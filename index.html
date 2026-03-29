@@ -2108,18 +2108,6 @@ function renderApp(aptIndex, lang) {
   const stMaps = document.getElementById('st-maps');
   stMaps.href = apt.mapsLink || '#';
 
-  document.getElementById('st-how-reach').textContent = lang === 'it' ? (apt.howToReachIt || '') : (apt.howToReachEn || '');
-  document.getElementById('st-how-access').textContent = lang === 'it' ? (apt.howToAccessIt || '') : (apt.howToAccessEn || '');
-  document.getElementById('st-parking').textContent = lang === 'it' ? (apt.parkingIt || '') : (apt.parkingEn || '');
-
-  // House rules
-  const rulesList = document.getElementById('st-rules-list');
-  rulesList.innerHTML = (apt.houseRules || []).map(r => {
-    const title = lang === 'it' ? r.titleIt : (r.titleEn || r.titleIt);
-    const desc = lang === 'it' ? r.descIt : (r.descEn || r.descIt);
-    return `<li class="rule-item"><span class="rule-icon">${escHtml(r.icon || '')}</span><div><div class="rule-title">${escHtml(title || '')}</div>${desc ? `<div class="rule-desc">${escHtml(desc)}</div>` : ''}</div></li>`;
-  }).join('');
-
   // Rooms description
   const roomsDesc = lang === 'it' ? apt.roomsIt : apt.roomsEn;
   document.getElementById('st-rooms-desc').textContent = roomsDesc;
@@ -2488,12 +2476,6 @@ function renderSettingsApts(apts) {
         <div class="s-field"><label>WiFi — Password</label><input type="text" id="s-a${i}-wifiPass" value="${escAttr(apt.wifiPass || '')}"></div>
         <div class="s-field"><label>Check-in (orario)</label><input type="text" id="s-a${i}-checkin" value="${escAttr(apt.checkin || '')}" placeholder="15:00"></div>
         <div class="s-field"><label>Check-out (orario)</label><input type="text" id="s-a${i}-checkout" value="${escAttr(apt.checkout || '')}" placeholder="10:00"></div>
-        <div class="s-field"><label>Come raggiungerci (IT)</label><textarea id="s-a${i}-howToReachIt">${escHtml(apt.howToReachIt || '')}</textarea></div>
-        <div class="s-field"><label>Come raggiungerci (EN)</label><textarea id="s-a${i}-howToReachEn">${escHtml(apt.howToReachEn || '')}</textarea></div>
-        <div class="s-field"><label>Come accedere (IT)</label><textarea id="s-a${i}-howToAccessIt">${escHtml(apt.howToAccessIt || '')}</textarea></div>
-        <div class="s-field"><label>Come accedere (EN)</label><textarea id="s-a${i}-howToAccessEn">${escHtml(apt.howToAccessEn || '')}</textarea></div>
-        <div class="s-field"><label>Parcheggio (IT)</label><textarea id="s-a${i}-parkingIt">${escHtml(apt.parkingIt || '')}</textarea></div>
-        <div class="s-field"><label>Parcheggio (EN)</label><textarea id="s-a${i}-parkingEn">${escHtml(apt.parkingEn || '')}</textarea></div>
       </div>`;
     container.appendChild(section);
   });
@@ -2505,13 +2487,10 @@ function collectSettingsApts() {
   const apts = [];
   for (let i = 0; i < count; i++) {
     const apt = {};
-    ['name','nameEn','address','addressShort','mapsLink','maxGuests','maxGuestsEn','roomsIt','roomsEn','wifi','wifiPass','checkin','checkout','howToReachIt','howToReachEn','howToAccessIt','howToAccessEn','parkingIt','parkingEn'].forEach(k => {
+    ['name','nameEn','address','addressShort','mapsLink','maxGuests','maxGuestsEn','roomsIt','roomsEn','wifi','wifiPass','checkin','checkout'].forEach(k => {
       const el = document.getElementById(`s-a${i}-${k}`);
       if (el) apt[k] = el.value;
     });
-    // Preserve houseRules from existing data (no UI editor yet)
-    const existing = currentData && currentData.apts && currentData.apts[i];
-    apt.houseRules = existing ? (existing.houseRules || []) : [];
     apts.push(apt);
   }
   return apts;
@@ -2520,7 +2499,7 @@ function collectSettingsApts() {
 function addSettingsApt() {
   const current = collectSettingsApts();
   const n = current.length + 1;
-  current.push({ name: `Appartamento ${n}`, nameEn: `Apartment ${n}`, address: '', addressShort: '', mapsLink: '', maxGuests: '4 persone', maxGuestsEn: '4 guests', roomsIt: '', roomsEn: '', wifi: '', wifiPass: '', checkin: '15:00', checkout: '10:00', howToReachIt: '', howToReachEn: '', howToAccessIt: '', howToAccessEn: '', parkingIt: '', parkingEn: '', houseRules: [] });
+  current.push({ name: `Appartamento ${n}`, nameEn: `Apartment ${n}`, address: '', addressShort: '', mapsLink: '', maxGuests: '4 persone', maxGuestsEn: '4 guests', roomsIt: '', roomsEn: '', wifi: '', wifiPass: '', checkin: '15:00', checkout: '10:00' });
   renderSettingsApts(current);
   const last = document.getElementById('s-apts-container').lastElementChild;
   if (last) { last.open = true; last.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
