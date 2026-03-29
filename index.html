@@ -1465,7 +1465,6 @@
           <p class="transport-desc" id="tr-tickets-desc">
             Biglietto singolo: ~€1,50 (valido 90 minuti). Abbonamento giornaliero: ~€5,00.
           </p>
-          <div class="transport-badge">💶 ~€1,50</div>
         </div>
 
         <!-- Taxi -->
@@ -1622,20 +1621,6 @@
         <div class="s-sub-title">💬 Messaggio di Benvenuto</div>
         <div class="s-field"><label>Testo IT</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..."></textarea></div>
         <div class="s-field"><label>Testo EN</label><textarea id="s-welcomeEn" placeholder="We are delighted to have you..."></textarea></div>
-        <div class="s-divider"></div>
-        <div class="s-sub-title">⭐ Recensione Google</div>
-        <div class="s-field"><label>Link recensione Google</label><input type="url" id="s-googleReviewUrl" placeholder="https://g.page/r/..."></div>
-        <p style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Se compilato, apparirà un pulsante "Lascia una Recensione su Google" nella sezione Partenza.</p>
-        <div class="s-divider"></div>
-        <div class="s-sub-title">🌟 Messaggio di Chiusura (Partenza)</div>
-        <div class="s-field"><label>Titolo IT</label><input type="text" id="s-closingTitleIt" placeholder="Grazie per aver scelto il nostro B&amp;B!"></div>
-        <div class="s-field"><label>Titolo EN</label><input type="text" id="s-closingTitleEn" placeholder="Thank you for choosing our B&amp;B!"></div>
-        <div class="s-field"><label>Testo IT</label><textarea id="s-closingTextIt" placeholder="È stato un piacere avervi come ospiti..."></textarea></div>
-        <div class="s-field"><label>Testo EN</label><textarea id="s-closingTextEn" placeholder="It was a pleasure having you as guests..."></textarea></div>
-        <div class="s-divider"></div>
-        <div class="s-sub-title">🏁 Istruzioni al Check-out (Partenza)</div>
-        <div id="s-checkout-steps" data-count="0"></div>
-        <button class="s-add-btn" style="margin-top:8px" onclick="addSettingsCheckoutStep()">➕ Aggiungi Passo</button>
       </div>
     </details>
 
@@ -1717,6 +1702,26 @@
         <div class="s-sub-title">🚖 Taxi &amp; App</div>
         <div class="s-field"><label>IT</label><textarea id="s-tr-taxiIt" placeholder="Taxi ufficiali: trovate i posteggi..."></textarea></div>
         <div class="s-field"><label>EN</label><textarea id="s-tr-taxiEn" placeholder="Official taxis: find stands..."></textarea></div>
+      </div>
+    </details>
+
+    <!-- Partenza -->
+    <details class="s-section">
+      <summary class="s-section-title">🧳 Partenza</summary>
+      <div class="s-fields">
+        <div class="s-sub-title">🏁 Istruzioni al Check-out</div>
+        <div id="s-checkout-steps" data-count="0"></div>
+        <button class="s-add-btn" style="margin-top:8px" onclick="addSettingsCheckoutStep()">➕ Aggiungi Passo</button>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">🌟 Messaggio di Chiusura</div>
+        <div class="s-field"><label>Titolo IT</label><input type="text" id="s-closingTitleIt" placeholder="Grazie per aver scelto il nostro B&amp;B!"></div>
+        <div class="s-field"><label>Titolo EN</label><input type="text" id="s-closingTitleEn" placeholder="Thank you for choosing our B&amp;B!"></div>
+        <div class="s-field"><label>Testo IT</label><textarea id="s-closingTextIt" placeholder="È stato un piacere avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Testo EN</label><textarea id="s-closingTextEn" placeholder="It was a pleasure having you as guests..."></textarea></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">⭐ Recensione Google</div>
+        <div class="s-field"><label>Link recensione Google</label><input type="url" id="s-googleReviewUrl" placeholder="https://g.page/r/..."></div>
+        <p style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Se compilato, apparirà un pulsante "Lascia una Recensione su Google" nella sezione Partenza.</p>
       </div>
     </details>
 
@@ -2163,8 +2168,8 @@ function renderApp(aptIndex, lang) {
   document.getElementById('w-title').textContent = lang === 'it' ? 'Benvenuti! 👋' : 'Welcome! 👋';
   const wItEl = document.getElementById('w-text-it');
   const wEnEl = document.getElementById('w-text-en');
-  wItEl.textContent = d.welcomeIt || '';
-  wEnEl.textContent = d.welcomeEn || '';
+  wItEl.innerHTML = renderRichText(d.welcomeIt || '');
+  wEnEl.innerHTML = renderRichText(d.welcomeEn || '');
   wItEl.style.display = lang === 'it' ? '' : 'none';
   wEnEl.style.display = lang === 'en' ? '' : 'none';
   document.getElementById('w-sign').textContent = '★ ' + d.hostName;
@@ -2180,9 +2185,9 @@ function renderApp(aptIndex, lang) {
   stMaps.href = apt.mapsLink || '#';
 
   // Stay tab - soggiorno extended fields
-  document.getElementById('st-how-reach').textContent = lang === 'it' ? (apt.howToReachIt || '') : (apt.howToReachEn || apt.howToReachIt || '');
-  document.getElementById('st-how-access').textContent = lang === 'it' ? (apt.howToAccessIt || '') : (apt.howToAccessEn || apt.howToAccessIt || '');
-  document.getElementById('st-parking').textContent = lang === 'it' ? (apt.parkingIt || '') : (apt.parkingEn || apt.parkingIt || '');
+  document.getElementById('st-how-reach').innerHTML = renderRichText(lang === 'it' ? (apt.howToReachIt || '') : (apt.howToReachEn || apt.howToReachIt || ''));
+  document.getElementById('st-how-access').innerHTML = renderRichText(lang === 'it' ? (apt.howToAccessIt || '') : (apt.howToAccessEn || apt.howToAccessIt || ''));
+  document.getElementById('st-parking').innerHTML = renderRichText(lang === 'it' ? (apt.parkingIt || '') : (apt.parkingEn || apt.parkingIt || ''));
 
   // House Rules
   const rulesList = document.getElementById('st-rules-list');
@@ -2192,7 +2197,7 @@ function renderApp(aptIndex, lang) {
     li.className = 'rule-item';
     const title = lang === 'it' ? r.titleIt : (r.titleEn || r.titleIt);
     const desc = lang === 'it' ? r.descIt : (r.descEn || r.descIt);
-    li.innerHTML = `<span class="rule-icon">${escHtml(r.icon || '')}</span><div><div class="rule-title">${escHtml(title || '')}</div><div class="rule-desc">${escHtml(desc || '')}</div></div>`;
+    li.innerHTML = `<span class="rule-icon">${escHtml(r.icon || '')}</span><div><div class="rule-title">${escHtml(title || '')}</div><div class="rule-desc">${renderRichText(desc || '')}</div></div>`;
     rulesList.appendChild(li);
   });
 
@@ -2300,10 +2305,10 @@ function renderPlaces(places, lang) {
         <span class="place-icon">${p.emoji || '📍'}</span>
         <span class="place-title">${escHtml(p.name)}</span>
       </div>
-      <p class="place-desc">${escHtml(desc)}</p>
+      <p class="place-desc">${renderRichText(desc)}</p>
       <div class="place-how">
         <div class="place-how-label">${escHtml(howLabel)}</div>
-        ${escHtml(how)}
+        ${renderRichText(how)}
       </div>
       <a class="maps-btn" href="${escAttr(p.maps || '#')}" target="_blank">${mapsLabel}</a>
     `;
@@ -2328,7 +2333,7 @@ function renderFood(restaurants, lang) {
         </div>
         <span class="rest-price">${escHtml(r.price)}</span>
       </div>
-      <p class="rest-desc">${escHtml(desc)}</p>
+      <p class="rest-desc">${renderRichText(desc)}</p>
       <a class="maps-btn" href="${escAttr(r.maps || '#')}" target="_blank">${mapsLabel}</a>
     `;
     container.appendChild(card);
@@ -2349,7 +2354,7 @@ function renderFood(restaurants, lang) {
       <div class="superm-icon">🛒</div>
       <div class="superm-body">
         <div class="superm-title">${superLabel}</div>
-        <div class="superm-desc">${superDesc}</div>
+        <div class="superm-desc">${renderRichText(superDesc)}</div>
       </div>
     </div>
     ${superMapsBtn}
@@ -2379,7 +2384,7 @@ function renderTransport(transport, lang) {
         <span class="transport-icon">${item.icon}</span>
         <span class="transport-title">${escHtml(title)}</span>
       </div>
-      <p class="transport-desc">${escHtml(text)}</p>
+      <p class="transport-desc">${renderRichText(text)}</p>
       ${mapsBtn}
     `;
     container.appendChild(card);
@@ -2387,11 +2392,11 @@ function renderTransport(transport, lang) {
 
   // Biglietti
   const ticketsEl = document.getElementById('tr-tickets-desc');
-  if (ticketsEl) ticketsEl.textContent = lang === 'it' ? (transport.ticketsIt || '') : (transport.ticketsEn || transport.ticketsIt || '');
+  if (ticketsEl) ticketsEl.innerHTML = renderRichText(lang === 'it' ? (transport.ticketsIt || '') : (transport.ticketsEn || transport.ticketsIt || ''));
 
   // Taxi & App
   const taxiEl = document.getElementById('tr-taxi-desc');
-  if (taxiEl) taxiEl.textContent = lang === 'it' ? (transport.taxiIt || '') : (transport.taxiEn || transport.taxiIt || '');
+  if (taxiEl) taxiEl.innerHTML = renderRichText(lang === 'it' ? (transport.taxiIt || '') : (transport.taxiEn || transport.taxiIt || ''));
 }
 
 // ════════════════════════════════════════════
@@ -2424,7 +2429,7 @@ function renderDeparture(d, lang) {
   const titleEl = document.getElementById('closing-title');
   const textEl = document.getElementById('closing-text');
   if (titleEl) titleEl.textContent = lang === 'it' ? (d.closingTitleIt || '') : (d.closingTitleEn || '');
-  if (textEl) textEl.textContent = lang === 'it' ? (d.closingTextIt || '') : (d.closingTextEn || '');
+  if (textEl) textEl.innerHTML = renderRichText(lang === 'it' ? (d.closingTextIt || '') : (d.closingTextEn || ''));
 
   // Checkout steps
   const stepsContainer = document.getElementById('departure-steps-list');
@@ -3222,6 +3227,14 @@ function escAttr(str) {
     .replace(/'/g, '&#39;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+}
+
+function renderRichText(text) {
+  if (!text) return '';
+  let s = escHtml(text);
+  s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/\n/g, '<br>');
+  return s;
 }
 
 // ════════════════════════════════════════════
