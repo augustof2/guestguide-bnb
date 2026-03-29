@@ -1339,9 +1339,7 @@
             <span class="info-card-icon">📍</span>
             <span class="info-card-title" data-it="Come raggiungerci" data-en="How to reach us">Come raggiungerci</span>
           </div>
-          <p class="info-card-body" data-it="Dalla stazione centrale: prendete la metro linea A fino alla fermata Centrale, poi 10 minuti a piedi. In taxi dal centro ~10€. Consigliamo di salvare l'indirizzo su Google Maps prima di partire." data-en="From the central station: take metro line A to the Centrale stop, then 10 minutes on foot. Taxi from the center ~€10. We recommend saving the address on Google Maps before you leave.">
-            Dalla stazione centrale: prendete la metro linea A fino alla fermata Centrale, poi 10 minuti a piedi. In taxi dal centro ~10€.
-          </p>
+          <p class="info-card-body" id="st-how-reach"></p>
           <a class="maps-btn" id="st-maps" href="#" target="_blank">🧭 <span data-it="Apri su Maps" data-en="Open in Maps">Apri su Maps</span></a>
         </div>
 
@@ -1351,9 +1349,7 @@
             <span class="info-card-icon">🗝️</span>
             <span class="info-card-title" data-it="Come accedere" data-en="How to access">Come accedere</span>
           </div>
-          <p class="info-card-body" data-it="Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo." data-en="The keys will be handed to you directly by the host upon arrival. In case of self-check-in, you will receive detailed instructions via message before arrival.">
-            Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo.
-          </p>
+          <p class="info-card-body" id="st-how-access"></p>
         </div>
 
         <!-- Parcheggio -->
@@ -1362,9 +1358,7 @@
             <span class="info-card-icon">🚗</span>
             <span class="info-card-title" data-it="Parcheggio" data-en="Parking">Parcheggio</span>
           </div>
-          <p class="info-card-body" data-it="Parcheggio pubblico disponibile nelle vicinanze (~200 metri). Strisce blu a pagamento nei giorni feriali 8:00–20:00 (~€1,50/h). Parcheggio gratuito nelle strisce bianche." data-en="Public parking available nearby (~200 meters). Paid blue lines on weekdays 8:00–20:00 (~€1.50/h). Free parking on white lines.">
-            Parcheggio pubblico disponibile nelle vicinanze (~200 metri). Strisce blu a pagamento nei giorni feriali.
-          </p>
+          <p class="info-card-body" id="st-parking"></p>
         </div>
 
         <!-- WiFi -->
@@ -1380,42 +1374,8 @@
         <!-- House Rules -->
         <div class="card" style="margin-bottom:14px">
           <div class="card-title" data-it="🏠 Regole della casa" data-en="🏠 House Rules">🏠 Regole della casa</div>
-          <ul class="rules-list">
-            <li class="rule-item">
-              <span class="rule-icon">🔇</span>
-              <div class="rule-body">
-                <div class="rule-title" data-it="Silenzio Notturno" data-en="Quiet Hours">Silenzio Notturno</div>
-                <div class="rule-desc" data-it="Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini." data-en="From 22:00 to 8:00 please keep quiet out of respect for neighbours.">Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini.</div>
-              </div>
-            </li>
-            <li class="rule-item">
-              <span class="rule-icon">🚭</span>
-              <div class="rule-body">
-                <div class="rule-title" data-it="Niente Fumo" data-en="No Smoking">Niente Fumo</div>
-                <div class="rule-desc" data-it="Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone." data-en="Smoking is forbidden inside the apartment. You may smoke on the balcony.">Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone.</div>
-              </div>
-            </li>
-            <li class="rule-item">
-              <span class="rule-icon">🐾</span>
-              <div class="rule-body">
-                <div class="rule-title" data-it="Animali Domestici" data-en="Pets">Animali Domestici</div>
-                <div class="rule-desc" data-it="Gli animali domestici non sono ammessi senza previo accordo con l'host." data-en="Pets are not allowed without prior agreement with the host.">Gli animali domestici non sono ammessi senza previo accordo con l'host.</div>
-              </div>
-            </li>
-            <li class="rule-item">
-              <span class="rule-icon">👥</span>
-              <div class="rule-body">
-                <div class="rule-title" data-it="Ospiti Esterni" data-en="External Guests">Ospiti Esterni</div>
-                <div class="rule-desc" data-it="Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata." data-en="Parties are not allowed. The number of guests must not exceed the stated maximum capacity.">Non sono ammesse feste. Rispettare la capienza massima indicata.</div>
-              </div>
-            </li>
-            <li class="rule-item">
-              <span class="rule-icon">♻️</span>
-              <div class="rule-body">
-                <div class="rule-title" data-it="Raccolta Rifiuti" data-en="Waste Sorting">Raccolta Rifiuti</div>
-                <div class="rule-desc" data-it="Si prega di rispettare la raccolta differenziata. Istruzioni in cucina." data-en="Please respect waste sorting. Instructions are in the kitchen.">Si prega di rispettare la raccolta differenziata. Istruzioni in cucina.</div>
-              </div>
-            </li>
+          <ul class="rules-list" id="st-rules-list">
+            <!-- populated by JS -->
           </ul>
         </div>
 
@@ -1897,7 +1857,20 @@ const DEFAULT_DATA = {
       wifi: "NomeRete",
       wifiPass: "password123",
       checkin: "15:00",
-      checkout: "10:00"
+      checkout: "10:00",
+      howToReachIt: "Dalla stazione centrale: prendete la metro linea A fino alla fermata Centrale, poi 10 minuti a piedi. In taxi dal centro ~10€. Consigliamo di salvare l'indirizzo su Google Maps prima di partire.",
+      howToReachEn: "From the central station: take metro line A to the Centrale stop, then 10 minutes on foot. Taxi from the center ~€10. We recommend saving the address on Google Maps before you leave.",
+      howToAccessIt: "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
+      howToAccessEn: "The keys will be handed to you directly by the host upon arrival. In case of self-check-in, you will receive detailed instructions via message before arrival.",
+      parkingIt: "Parcheggio pubblico disponibile nelle vicinanze (~200 metri). Strisce blu a pagamento nei giorni feriali 8:00–20:00 (~€1,50/h). Parcheggio gratuito nelle strisce bianche.",
+      parkingEn: "Public parking available nearby (~200 meters). Paid blue lines on weekdays 8:00–20:00 (~€1.50/h). Free parking on white lines.",
+      houseRules: [
+        { icon: "🔇", titleIt: "Silenzio Notturno", titleEn: "Quiet Hours", descIt: "Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini.", descEn: "From 22:00 to 8:00 please keep quiet out of respect for neighbours." },
+        { icon: "🚭", titleIt: "Niente Fumo", titleEn: "No Smoking", descIt: "Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone.", descEn: "Smoking is forbidden inside the apartment. You may smoke on the balcony." },
+        { icon: "🐾", titleIt: "Animali Domestici", titleEn: "Pets", descIt: "Gli animali domestici non sono ammessi senza previo accordo con l'host.", descEn: "Pets are not allowed without prior agreement with the host." },
+        { icon: "👥", titleIt: "Ospiti Esterni", titleEn: "External Guests", descIt: "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata.", descEn: "Parties are not allowed. The number of guests must not exceed the stated maximum capacity." },
+        { icon: "♻️", titleIt: "Raccolta Rifiuti", titleEn: "Waste Sorting", descIt: "Si prega di rispettare la raccolta differenziata. Istruzioni in cucina.", descEn: "Please respect waste sorting. Instructions are in the kitchen." }
+      ]
     },
     {
       name: "Appartamento 2",
@@ -1912,7 +1885,20 @@ const DEFAULT_DATA = {
       wifi: "NomeRete2",
       wifiPass: "password456",
       checkin: "15:00",
-      checkout: "10:00"
+      checkout: "10:00",
+      howToReachIt: "Dalla stazione centrale: prendete la metro linea A fino alla fermata Centrale, poi 10 minuti a piedi. In taxi dal centro ~10€. Consigliamo di salvare l'indirizzo su Google Maps prima di partire.",
+      howToReachEn: "From the central station: take metro line A to the Centrale stop, then 10 minutes on foot. Taxi from the center ~€10. We recommend saving the address on Google Maps before you leave.",
+      howToAccessIt: "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
+      howToAccessEn: "The keys will be handed to you directly by the host upon arrival. In case of self-check-in, you will receive detailed instructions via message before arrival.",
+      parkingIt: "Parcheggio pubblico disponibile nelle vicinanze (~200 metri). Strisce blu a pagamento nei giorni feriali 8:00–20:00 (~€1,50/h). Parcheggio gratuito nelle strisce bianche.",
+      parkingEn: "Public parking available nearby (~200 meters). Paid blue lines on weekdays 8:00–20:00 (~€1.50/h). Free parking on white lines.",
+      houseRules: [
+        { icon: "🔇", titleIt: "Silenzio Notturno", titleEn: "Quiet Hours", descIt: "Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini.", descEn: "From 22:00 to 8:00 please keep quiet out of respect for neighbours." },
+        { icon: "🚭", titleIt: "Niente Fumo", titleEn: "No Smoking", descIt: "Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone.", descEn: "Smoking is forbidden inside the apartment. You may smoke on the balcony." },
+        { icon: "🐾", titleIt: "Animali Domestici", titleEn: "Pets", descIt: "Gli animali domestici non sono ammessi senza previo accordo con l'host.", descEn: "Pets are not allowed without prior agreement with the host." },
+        { icon: "👥", titleIt: "Ospiti Esterni", titleEn: "External Guests", descIt: "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata.", descEn: "Parties are not allowed. The number of guests must not exceed the stated maximum capacity." },
+        { icon: "♻️", titleIt: "Raccolta Rifiuti", titleEn: "Waste Sorting", descIt: "Si prega di rispettare la raccolta differenziata. Istruzioni in cucina.", descEn: "Please respect waste sorting. Instructions are in the kitchen." }
+      ]
     }
   ],
   places: [
