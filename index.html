@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Il Tuo B&amp;B — Guest Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -572,6 +575,8 @@
     transition: background .2s;
   }
   .maps-btn:hover { background: var(--teal2); }
+  .maps-btn.review-btn { background: var(--gold); color: #0d1b1e; justify-content: center; }
+  .maps-btn.review-btn:hover { background: var(--gold2); }
 
   .wifi-card {
     background: linear-gradient(135deg, #1a3540 0%, var(--card) 100%);
@@ -1565,14 +1570,7 @@
             <a class="call-btn host" id="sos-host-call" href="tel:+390000000000">📞 <span data-it="Chiama" data-en="Call">Chiama</span></a>
           </div>
 
-          <div class="sos-card" id="sos-contact2-card">
-            <div class="sos-icon">👤</div>
-            <div class="sos-body">
-              <div class="sos-name" id="sos-c2-name">Secondo Contatto</div>
-              <div class="sos-number" id="sos-c2-phone">📞 +39 000 000 0001</div>
-            </div>
-            <a class="call-btn host" id="sos-c2-call" href="tel:+390000000001">📞 <span data-it="Chiama" data-en="Call">Chiama</span></a>
-          </div>
+          <div id="sos-extra-contacts"><!-- populated by JS --></div>
         </div>
 
         <!-- Checkout steps -->
@@ -1604,6 +1602,9 @@
             <div class="step-body">
               <div class="step-title" data-it="Lasciate una recensione" data-en="Leave a review">Lasciate una recensione</div>
               <div class="step-desc" data-it="Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!" data-en="If you enjoyed your stay, your review is a huge help for us!">Se avete apprezzato il soggiorno, la vostra recensione è per noi un grande aiuto!</div>
+              <div id="google-review-btn-container" style="display:none;margin-top:12px">
+                <a id="google-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn"><span data-it="⭐ Lascia una Recensione su Google" data-en="⭐ Leave a Google Review">⭐ Lascia una Recensione su Google</span></a>
+              </div>
             </div>
           </div>
         </div>
@@ -1677,6 +1678,14 @@
         <div class="s-field"><label>Città e Zona</label><input type="text" id="s-cityZone" placeholder="La Tua Città · Zona"></div>
         <div class="s-field"><label>Nome Host principale</label><input type="text" id="s-hostName" placeholder="Nome Host"></div>
         <div class="s-field"><label>Telefono Host</label><input type="tel" id="s-hostPhone" placeholder="+39 000 000 0000"></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">💬 Messaggio di Benvenuto</div>
+        <div class="s-field"><label>Testo IT</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Testo EN</label><textarea id="s-welcomeEn" placeholder="We are delighted to have you..."></textarea></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">⭐ Recensione Google</div>
+        <div class="s-field"><label>Link recensione Google</label><input type="url" id="s-googleReviewUrl" placeholder="https://g.page/r/..."></div>
+        <p style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Se compilato, apparirà un pulsante "Lascia una Recensione su Google" nel check-out.</p>
       </div>
     </details>
 
@@ -1709,30 +1718,50 @@
       <summary class="s-section-title">🚇 Trasporti</summary>
       <div class="s-fields">
         <div class="s-sub-title">✈️ Aeroporto</div>
+        <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
+          <label style="white-space:nowrap">Mostra sezione</label>
+          <input type="checkbox" id="s-tr-airportEnabled" style="width:auto;accent-color:var(--teal)">
+        </div>
         <div class="s-field"><label>IT</label><textarea id="s-tr-airportIt" placeholder="All'uscita dell'aeroporto..."></textarea></div>
         <div class="s-field"><label>EN</label><textarea id="s-tr-airportEn" placeholder="At the airport exit..."></textarea></div>
+        <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-airportMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🚉 Stazione</div>
+        <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
+          <label style="white-space:nowrap">Mostra sezione</label>
+          <input type="checkbox" id="s-tr-stationEnabled" style="width:auto;accent-color:var(--teal)">
+        </div>
         <div class="s-field"><label>IT</label><textarea id="s-tr-stationIt" placeholder="Dalla stazione..."></textarea></div>
         <div class="s-field"><label>EN</label><textarea id="s-tr-stationEn" placeholder="From the station..."></textarea></div>
+        <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-stationMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🚇 Metro</div>
+        <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
+          <label style="white-space:nowrap">Mostra sezione</label>
+          <input type="checkbox" id="s-tr-metroEnabled" style="width:auto;accent-color:var(--teal)">
+        </div>
         <div class="s-field"><label>IT</label><input type="text" id="s-tr-metroIt" placeholder="Fermata più vicina..."></div>
         <div class="s-field"><label>EN</label><input type="text" id="s-tr-metroEn" placeholder="Nearest stop..."></div>
+        <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-metroMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🚌 Bus</div>
+        <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
+          <label style="white-space:nowrap">Mostra sezione</label>
+          <input type="checkbox" id="s-tr-busEnabled" style="width:auto;accent-color:var(--teal)">
+        </div>
         <div class="s-field"><label>IT</label><input type="text" id="s-tr-busIt" placeholder="Linee principali..."></div>
         <div class="s-field"><label>EN</label><input type="text" id="s-tr-busEn" placeholder="Main lines..."></div>
+        <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-busMaps" placeholder="https://maps.google.com/..."></div>
       </div>
     </details>
 
     <!-- Contatti extra -->
     <details class="s-section">
       <summary class="s-section-title">📞 Contatti Extra</summary>
-      <div class="s-fields">
-        <div class="s-field"><label>Secondo contatto — Nome</label><input type="text" id="s-contact2Name" placeholder="Secondo Contatto"></div>
-        <div class="s-field"><label>Secondo contatto — Telefono</label><input type="tel" id="s-contact2Phone" placeholder="+39 000 000 0001"></div>
+      <div class="s-fields" id="s-contacts-fields" data-count="0">
+        <!-- generated by JS -->
       </div>
+      <button class="s-add-btn" onclick="addSettingsContact()">➕ Aggiungi Contatto</button>
     </details>
 
     <!-- PIN Sicurezza -->
@@ -1796,8 +1825,12 @@ const DEFAULT_DATA = {
   cityZone: "La Tua Città · Zona",
   hostName: "Nome Host",
   hostPhone: "+39 000 000 0000",
-  contact2Name: "Secondo Contatto",
-  contact2Phone: "+39 000 000 0001",
+  googleReviewUrl: "",
+  welcomeIt: "Siamo felici di avervi come ospiti! Questo appartamento è stato preparato con cura per rendere il vostro soggiorno indimenticabile. Siamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
+  welcomeEn: "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — please do not hesitate to contact us.",
+  extraContacts: [
+    { name: "Secondo Contatto", phone: "+39 000 000 0001" }
+  ],
   apts: [
     {
       name: "Appartamento 1",
@@ -1916,14 +1949,22 @@ const DEFAULT_DATA = {
     }
   ],
   transport: {
+    airportEnabled: true,
     airportIt: "All'uscita dell'aeroporto trovi i taxi ufficiali. Tariffa fissa ~50–60€ per il centro. In alternativa, treno diretto per la stazione centrale ogni 30 min (~14€).",
     airportEn: "At the airport exit you'll find official taxis. Fixed rate ~€50–60 to the center. Alternatively, direct train to central station every 30 min (~€14).",
+    airportMaps: "",
+    stationEnabled: true,
     stationIt: "Dalla stazione puoi prendere metro, autobus o taxi per raggiungere l'appartamento. La fermata metro è a 5 min a piedi.",
     stationEn: "From the station you can take metro, bus or taxi to reach the apartment. The metro stop is 5 min walk.",
+    stationMaps: "",
+    metroEnabled: true,
     metroIt: "Fermata più vicina: Centrale (Linea A) a 800 metri dall'appartamento.",
     metroEn: "Nearest stop: Centrale (Line A), 800 meters from the apartment.",
+    metroMaps: "",
+    busEnabled: true,
     busIt: "Linee principali: Bus 10, 20, 30 verso il centro. Fermata a 200 metri dall'appartamento.",
-    busEn: "Main lines: Bus 10, 20, 30 toward the center. Stop 200 meters from the apartment."
+    busEn: "Main lines: Bus 10, 20, 30 toward the center. Stop 200 meters from the apartment.",
+    busMaps: ""
   }
 };
 
@@ -1947,10 +1988,41 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+function mergeWithDefaults(stored, defaults) {
+  if (!stored || typeof stored !== 'object') return deepClone(defaults);
+  const result = deepClone(defaults);
+  for (const key of Object.keys(defaults)) {
+    const sv = stored[key];
+    const dv = defaults[key];
+    if (sv === undefined || sv === null) continue;
+    if (Array.isArray(dv)) {
+      if (Array.isArray(sv)) {
+        // Preserve empty arrays (user intentionally cleared) and merge populated ones
+        const tpl = dv[0] || {};
+        result[key] = sv.length > 0 ? sv.map(item => mergeWithDefaults(item, tpl)) : [];
+      }
+    } else if (typeof dv === 'object') {
+      if (typeof sv === 'object') result[key] = mergeWithDefaults(sv, dv);
+    } else {
+      result[key] = sv;
+    }
+  }
+  return result;
+}
+
 function loadData() {
   try {
     const raw = localStorage.getItem('bnb_guide_data');
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const stored = JSON.parse(raw);
+      // Migrate legacy contact2Name/contact2Phone to extraContacts array
+      if ((stored.contact2Name !== undefined || stored.contact2Phone !== undefined) && !stored.extraContacts) {
+        stored.extraContacts = [{ name: stored.contact2Name || '', phone: stored.contact2Phone || '' }];
+        delete stored.contact2Name;
+        delete stored.contact2Phone;
+      }
+      return mergeWithDefaults(stored, DEFAULT_DATA);
+    }
   } catch(e) { console.error('Failed to load saved data:', e); }
   return deepClone(DEFAULT_DATA);
 }
@@ -2062,8 +2134,12 @@ function renderApp(aptIndex, lang) {
   sMaps.textContent = lang === 'it' ? 'Apri Maps' : 'Open Maps';
 
   document.getElementById('w-title').textContent = lang === 'it' ? 'Benvenuti! 👋' : 'Welcome! 👋';
-  document.getElementById('w-text-it').style.display = lang === 'it' ? '' : 'none';
-  document.getElementById('w-text-en').style.display = lang === 'en' ? '' : 'none';
+  const wItEl = document.getElementById('w-text-it');
+  const wEnEl = document.getElementById('w-text-en');
+  wItEl.textContent = d.welcomeIt || '';
+  wEnEl.textContent = d.welcomeEn || '';
+  wItEl.style.display = lang === 'it' ? '' : 'none';
+  wEnEl.style.display = lang === 'en' ? '' : 'none';
   document.getElementById('w-sign').textContent = '★ ' + d.hostName;
 
   // Stay tab
@@ -2094,11 +2170,19 @@ function renderApp(aptIndex, lang) {
 
   // SOS
   document.getElementById('sos-host-name').textContent = d.hostName;
-  document.getElementById('sos-host-phone').textContent = '📞 ' + d.hostPhone;
-  document.getElementById('sos-host-call').href = 'tel:' + d.hostPhone.replace(/\s/g, '');
-  document.getElementById('sos-c2-name').textContent = d.contact2Name;
-  document.getElementById('sos-c2-phone').textContent = '📞 ' + d.contact2Phone;
-  document.getElementById('sos-c2-call').href = 'tel:' + d.contact2Phone.replace(/\s/g, '');
+  document.getElementById('sos-host-phone').textContent = '📞 ' + (d.hostPhone || '');
+  document.getElementById('sos-host-call').href = 'tel:' + (d.hostPhone || '').replace(/\s/g, '');
+  renderExtraContacts(d.extraContacts || [], lang);
+
+  // Google Review Button
+  const reviewUrl = d.googleReviewUrl || '';
+  const reviewContainer = document.getElementById('google-review-btn-container');
+  if (reviewUrl) {
+    document.getElementById('google-review-btn').href = reviewUrl;
+    reviewContainer.style.display = '';
+  } else {
+    reviewContainer.style.display = 'none';
+  }
 
   // Translate data-it / data-en elements
   applyLangAttrs(lang);
@@ -2174,22 +2258,49 @@ function renderTransport(transport, lang) {
   const container = document.getElementById('transport-container');
   container.innerHTML = '';
   const items = [
-    { icon: '✈️', labelIt: "Dall'Aeroporto", labelEn: 'From the Airport', textIt: transport.airportIt, textEn: transport.airportEn },
-    { icon: '🚉', labelIt: 'Dalla Stazione', labelEn: 'From the Station', textIt: transport.stationIt, textEn: transport.stationEn },
-    { icon: '🚇', labelIt: 'Metro', labelEn: 'Metro', textIt: transport.metroIt, textEn: transport.metroEn },
-    { icon: '🚌', labelIt: 'Bus', labelEn: 'Bus', textIt: transport.busIt, textEn: transport.busEn }
+    { key: 'airport', icon: '✈️', labelIt: "Dall'Aeroporto", labelEn: 'From the Airport', textIt: transport.airportIt, textEn: transport.airportEn, maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
+    { key: 'station', icon: '🚉', labelIt: 'Dalla Stazione', labelEn: 'From the Station', textIt: transport.stationIt, textEn: transport.stationEn, maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
+    { key: 'metro', icon: '🚇', labelIt: 'Metro', labelEn: 'Metro', textIt: transport.metroIt, textEn: transport.metroEn, maps: transport.metroMaps, enabled: transport.metroEnabled !== false },
+    { key: 'bus', icon: '🚌', labelIt: 'Bus', labelEn: 'Bus', textIt: transport.busIt, textEn: transport.busEn, maps: transport.busMaps, enabled: transport.busEnabled !== false }
   ];
+  const mapsLabel = lang === 'it' ? '🧭 Vedi su Maps' : '🧭 View on Maps';
   items.forEach(item => {
+    if (!item.enabled) return;
     const title = lang === 'it' ? item.labelIt : item.labelEn;
     const text = lang === 'it' ? item.textIt : item.textEn;
     const card = document.createElement('div');
     card.className = 'transport-card';
+    const mapsBtn = item.maps ? `<a class="maps-btn" href="${escAttr(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
     card.innerHTML = `
       <div class="transport-header">
         <span class="transport-icon">${item.icon}</span>
         <span class="transport-title">${escHtml(title)}</span>
       </div>
       <p class="transport-desc">${escHtml(text)}</p>
+      ${mapsBtn}
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ════════════════════════════════════════════
+//  EXTRA CONTACTS RENDER
+// ════════════════════════════════════════════
+function renderExtraContacts(contacts, lang) {
+  const container = document.getElementById('sos-extra-contacts');
+  container.innerHTML = '';
+  const callLabel = lang === 'it' ? 'Chiama' : 'Call';
+  (contacts || []).forEach(c => {
+    if (!c.name && !c.phone) return;
+    const card = document.createElement('div');
+    card.className = 'sos-card';
+    card.innerHTML = `
+      <div class="sos-icon">👤</div>
+      <div class="sos-body">
+        <div class="sos-name">${escHtml(c.name || '')}</div>
+        <div class="sos-number">📞 ${escHtml(c.phone || '')}</div>
+      </div>
+      <a class="call-btn host" href="tel:${escAttr((c.phone || '').replace(/\s/g, ''))}">📞 ${callLabel}</a>
     `;
     container.appendChild(card);
   });
@@ -2518,6 +2629,57 @@ function removeSettingsRest(idx) {
 }
 
 // ════════════════════════════════════════════
+//  SETTINGS: DYNAMIC CONTACTS
+// ════════════════════════════════════════════
+function renderSettingsContacts(contacts) {
+  const container = document.getElementById('s-contacts-fields');
+  container.dataset.count = contacts.length;
+  container.innerHTML = '';
+  let html = '';
+  contacts.forEach((c, i) => {
+    html += `
+      <div class="s-sub-title s-sub-title-row">
+        <span>Contatto ${i + 1}</span>
+        <button class="s-remove-btn" onclick="removeSettingsContact(${i})">🗑️ Rimuovi</button>
+      </div>
+      <div class="s-field"><label>Nome</label><input type="text" id="s-c${i}-name" value="${escAttr(c.name || '')}" placeholder="Nome Contatto"></div>
+      <div class="s-field"><label>Telefono</label><input type="tel" id="s-c${i}-phone" value="${escAttr(c.phone || '')}" placeholder="+39 000 000 0000"></div>
+      ${i < contacts.length - 1 ? '<div class="s-divider"></div>' : ''}`;
+  });
+  container.innerHTML = html;
+
+function collectSettingsContacts() {
+  const container = document.getElementById('s-contacts-fields');
+  const count = parseInt(container.dataset.count || '0');
+  const contacts = [];
+  for (let i = 0; i < count; i++) {
+    const nameEl = document.getElementById(`s-c${i}-name`);
+    const phoneEl = document.getElementById(`s-c${i}-phone`);
+    contacts.push({
+      name: nameEl ? nameEl.value.trim() : '',
+      phone: phoneEl ? phoneEl.value.trim() : ''
+    });
+  }
+  return contacts;
+}
+
+function addSettingsContact() {
+  const current = collectSettingsContacts();
+  current.push({ name: '', phone: '' });
+  renderSettingsContacts(current);
+  const container = document.getElementById('s-contacts-fields');
+  const idx = current.length - 1;
+  const el = document.getElementById(`s-c${idx}-name`);
+  if (el) el.focus();
+}
+
+function removeSettingsContact(idx) {
+  const current = collectSettingsContacts();
+  current.splice(idx, 1);
+  renderSettingsContacts(current);
+}
+
+// ════════════════════════════════════════════
 //  SETTINGS PANEL
 // ════════════════════════════════════════════
 
@@ -2530,6 +2692,9 @@ function populateSettingsForms() {
   document.getElementById('s-cityZone').value = d.cityZone;
   document.getElementById('s-hostName').value = d.hostName;
   document.getElementById('s-hostPhone').value = d.hostPhone;
+  document.getElementById('s-welcomeIt').value = d.welcomeIt || '';
+  document.getElementById('s-welcomeEn').value = d.welcomeEn || '';
+  document.getElementById('s-googleReviewUrl').value = d.googleReviewUrl || '';
 
   // Apts (dynamic)
   renderSettingsApts(d.apts);
@@ -2542,18 +2707,25 @@ function populateSettingsForms() {
 
   // Transport
   const tr = d.transport;
+  document.getElementById('s-tr-airportEnabled').checked = tr.airportEnabled !== false;
   document.getElementById('s-tr-airportIt').value = tr.airportIt || '';
   document.getElementById('s-tr-airportEn').value = tr.airportEn || '';
+  document.getElementById('s-tr-airportMaps').value = tr.airportMaps || '';
+  document.getElementById('s-tr-stationEnabled').checked = tr.stationEnabled !== false;
   document.getElementById('s-tr-stationIt').value = tr.stationIt || '';
   document.getElementById('s-tr-stationEn').value = tr.stationEn || '';
+  document.getElementById('s-tr-stationMaps').value = tr.stationMaps || '';
+  document.getElementById('s-tr-metroEnabled').checked = tr.metroEnabled !== false;
   document.getElementById('s-tr-metroIt').value = tr.metroIt || '';
   document.getElementById('s-tr-metroEn').value = tr.metroEn || '';
+  document.getElementById('s-tr-metroMaps').value = tr.metroMaps || '';
+  document.getElementById('s-tr-busEnabled').checked = tr.busEnabled !== false;
   document.getElementById('s-tr-busIt').value = tr.busIt || '';
   document.getElementById('s-tr-busEn').value = tr.busEn || '';
+  document.getElementById('s-tr-busMaps').value = tr.busMaps || '';
 
-  // Contacts
-  document.getElementById('s-contact2Name').value = d.contact2Name || '';
-  document.getElementById('s-contact2Phone').value = d.contact2Phone || '';
+  // Contacts (dynamic)
+  renderSettingsContacts(d.extraContacts || []);
 }
 
 function collectFormData() {
@@ -2564,6 +2736,9 @@ function collectFormData() {
   d.cityZone = document.getElementById('s-cityZone').value.trim() || d.cityZone;
   d.hostName = document.getElementById('s-hostName').value.trim() || d.hostName;
   d.hostPhone = document.getElementById('s-hostPhone').value.trim() || d.hostPhone;
+  d.welcomeIt = document.getElementById('s-welcomeIt').value;
+  d.welcomeEn = document.getElementById('s-welcomeEn').value;
+  d.googleReviewUrl = document.getElementById('s-googleReviewUrl').value.trim();
 
   // Dynamic apts
   d.apts = collectSettingsApts();
@@ -2574,17 +2749,25 @@ function collectFormData() {
   // Dynamic restaurants
   d.restaurants = collectSettingsRests();
 
+  d.transport.airportEnabled = document.getElementById('s-tr-airportEnabled').checked;
   d.transport.airportIt = document.getElementById('s-tr-airportIt').value.trim();
   d.transport.airportEn = document.getElementById('s-tr-airportEn').value.trim();
+  d.transport.airportMaps = document.getElementById('s-tr-airportMaps').value.trim();
+  d.transport.stationEnabled = document.getElementById('s-tr-stationEnabled').checked;
   d.transport.stationIt = document.getElementById('s-tr-stationIt').value.trim();
   d.transport.stationEn = document.getElementById('s-tr-stationEn').value.trim();
+  d.transport.stationMaps = document.getElementById('s-tr-stationMaps').value.trim();
+  d.transport.metroEnabled = document.getElementById('s-tr-metroEnabled').checked;
   d.transport.metroIt = document.getElementById('s-tr-metroIt').value.trim();
   d.transport.metroEn = document.getElementById('s-tr-metroEn').value.trim();
+  d.transport.metroMaps = document.getElementById('s-tr-metroMaps').value.trim();
+  d.transport.busEnabled = document.getElementById('s-tr-busEnabled').checked;
   d.transport.busIt = document.getElementById('s-tr-busIt').value.trim();
   d.transport.busEn = document.getElementById('s-tr-busEn').value.trim();
+  d.transport.busMaps = document.getElementById('s-tr-busMaps').value.trim();
 
-  d.contact2Name = document.getElementById('s-contact2Name').value.trim();
-  d.contact2Phone = document.getElementById('s-contact2Phone').value.trim();
+  // Dynamic contacts
+  d.extraContacts = collectSettingsContacts();
 
   return d;
 }
