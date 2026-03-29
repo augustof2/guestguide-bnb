@@ -681,10 +681,17 @@
     border-radius: 12px;
     padding: 14px 12px;
     text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: background .2s, border-color .2s, transform .15s;
   }
+  .service-item:hover { background: var(--card); border-color: var(--teal); }
+  .service-item:active { transform: scale(.96); }
   .service-icon { font-size: 24px; margin-bottom: 6px; }
   .service-name { font-size: 12px; font-weight: 600; color: var(--text); }
   .service-desc { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .service-wa-hint { font-size: 10px; color: var(--teal); margin-top: 5px; font-weight: 500; }
 
   /* ── PLACES TAB ───────────────────────────────────── */
   .place-card {
@@ -1287,6 +1294,14 @@
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
+        <div class="quick-nav-card" onclick="switchTab('departure')">
+          <div class="quick-nav-icon">🧳</div>
+          <div class="quick-nav-body">
+            <div class="quick-nav-label" data-it="Partenza" data-en="Checkout">Partenza</div>
+            <div class="quick-nav-desc" data-it="Check-out e recensione" data-en="Check-out and review">Check-out e recensione</div>
+          </div>
+          <div class="quick-nav-arrow">›</div>
+        </div>
       </div>
 
       <div id="home-review-section" style="display:none;padding:0 0 4px">
@@ -1449,26 +1464,30 @@
         <!-- Extra Services -->
         <div class="card-title" style="margin-bottom:10px" data-it="✨ Servizi Extra" data-en="✨ Extra Services">✨ Servizi Extra</div>
         <div class="service-grid" style="margin-bottom:20px">
-          <div class="service-item">
+          <a class="service-item" href="#" onclick="requestService('Cambio Biancheria','Linen Change');return false;">
             <div class="service-icon">🧺</div>
             <div class="service-name" data-it="Cambio Biancheria" data-en="Linen Change">Cambio Biancheria</div>
             <div class="service-desc" data-it="Ogni 4 giorni su richiesta" data-en="Every 4 days on request">Ogni 4 giorni su richiesta</div>
-          </div>
-          <div class="service-item">
+            <div class="service-wa-hint" data-it="💬 Richiedi su WhatsApp" data-en="💬 Request on WhatsApp">💬 Richiedi su WhatsApp</div>
+          </a>
+          <a class="service-item" href="#" onclick="requestService('Pulizie Aggiuntive','Extra Cleaning');return false;">
             <div class="service-icon">🧹</div>
             <div class="service-name" data-it="Pulizie Aggiuntive" data-en="Extra Cleaning">Pulizie Aggiuntive</div>
             <div class="service-desc" data-it="Disponibile su richiesta" data-en="Available on request">Disponibile su richiesta</div>
-          </div>
-          <div class="service-item">
+            <div class="service-wa-hint" data-it="💬 Richiedi su WhatsApp" data-en="💬 Request on WhatsApp">💬 Richiedi su WhatsApp</div>
+          </a>
+          <a class="service-item" href="#" onclick="requestService('Transfer Aeroporto','Airport Transfer');return false;">
             <div class="service-icon">🚗</div>
             <div class="service-name" data-it="Transfer Aeroporto" data-en="Airport Transfer">Transfer Aeroporto</div>
             <div class="service-desc" data-it="Prenotabile in anticipo" data-en="Book in advance">Prenotabile in anticipo</div>
-          </div>
-          <div class="service-item">
+            <div class="service-wa-hint" data-it="💬 Richiedi su WhatsApp" data-en="💬 Request on WhatsApp">💬 Richiedi su WhatsApp</div>
+          </a>
+          <a class="service-item" href="#" onclick="requestService('Colazione','Breakfast');return false;">
             <div class="service-icon">☕</div>
             <div class="service-name" data-it="Colazione" data-en="Breakfast">Colazione</div>
             <div class="service-desc" data-it="Disponibile su richiesta" data-en="Available on request">Disponibile su richiesta</div>
-          </div>
+            <div class="service-wa-hint" data-it="💬 Richiedi su WhatsApp" data-en="💬 Request on WhatsApp">💬 Richiedi su WhatsApp</div>
+          </a>
         </div>
 
       </div>
@@ -1575,8 +1594,20 @@
           <div id="sos-extra-contacts"><!-- populated by JS --></div>
         </div>
 
+      </div>
+    </div><!-- /tab-transport -->
+
+    <!-- ── TAB: DEPARTURE ── -->
+    <div class="tab-section" id="tab-departure">
+      <div class="tab-header">
+        <div class="section-eyebrow" data-it="È Ora di Partire" data-en="Time to Leave">È Ora di Partire</div>
+        <div class="section-title" data-it="Partenza" data-en="Checkout">Partenza</div>
+        <div class="section-sub" data-it="Tutto quello che c'è da sapere prima di andare" data-en="Everything you need to know before leaving">Tutto quello che c'è da sapere prima di andare</div>
+      </div>
+      <div class="section-pad" style="padding-top:0">
+
         <!-- Checkout steps -->
-        <div class="checkout-steps" style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border)">
+        <div class="checkout-steps">
           <div class="checkout-title">🏁 <span data-it="Al Check-out" data-en="At Check-out">Al Check-out</span></div>
           <div class="step-item">
             <div class="step-num">1</div>
@@ -1614,14 +1645,14 @@
         <!-- Closing message -->
         <div class="closing-msg">
           <div class="closing-icon">🌟</div>
-          <div class="closing-title" data-it="Grazie per aver scelto il nostro B&amp;B!" data-en="Thank you for choosing our B&amp;B!">Grazie per aver scelto il nostro B&amp;B!</div>
-          <p class="closing-text" data-it="È stato un piacere avervi come ospiti. Speriamo di rivedervi presto! Buon viaggio! ✈️" data-en="It was a pleasure having you as guests. We hope to see you again soon! Safe travels! ✈️">
+          <div class="closing-title" id="closing-title">Grazie per aver scelto il nostro B&amp;B!</div>
+          <p class="closing-text" id="closing-text">
             È stato un piacere avervi come ospiti. Speriamo di rivedervi presto! Buon viaggio! ✈️
           </p>
         </div>
 
       </div>
-    </div><!-- /tab-transport -->
+    </div><!-- /tab-departure -->
 
   </div><!-- /guide-content -->
 
@@ -1646,6 +1677,10 @@
     <button class="nav-item" data-tab="transport" onclick="switchTab('transport')">
       <span class="nav-icon">🚇</span>
       <span class="nav-label" data-it="Muoversi" data-en="Around">Muoversi</span>
+    </button>
+    <button class="nav-item" data-tab="departure" onclick="switchTab('departure')">
+      <span class="nav-icon">🧳</span>
+      <span class="nav-label" data-it="Partenza" data-en="Checkout">Partenza</span>
     </button>
   </nav>
 </div><!-- /guide -->
@@ -1687,7 +1722,13 @@
         <div class="s-divider"></div>
         <div class="s-sub-title">⭐ Recensione Google</div>
         <div class="s-field"><label>Link recensione Google</label><input type="url" id="s-googleReviewUrl" placeholder="https://g.page/r/..."></div>
-        <p style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Se compilato, apparirà un pulsante "Lascia una Recensione su Google" nel check-out.</p>
+        <p style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.5">Se compilato, apparirà un pulsante "Lascia una Recensione su Google" nella sezione Partenza.</p>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">🌟 Messaggio di Chiusura (Partenza)</div>
+        <div class="s-field"><label>Titolo IT</label><input type="text" id="s-closingTitleIt" placeholder="Grazie per aver scelto il nostro B&amp;B!"></div>
+        <div class="s-field"><label>Titolo EN</label><input type="text" id="s-closingTitleEn" placeholder="Thank you for choosing our B&amp;B!"></div>
+        <div class="s-field"><label>Testo IT</label><textarea id="s-closingTextIt" placeholder="È stato un piacere avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Testo EN</label><textarea id="s-closingTextEn" placeholder="It was a pleasure having you as guests..."></textarea></div>
       </div>
     </details>
 
@@ -1835,6 +1876,10 @@ const DEFAULT_DATA = {
   googleReviewUrl: "",
   welcomeIt: "Siamo felici di avervi come ospiti! Questo appartamento è stato preparato con cura per rendere il vostro soggiorno indimenticabile. Siamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
   welcomeEn: "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — please do not hesitate to contact us.",
+  closingTitleIt: "Grazie per aver scelto il nostro B&B!",
+  closingTitleEn: "Thank you for choosing our B&B!",
+  closingTextIt: "È stato un piacere avervi come ospiti. Speriamo di rivedervi presto! Buon viaggio! ✈️",
+  closingTextEn: "It was a pleasure having you as guests. We hope to see you again soon! Safe travels! ✈️",
   extraContacts: [
     { name: "Secondo Contatto", phone: "+39 000 000 0001" }
   ],
@@ -2176,6 +2221,9 @@ function renderApp(aptIndex, lang) {
   // Transport
   renderTransport(d.transport, lang);
 
+  // Departure
+  renderDeparture(d, lang);
+
   // SOS
   document.getElementById('sos-host-name').textContent = d.hostName;
   document.getElementById('sos-host-phone').textContent = '📞 ' + (d.hostPhone || '');
@@ -2325,6 +2373,32 @@ function renderExtraContacts(contacts, lang) {
 }
 
 // ════════════════════════════════════════════
+//  DEPARTURE TAB RENDER
+// ════════════════════════════════════════════
+function renderDeparture(d, lang) {
+  const titleEl = document.getElementById('closing-title');
+  const textEl = document.getElementById('closing-text');
+  if (titleEl) titleEl.textContent = lang === 'it' ? (d.closingTitleIt || '') : (d.closingTitleEn || '');
+  if (textEl) textEl.textContent = lang === 'it' ? (d.closingTextIt || '') : (d.closingTextEn || '');
+}
+
+// ════════════════════════════════════════════
+//  WHATSAPP SERVICE REQUEST
+// ════════════════════════════════════════════
+function requestService(nameIt, nameEn) {
+  const lang = currentLang;
+  const name = lang === 'it' ? nameIt : nameEn;
+  const phone = ((currentData && currentData.hostPhone) || '').replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
+  const msg = lang === 'it'
+    ? `Ciao! Vorrei richiedere il servizio: ${nameIt}`
+    : `Hi! I would like to request the service: ${nameEn}`;
+  const url = phone
+    ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`
+    : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+// ════════════════════════════════════════════
 //  LANGUAGE HELPERS
 // ════════════════════════════════════════════
 function applyLangAttrs(lang) {
@@ -2342,7 +2416,7 @@ function setGuideLang(lang) {
 // ════════════════════════════════════════════
 //  TAB NAVIGATION
 // ════════════════════════════════════════════
-const TAB_IDS = ['home', 'stay', 'places', 'food', 'transport'];
+const TAB_IDS = ['home', 'stay', 'places', 'food', 'transport', 'departure'];
 
 function switchTab(tabId) {
   TAB_IDS.forEach(t => {
@@ -2714,6 +2788,10 @@ function populateSettingsForms() {
   document.getElementById('s-welcomeIt').value = d.welcomeIt || '';
   document.getElementById('s-welcomeEn').value = d.welcomeEn || '';
   document.getElementById('s-googleReviewUrl').value = d.googleReviewUrl || '';
+  document.getElementById('s-closingTitleIt').value = d.closingTitleIt || '';
+  document.getElementById('s-closingTitleEn').value = d.closingTitleEn || '';
+  document.getElementById('s-closingTextIt').value = d.closingTextIt || '';
+  document.getElementById('s-closingTextEn').value = d.closingTextEn || '';
 
   // Apts (dynamic)
   renderSettingsApts(d.apts);
@@ -2761,6 +2839,10 @@ function collectFormData() {
   d.welcomeIt = document.getElementById('s-welcomeIt').value;
   d.welcomeEn = document.getElementById('s-welcomeEn').value;
   d.googleReviewUrl = document.getElementById('s-googleReviewUrl').value.trim();
+  d.closingTitleIt = document.getElementById('s-closingTitleIt').value.trim();
+  d.closingTitleEn = document.getElementById('s-closingTitleEn').value.trim();
+  d.closingTextIt = document.getElementById('s-closingTextIt').value.trim();
+  d.closingTextEn = document.getElementById('s-closingTextEn').value.trim();
 
   // Dynamic apts
   d.apts = collectSettingsApts();
