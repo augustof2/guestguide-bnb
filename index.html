@@ -2234,7 +2234,12 @@ function renderApp(aptIndex, lang) {
       const a = document.createElement('a');
       a.className = 'service-item';
       a.href = '#';
-      a.setAttribute('onclick', `requestService(${JSON.stringify(svc.nameIt || '')},${JSON.stringify(svc.nameEn || '')});return false;`);
+      const nameIt = svc.nameIt || '';
+      const nameEn = svc.nameEn || '';
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        requestService(nameIt, nameEn);
+      });
       a.innerHTML = `
         <div class="service-icon">${escHtml(svc.icon || '✨')}</div>
         <div class="service-name">${escHtml(name)}</div>
