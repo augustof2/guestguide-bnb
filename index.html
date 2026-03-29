@@ -1597,6 +1597,7 @@
           <label style="white-space:nowrap">Mostra sezione</label>
           <input type="checkbox" id="s-tr-airportEnabled" style="width:auto;accent-color:var(--teal)">
         </div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-tr-airportIcon" placeholder="✈️" style="max-width:80px"></div>
         <div class="s-field"><label>Descrizione</label><textarea id="s-tr-airportIt" placeholder="All'uscita dell'aeroporto..."></textarea></div>
         <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-airportMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
@@ -1605,6 +1606,7 @@
           <label style="white-space:nowrap">Mostra sezione</label>
           <input type="checkbox" id="s-tr-stationEnabled" style="width:auto;accent-color:var(--teal)">
         </div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-tr-stationIcon" placeholder="🚉" style="max-width:80px"></div>
         <div class="s-field"><label>Descrizione</label><textarea id="s-tr-stationIt" placeholder="Dalla stazione..."></textarea></div>
         <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-stationMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
@@ -1613,6 +1615,7 @@
           <label style="white-space:nowrap">Mostra sezione</label>
           <input type="checkbox" id="s-tr-metroEnabled" style="width:auto;accent-color:var(--teal)">
         </div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-tr-metroIcon" placeholder="🚇" style="max-width:80px"></div>
         <div class="s-field"><label>Descrizione</label><input type="text" id="s-tr-metroIt" placeholder="Fermata più vicina..."></div>
         <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-metroMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
@@ -1621,6 +1624,7 @@
           <label style="white-space:nowrap">Mostra sezione</label>
           <input type="checkbox" id="s-tr-busEnabled" style="width:auto;accent-color:var(--teal)">
         </div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-tr-busIcon" placeholder="🚌" style="max-width:80px"></div>
         <div class="s-field"><label>Descrizione</label><input type="text" id="s-tr-busIt" placeholder="Linee principali..."></div>
         <div class="s-field"><label>Link Maps</label><input type="url" id="s-tr-busMaps" placeholder="https://maps.google.com/..."></div>
         <div class="s-divider"></div>
@@ -1658,21 +1662,27 @@
         <p style="font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.5">Personalizza le etichette visibili nella barra di navigazione.</p>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🏠 Home</div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-homeIcon" placeholder="🏠" style="max-width:80px"></div>
         <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-homeIt" placeholder="Home"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🛋️ Soggiorno</div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-stayIcon" placeholder="🛋️" style="max-width:80px"></div>
         <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-stayIt" placeholder="Soggiorno"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🗺️ Luoghi</div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-placesIcon" placeholder="🗺️" style="max-width:80px"></div>
         <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-placesIt" placeholder="Luoghi"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🍽️ Mangiare</div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-foodIcon" placeholder="🍽️" style="max-width:80px"></div>
         <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-foodIt" placeholder="Mangiare"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🚇 Muoversi</div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-transportIcon" placeholder="🚇" style="max-width:80px"></div>
         <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-transportIt" placeholder="Muoversi"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🧳 Partenza</div>
+        <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-departureIcon" placeholder="🧳" style="max-width:80px"></div>
         <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-departureIt" placeholder="Partenza"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">📄 Intestazioni Sezioni</div>
@@ -1919,11 +1929,17 @@ const DEFAULT_DATA = {
   ],
   navLabels: {
     homeIt: "Home",
+    homeIcon: "🏠",
     stayIt: "Soggiorno",
+    stayIcon: "🛋️",
     placesIt: "Luoghi",
+    placesIcon: "🗺️",
     foodIt: "Mangiare",
+    foodIcon: "🍽️",
     transportIt: "Muoversi",
-    departureIt: "Partenza"
+    transportIcon: "🚇",
+    departureIt: "Partenza",
+    departureIcon: "🧳"
   },
   sectionTitles: {
     stayEyebrowIt: "Il Tuo Appartamento",
@@ -1939,15 +1955,19 @@ const DEFAULT_DATA = {
   },
   transport: {
     airportEnabled: true,
+    airportIcon: "✈️",
     airportIt: "All'uscita dell'aeroporto trovi i taxi ufficiali. Tariffa fissa ~50–60€ per il centro. In alternativa, treno diretto per la stazione centrale ogni 30 min (~14€).",
     airportMaps: "",
     stationEnabled: true,
+    stationIcon: "🚉",
     stationIt: "Dalla stazione puoi prendere metro, autobus o taxi per raggiungere l'appartamento. La fermata metro è a 5 min a piedi.",
     stationMaps: "",
     metroEnabled: true,
+    metroIcon: "🚇",
     metroIt: "Fermata più vicina: Centrale (Linea A) a 800 metri dall'appartamento.",
     metroMaps: "",
     busEnabled: true,
+    busIcon: "🚌",
     busIt: "Linee principali: Bus 10, 20, 30 verso il centro. Fermata a 200 metri dall'appartamento.",
     busMaps: "",
     ticketsIt: "Biglietto singolo: ~€1,50 (valido 90 minuti). Abbonamento giornaliero: ~€5,00. Acquisto alle macchinette in stazione o tramite app.",
@@ -2226,10 +2246,20 @@ function renderApp(aptIndex) {
     transport: nl.transportIt,
     departure: nl.departureIt
   };
+  const navIconMap = {
+    home: nl.homeIcon || DEFAULT_DATA.navLabels.homeIcon,
+    stay: nl.stayIcon || DEFAULT_DATA.navLabels.stayIcon,
+    places: nl.placesIcon || DEFAULT_DATA.navLabels.placesIcon,
+    food: nl.foodIcon || DEFAULT_DATA.navLabels.foodIcon,
+    transport: nl.transportIcon || DEFAULT_DATA.navLabels.transportIcon,
+    departure: nl.departureIcon || DEFAULT_DATA.navLabels.departureIcon
+  };
   document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
     const tab = btn.getAttribute('data-tab');
     const label = btn.querySelector('.nav-label');
     if (label && navLabelMap[tab]) label.textContent = navLabelMap[tab];
+    const icon = btn.querySelector('.nav-icon');
+    if (icon && navIconMap[tab]) icon.textContent = navIconMap[tab];
   });
   document.querySelectorAll('.quick-nav-card').forEach(card => {
     const onclick = card.getAttribute('onclick') || '';
@@ -2238,6 +2268,8 @@ function renderApp(aptIndex) {
       const tab = match[1];
       const label = card.querySelector('.quick-nav-label');
       if (label && navLabelMap[tab]) label.textContent = navLabelMap[tab];
+      const icon = card.querySelector('.quick-nav-icon');
+      if (icon && navIconMap[tab]) icon.textContent = navIconMap[tab];
     }
   });
 
@@ -2334,10 +2366,10 @@ function renderTransport(transport) {
   const container = document.getElementById('transport-container');
   container.innerHTML = '';
   const items = [
-    { key: 'airport', icon: '✈️', label: "Dall'Aeroporto", text: transport.airportIt, maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
-    { key: 'station', icon: '🚉', label: 'Dalla Stazione', text: transport.stationIt, maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
-    { key: 'metro', icon: '🚇', label: 'Metro', text: transport.metroIt, maps: transport.metroMaps, enabled: transport.metroEnabled !== false },
-    { key: 'bus', icon: '🚌', label: 'Bus', text: transport.busIt, maps: transport.busMaps, enabled: transport.busEnabled !== false }
+    { key: 'airport', icon: transport.airportIcon || '✈️', label: "Dall'Aeroporto", text: transport.airportIt, maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
+    { key: 'station', icon: transport.stationIcon || '🚉', label: 'Dalla Stazione', text: transport.stationIt, maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
+    { key: 'metro', icon: transport.metroIcon || '🚇', label: 'Metro', text: transport.metroIt, maps: transport.metroMaps, enabled: transport.metroEnabled !== false },
+    { key: 'bus', icon: transport.busIcon || '🚌', label: 'Bus', text: transport.busIt, maps: transport.busMaps, enabled: transport.busEnabled !== false }
   ];
   const mapsLabel = '🧭 Vedi su Maps';
   items.forEach(item => {
@@ -2818,7 +2850,7 @@ function renderSettingsPlaces(places) {
         <span>Luogo ${i + 1}</span>
         <button class="s-remove-btn" onclick="removeSettingsPlace(${i})">🗑️ Rimuovi</button>
       </div>
-      <input type="hidden" id="s-p${i}-emoji" value="${escAttr(p.emoji || '📍')}">
+      <div class="s-field"><label>Emoji</label><input type="text" id="s-p${i}-emoji" value="${escAttr(p.emoji || '📍')}" placeholder="📍" style="max-width:80px"></div>
       <div class="s-field"><label>Nome</label><input type="text" id="s-p${i}-name" value="${escAttr(p.name || '')}"></div>
       <div class="s-field"><label>Descrizione</label><textarea id="s-p${i}-descIt">${escHtml(p.descIt || '')}</textarea></div>
       <div class="s-field"><label>Come arrivarci</label><textarea id="s-p${i}-howIt">${escHtml(p.howIt || '')}</textarea></div>
@@ -2871,7 +2903,7 @@ function renderSettingsRests(rests) {
         <span>Ristorante ${i + 1}</span>
         <button class="s-remove-btn" onclick="removeSettingsRest(${i})">🗑️ Rimuovi</button>
       </div>
-      <input type="hidden" id="s-r${i}-emoji" value="${escAttr(r.emoji || '🍽️')}">
+      <div class="s-field"><label>Emoji</label><input type="text" id="s-r${i}-emoji" value="${escAttr(r.emoji || '🍽️')}" placeholder="🍽️" style="max-width:80px"></div>
       <div class="s-field"><label>Nome</label><input type="text" id="s-r${i}-name" value="${escAttr(r.name || '')}"></div>
       <div class="s-field"><label>Tipo</label><input type="text" id="s-r${i}-tipo" value="${escAttr(r.tipo || '')}"></div>
       <div class="s-field"><label>Descrizione</label><textarea id="s-r${i}-descIt">${escHtml(r.descIt || '')}</textarea></div>
@@ -3001,15 +3033,19 @@ function populateSettingsForms() {
   // Transport
   const tr = d.transport;
   document.getElementById('s-tr-airportEnabled').checked = tr.airportEnabled !== false;
+  document.getElementById('s-tr-airportIcon').value = tr.airportIcon || '';
   document.getElementById('s-tr-airportIt').value = tr.airportIt || '';
   document.getElementById('s-tr-airportMaps').value = tr.airportMaps || '';
   document.getElementById('s-tr-stationEnabled').checked = tr.stationEnabled !== false;
+  document.getElementById('s-tr-stationIcon').value = tr.stationIcon || '';
   document.getElementById('s-tr-stationIt').value = tr.stationIt || '';
   document.getElementById('s-tr-stationMaps').value = tr.stationMaps || '';
   document.getElementById('s-tr-metroEnabled').checked = tr.metroEnabled !== false;
+  document.getElementById('s-tr-metroIcon').value = tr.metroIcon || '';
   document.getElementById('s-tr-metroIt').value = tr.metroIt || '';
   document.getElementById('s-tr-metroMaps').value = tr.metroMaps || '';
   document.getElementById('s-tr-busEnabled').checked = tr.busEnabled !== false;
+  document.getElementById('s-tr-busIcon').value = tr.busIcon || '';
   document.getElementById('s-tr-busIt').value = tr.busIt || '';
   document.getElementById('s-tr-busMaps').value = tr.busMaps || '';
   document.getElementById('s-tr-ticketsIt').value = tr.ticketsIt || '';
@@ -3020,11 +3056,17 @@ function populateSettingsForms() {
 
   // Nav Labels
   const nl = d.navLabels || {};
+  document.getElementById('s-nl-homeIcon').value = nl.homeIcon || '';
   document.getElementById('s-nl-homeIt').value = nl.homeIt || '';
+  document.getElementById('s-nl-stayIcon').value = nl.stayIcon || '';
   document.getElementById('s-nl-stayIt').value = nl.stayIt || '';
+  document.getElementById('s-nl-placesIcon').value = nl.placesIcon || '';
   document.getElementById('s-nl-placesIt').value = nl.placesIt || '';
+  document.getElementById('s-nl-foodIcon').value = nl.foodIcon || '';
   document.getElementById('s-nl-foodIt').value = nl.foodIt || '';
+  document.getElementById('s-nl-transportIcon').value = nl.transportIcon || '';
   document.getElementById('s-nl-transportIt').value = nl.transportIt || '';
+  document.getElementById('s-nl-departureIcon').value = nl.departureIcon || '';
   document.getElementById('s-nl-departureIt').value = nl.departureIt || '';
 
   // Section Titles
@@ -3071,15 +3113,19 @@ function collectFormData() {
   d.supermarketMaps = document.getElementById('s-supermarketMaps').value.trim();
 
   d.transport.airportEnabled = document.getElementById('s-tr-airportEnabled').checked;
+  d.transport.airportIcon = document.getElementById('s-tr-airportIcon').value.trim() || '✈️';
   d.transport.airportIt = document.getElementById('s-tr-airportIt').value.trim();
   d.transport.airportMaps = document.getElementById('s-tr-airportMaps').value.trim();
   d.transport.stationEnabled = document.getElementById('s-tr-stationEnabled').checked;
+  d.transport.stationIcon = document.getElementById('s-tr-stationIcon').value.trim() || '🚉';
   d.transport.stationIt = document.getElementById('s-tr-stationIt').value.trim();
   d.transport.stationMaps = document.getElementById('s-tr-stationMaps').value.trim();
   d.transport.metroEnabled = document.getElementById('s-tr-metroEnabled').checked;
+  d.transport.metroIcon = document.getElementById('s-tr-metroIcon').value.trim() || '🚇';
   d.transport.metroIt = document.getElementById('s-tr-metroIt').value.trim();
   d.transport.metroMaps = document.getElementById('s-tr-metroMaps').value.trim();
   d.transport.busEnabled = document.getElementById('s-tr-busEnabled').checked;
+  d.transport.busIcon = document.getElementById('s-tr-busIcon').value.trim() || '🚌';
   d.transport.busIt = document.getElementById('s-tr-busIt').value.trim();
   d.transport.busMaps = document.getElementById('s-tr-busMaps').value.trim();
   d.transport.ticketsIt = document.getElementById('s-tr-ticketsIt').value.trim();
@@ -3090,12 +3136,18 @@ function collectFormData() {
 
   // Nav Labels
   d.navLabels = {
-    homeIt:      document.getElementById('s-nl-homeIt').value.trim() || 'Home',
-    stayIt:      document.getElementById('s-nl-stayIt').value.trim() || 'Soggiorno',
-    placesIt:    document.getElementById('s-nl-placesIt').value.trim() || 'Luoghi',
-    foodIt:      document.getElementById('s-nl-foodIt').value.trim() || 'Mangiare',
-    transportIt: document.getElementById('s-nl-transportIt').value.trim() || 'Muoversi',
-    departureIt: document.getElementById('s-nl-departureIt').value.trim() || 'Partenza'
+    homeIt:         document.getElementById('s-nl-homeIt').value.trim() || 'Home',
+    homeIcon:       document.getElementById('s-nl-homeIcon').value.trim() || '🏠',
+    stayIt:         document.getElementById('s-nl-stayIt').value.trim() || 'Soggiorno',
+    stayIcon:       document.getElementById('s-nl-stayIcon').value.trim() || '🛋️',
+    placesIt:       document.getElementById('s-nl-placesIt').value.trim() || 'Luoghi',
+    placesIcon:     document.getElementById('s-nl-placesIcon').value.trim() || '🗺️',
+    foodIt:         document.getElementById('s-nl-foodIt').value.trim() || 'Mangiare',
+    foodIcon:       document.getElementById('s-nl-foodIcon').value.trim() || '🍽️',
+    transportIt:    document.getElementById('s-nl-transportIt').value.trim() || 'Muoversi',
+    transportIcon:  document.getElementById('s-nl-transportIcon').value.trim() || '🚇',
+    departureIt:    document.getElementById('s-nl-departureIt').value.trim() || 'Partenza',
+    departureIcon:  document.getElementById('s-nl-departureIcon').value.trim() || '🧳'
   };
 
   // Section Titles
