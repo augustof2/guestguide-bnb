@@ -3455,6 +3455,14 @@ function renderRichText(text) {
 // ════════════════════════════════════════════
 (function init() {
   currentData = loadData();
+
+  // Auto-detect browser language: default to English for non-Italian browsers
+  const browserLang = (navigator.language || navigator.userLanguage || 'it').toLowerCase();
+  if (!browserLang.startsWith('it')) {
+    currentLang = 'en';
+    landingLang = 'en';
+  }
+
   renderLanding();
 
   // Global keydown for PIN modal — intentional: single-page app, listener persists for the app lifetime
