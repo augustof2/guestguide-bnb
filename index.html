@@ -1265,7 +1265,7 @@
         <div class="quick-nav-card" onclick="switchTab('stay')">
           <div class="quick-nav-icon">🛋️</div>
           <div class="quick-nav-body">
-            <div class="quick-nav-label" data-it="Soggiorno" data-en="Stay">Soggiorno</div>
+            <div class="quick-nav-label" data-it="Servizi" data-en="Services">Servizi</div>
             <div class="quick-nav-desc" data-it="WiFi, regole, spazi, servizi" data-en="WiFi, rules, spaces, services">WiFi, regole, spazi, servizi</div>
           </div>
           <div class="quick-nav-arrow">›</div>
@@ -1314,24 +1314,9 @@
     <div class="tab-section" id="tab-stay">
       <div class="tab-header">
         <div class="section-eyebrow" data-it="Il Tuo Appartamento" data-en="Your Apartment">Il Tuo Appartamento</div>
-        <div class="section-title" data-it="Soggiorno" data-en="Stay">Soggiorno</div>
+        <div class="section-title" data-it="Servizi" data-en="Services">Servizi</div>
       </div>
       <div class="section-pad" style="padding-top:0">
-
-        <!-- Check-in / Check-out -->
-        <div class="checkinout-row">
-          <div class="time-card">
-            <div class="time-icon">🔑</div>
-            <div class="time-label" data-it="Check-in" data-en="Check-in">Check-in</div>
-            <div class="time-value" id="st-checkin">15:00</div>
-          </div>
-          <div class="time-card">
-            <div class="time-icon">🚪</div>
-            <div class="time-label" data-it="Check-out" data-en="Check-out">Check-out</div>
-            <div class="time-value" id="st-checkout">10:00</div>
-          </div>
-        </div>
-        <div class="guests-badge">👥 <span id="st-guests" data-it-key="maxGuests" data-en-key="maxGuestsEn">4 persone</span></div>
 
         <!-- Come raggiungerci -->
         <div class="info-card">
@@ -1343,24 +1328,6 @@
           <a class="maps-btn" id="st-maps" href="#" target="_blank">🧭 <span data-it="Apri su Maps" data-en="Open in Maps">Apri su Maps</span></a>
         </div>
 
-        <!-- Come accedere -->
-        <div class="info-card">
-          <div class="info-card-header">
-            <span class="info-card-icon">🗝️</span>
-            <span class="info-card-title" data-it="Come accedere" data-en="How to access">Come accedere</span>
-          </div>
-          <p class="info-card-body" id="st-how-access"></p>
-        </div>
-
-        <!-- Parcheggio -->
-        <div class="info-card">
-          <div class="info-card-header">
-            <span class="info-card-icon">🚗</span>
-            <span class="info-card-title" data-it="Parcheggio" data-en="Parking">Parcheggio</span>
-          </div>
-          <p class="info-card-body" id="st-parking"></p>
-        </div>
-
         <!-- WiFi -->
         <div class="wifi-card">
           <div class="wifi-card-eyebrow">📶 WiFi</div>
@@ -1368,56 +1335,6 @@
           <div class="wifi-pass-row">
             <div class="wifi-pass-text" id="st-wifi-pass">password123</div>
             <button class="copy-btn" id="copy-wifi-btn" onclick="copyWifi()" title="Copia password">📋</button>
-          </div>
-        </div>
-
-        <!-- House Rules -->
-        <div class="card" style="margin-bottom:14px">
-          <div class="card-title" data-it="🏠 Regole della casa" data-en="🏠 House Rules">🏠 Regole della casa</div>
-          <ul class="rules-list" id="st-rules-list">
-            <!-- populated by JS -->
-          </ul>
-        </div>
-
-        <!-- Spaces -->
-        <div class="card-title" style="margin-bottom:10px" data-it="🏡 Gli Spazi" data-en="🏡 The Spaces">🏡 Gli Spazi</div>
-
-        <div class="space-card">
-          <div class="space-header">
-            <span class="space-icon">🛌</span>
-            <span class="space-name" data-it="Camera da Letto" data-en="Bedroom">Camera da Letto</span>
-          </div>
-          <div class="amenity-tags" id="st-rooms-tags">
-            <!-- populated by JS based on roomsIt/roomsEn -->
-          </div>
-          <p style="font-size:13px;color:var(--text2);margin-top:10px;line-height:1.6" id="st-rooms-desc"></p>
-        </div>
-
-        <div class="space-card">
-          <div class="space-header">
-            <span class="space-icon">🍳</span>
-            <span class="space-name" data-it="Cucina" data-en="Kitchen">Cucina</span>
-          </div>
-          <div class="amenity-tags">
-            <span class="tag" data-it="Piano cottura" data-en="Stove">Piano cottura</span>
-            <span class="tag" data-it="Forno" data-en="Oven">Forno</span>
-            <span class="tag" data-it="Frigorifero" data-en="Fridge">Frigorifero</span>
-            <span class="tag" data-it="Lavastoviglie" data-en="Dishwasher">Lavastoviglie</span>
-            <span class="tag" data-it="Caffettiera" data-en="Coffee maker">Caffettiera</span>
-            <span class="tag" data-it="Microonde" data-en="Microwave">Microonde</span>
-          </div>
-        </div>
-
-        <div class="space-card" style="margin-bottom:20px">
-          <div class="space-header">
-            <span class="space-icon">🚿</span>
-            <span class="space-name" data-it="Bagno" data-en="Bathroom">Bagno</span>
-          </div>
-          <div class="amenity-tags">
-            <span class="tag" data-it="Doccia" data-en="Shower">Doccia</span>
-            <span class="tag" data-it="Asciugamani" data-en="Towels">Asciugamani</span>
-            <span class="tag" data-it="Phon" data-en="Hair dryer">Phon</span>
-            <span class="tag" data-it="Prodotti igiene" data-en="Toiletries">Prodotti igiene</span>
           </div>
         </div>
 
@@ -1624,7 +1541,7 @@
     </button>
     <button class="nav-item" data-tab="stay" onclick="switchTab('stay')">
       <span class="nav-icon">🛋️</span>
-      <span class="nav-label" data-it="Soggiorno" data-en="Stay">Soggiorno</span>
+      <span class="nav-label" data-it="Servizi" data-en="Services">Servizi</span>
     </button>
     <button class="nav-item" data-tab="places" onclick="switchTab('places')">
       <span class="nav-icon">🗺️</span>
