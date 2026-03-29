@@ -2191,6 +2191,23 @@ function renderApp(aptIndex, lang) {
   const stMaps = document.getElementById('st-maps');
   stMaps.href = apt.mapsLink || '#';
 
+  // Stay tab - soggiorno extended fields
+  document.getElementById('st-how-reach').textContent = lang === 'it' ? (apt.howToReachIt || '') : (apt.howToReachEn || apt.howToReachIt || '');
+  document.getElementById('st-how-access').textContent = lang === 'it' ? (apt.howToAccessIt || '') : (apt.howToAccessEn || apt.howToAccessIt || '');
+  document.getElementById('st-parking').textContent = lang === 'it' ? (apt.parkingIt || '') : (apt.parkingEn || apt.parkingIt || '');
+
+  // House Rules
+  const rulesList = document.getElementById('st-rules-list');
+  rulesList.innerHTML = '';
+  (apt.houseRules || []).forEach(r => {
+    const li = document.createElement('li');
+    li.className = 'rule-item';
+    const title = lang === 'it' ? r.titleIt : (r.titleEn || r.titleIt);
+    const desc = lang === 'it' ? r.descIt : (r.descEn || r.descIt);
+    li.innerHTML = `<span class="rule-icon">${escHtml(r.icon || '')}</span><div><div class="rule-title">${escHtml(title || '')}</div><div class="rule-desc">${escHtml(desc || '')}</div></div>`;
+    rulesList.appendChild(li);
+  });
+
   // Rooms description
   const roomsDesc = lang === 'it' ? apt.roomsIt : apt.roomsEn;
   document.getElementById('st-rooms-desc').textContent = roomsDesc;
@@ -2559,8 +2576,25 @@ function renderSettingsApts(apts) {
         <div class="s-field"><label>WiFi — Password</label><input type="text" id="s-a${i}-wifiPass" value="${escAttr(apt.wifiPass || '')}"></div>
         <div class="s-field"><label>Check-in (orario)</label><input type="text" id="s-a${i}-checkin" value="${escAttr(apt.checkin || '')}" placeholder="15:00"></div>
         <div class="s-field"><label>Check-out (orario)</label><input type="text" id="s-a${i}-checkout" value="${escAttr(apt.checkout || '')}" placeholder="10:00"></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">📍 Come raggiungerci</div>
+        <div class="s-field"><label>IT</label><textarea id="s-a${i}-howToReachIt" placeholder="Dalla stazione centrale...">${escHtml(apt.howToReachIt || '')}</textarea></div>
+        <div class="s-field"><label>EN</label><textarea id="s-a${i}-howToReachEn" placeholder="From the central station...">${escHtml(apt.howToReachEn || '')}</textarea></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">🗝️ Come accedere</div>
+        <div class="s-field"><label>IT</label><textarea id="s-a${i}-howToAccessIt" placeholder="Le chiavi vi verranno consegnate...">${escHtml(apt.howToAccessIt || '')}</textarea></div>
+        <div class="s-field"><label>EN</label><textarea id="s-a${i}-howToAccessEn" placeholder="The keys will be handed to you...">${escHtml(apt.howToAccessEn || '')}</textarea></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">🚗 Parcheggio</div>
+        <div class="s-field"><label>IT</label><textarea id="s-a${i}-parkingIt" placeholder="Parcheggio pubblico disponibile...">${escHtml(apt.parkingIt || '')}</textarea></div>
+        <div class="s-field"><label>EN</label><textarea id="s-a${i}-parkingEn" placeholder="Public parking available...">${escHtml(apt.parkingEn || '')}</textarea></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">🏠 Regole della casa</div>
+        <div id="s-a${i}-rules" data-count="0"></div>
+        <button class="s-add-btn" style="margin-top:8px" onclick="addAptHouseRule(${i})">➕ Aggiungi Regola</button>
       </div>`;
     container.appendChild(section);
+    renderAptHouseRules(i, apt.houseRules || []);
   });
 }
 
@@ -2570,10 +2604,11 @@ function collectSettingsApts() {
   const apts = [];
   for (let i = 0; i < count; i++) {
     const apt = {};
-    ['name','nameEn','address','addressShort','mapsLink','maxGuests','maxGuestsEn','roomsIt','roomsEn','wifi','wifiPass','checkin','checkout'].forEach(k => {
+    ['name','nameEn','address','addressShort','mapsLink','maxGuests','maxGuestsEn','roomsIt','roomsEn','wifi','wifiPass','checkin','checkout','howToReachIt','howToReachEn','howToAccessIt','howToAccessEn','parkingIt','parkingEn'].forEach(k => {
       const el = document.getElementById(`s-a${i}-${k}`);
       if (el) apt[k] = el.value;
     });
+    apt.houseRules = collectAptHouseRules(i);
     apts.push(apt);
   }
   return apts;
@@ -2582,7 +2617,7 @@ function collectSettingsApts() {
 function addSettingsApt() {
   const current = collectSettingsApts();
   const n = current.length + 1;
-  current.push({ name: `Appartamento ${n}`, nameEn: `Apartment ${n}`, address: '', addressShort: '', mapsLink: '', maxGuests: '4 persone', maxGuestsEn: '4 guests', roomsIt: '', roomsEn: '', wifi: '', wifiPass: '', checkin: '15:00', checkout: '10:00' });
+  current.push({ name: `Appartamento ${n}`, nameEn: `Apartment ${n}`, address: '', addressShort: '', mapsLink: '', maxGuests: '4 persone', maxGuestsEn: '4 guests', roomsIt: '', roomsEn: '', wifi: '', wifiPass: '', checkin: '15:00', checkout: '10:00', howToReachIt: '', howToReachEn: '', howToAccessIt: '', howToAccessEn: '', parkingIt: '', parkingEn: '', houseRules: [] });
   renderSettingsApts(current);
   const last = document.getElementById('s-apts-container').lastElementChild;
   if (last) { last.open = true; last.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
@@ -2594,6 +2629,58 @@ function removeSettingsApt(idx) {
   if (!confirm(`Eliminare Appartamento ${idx + 1}? Le modifiche non salvate verranno perse.`)) return;
   current.splice(idx, 1);
   renderSettingsApts(current);
+}
+
+// ════════════════════════════════════════════
+//  SETTINGS: APT HOUSE RULES (dynamic)
+// ════════════════════════════════════════════
+function renderAptHouseRules(aptIndex, rules) {
+  const container = document.getElementById(`s-a${aptIndex}-rules`);
+  if (!container) return;
+  container.dataset.count = rules.length;
+  let html = '';
+  rules.forEach((r, j) => {
+    html += `
+      <div class="s-sub-title s-sub-title-row" style="margin-top:12px">
+        <span>Regola ${j + 1}</span>
+        <button class="s-remove-btn" onclick="removeAptHouseRule(${aptIndex}, ${j})">🗑️ Rimuovi</button>
+      </div>
+      <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-r${j}-icon" value="${escAttr(r.icon || '')}" placeholder="🔇"></div>
+      <div class="s-field"><label>Titolo IT</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escAttr(r.titleIt || '')}"></div>
+      <div class="s-field"><label>Titolo EN</label><input type="text" id="s-a${aptIndex}-r${j}-titleEn" value="${escAttr(r.titleEn || '')}"></div>
+      <div class="s-field"><label>Descrizione IT</label><textarea id="s-a${aptIndex}-r${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione EN</label><textarea id="s-a${aptIndex}-r${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>`;
+  });
+  container.innerHTML = html;
+}
+
+function collectAptHouseRules(aptIndex) {
+  const container = document.getElementById(`s-a${aptIndex}-rules`);
+  if (!container) return [];
+  const count = parseInt(container.dataset.count || '0');
+  const rules = [];
+  for (let j = 0; j < count; j++) {
+    const rule = {};
+    ['icon', 'titleIt', 'titleEn', 'descIt', 'descEn'].forEach(k => {
+      const el = document.getElementById(`s-a${aptIndex}-r${j}-${k}`);
+      if (el) rule[k] = el.value;
+    });
+    rules.push(rule);
+  }
+  return rules;
+}
+
+function addAptHouseRule(aptIndex) {
+  const current = collectAptHouseRules(aptIndex);
+  current.push({ icon: '🏠', titleIt: '', titleEn: '', descIt: '', descEn: '' });
+  renderAptHouseRules(aptIndex, current);
+}
+
+function removeAptHouseRule(aptIndex, ruleIdx) {
+  if (!confirm(`Rimuovere la regola ${ruleIdx + 1}?`)) return;
+  const current = collectAptHouseRules(aptIndex);
+  current.splice(ruleIdx, 1);
+  renderAptHouseRules(aptIndex, current);
 }
 
 // ════════════════════════════════════════════
