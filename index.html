@@ -1790,7 +1790,7 @@ function loadData() {
   try {
     const raw = localStorage.getItem('bnb_guide_data');
     if (raw) return JSON.parse(raw);
-  } catch(e) {}
+  } catch(e) { console.error('Failed to load saved data:', e); }
   return deepClone(DEFAULT_DATA);
 }
 
@@ -1814,7 +1814,7 @@ function renderLanding() {
     document.getElementById('l-bbname-em').innerHTML = nameParts[nameParts.length - 1];
   } else {
     document.getElementById('l-bbname-line1').textContent = d.bbName;
-    document.getElementById('l-bbname-em').textContent = '';
+    document.getElementById('l-bbname-em').innerHTML = '';
   }
   document.getElementById('l-subtitle').textContent = d.subtitle;
 
@@ -2237,7 +2237,10 @@ function saveAndApply() {
 }
 
 function resetData() {
-  if (!confirm('Ripristinare i dati predefiniti? Tutte le modifiche verranno perse.')) return;
+  const msg = landingLang === 'it'
+    ? 'Ripristinare i dati predefiniti? Tutte le modifiche verranno perse.'
+    : 'Reset to default data? All changes will be lost.';
+  if (!confirm(msg)) return;
   currentData = deepClone(DEFAULT_DATA);
   saveData(currentData);
   renderLanding();
@@ -2269,9 +2272,9 @@ function importJSON(event) {
       saveData(currentData);
       renderLanding();
       populateSettingsForms();
-      alert('Dati importati con successo!');
+      alert(landingLang === 'it' ? 'Dati importati con successo!' : 'Data imported successfully!');
     } catch(err) {
-      alert('Errore nel file JSON. Verificare il formato.');
+      alert(landingLang === 'it' ? 'Errore nel file JSON. Verificare il formato.' : 'JSON file error. Please check the format.');
     }
   };
   reader.readAsText(file);
