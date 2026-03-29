@@ -22,11 +22,17 @@ Una **Guest Guide interattiva** per il tuo Bed & Breakfast — un singolo file `
 
 ## 🚀 Deploy su GitHub Pages
 
-1. Fai **fork** di questo repository (o usalo direttamente)
-2. Vai su **Settings → Pages**
-3. Seleziona **Branch: `main`** → cartella **`/ (root)`**
-4. Clicca **Save**
-5. Il sito sarà live su `https://TUO-USERNAME.github.io/guestguide-bnb/`
+Il repository include un workflow GitHub Actions che pubblica automaticamente il sito ogni volta che fai push su `main`.
+
+### Primo Deploy (una sola volta)
+
+1. Vai su **Settings → Pages** nel tuo repository
+2. In **Source**, seleziona **GitHub Actions**
+3. Clicca **Save**
+4. Il sito si pubblicherà automaticamente ad ogni push su `main`
+5. Sarà live su `https://TUO-USERNAME.github.io/guestguide-bnb/`
+
+> **Nota:** Se vedi ancora una pagina vuota o un errore 404 subito dopo il merge, attendi 1-2 minuti che il deployment finisca, poi ricarica la pagina.
 
 ---
 
@@ -68,7 +74,9 @@ const DEFAULT_DATA = {
 
 ```
 guestguide-bnb/
-└── index.html    ← tutto il codice (HTML + CSS + JS inline)
+├── index.html                    ← tutto il codice (HTML + CSS + JS inline)
+├── .nojekyll                     ← disabilita Jekyll su GitHub Pages
+└── .github/workflows/deploy.yml ← auto-deploy su GitHub Pages
 ```
 
 ---
