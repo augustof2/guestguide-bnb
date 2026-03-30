@@ -937,6 +937,9 @@
   .s-btn.danger:hover { background: rgba(231,111,81,.1); }
   .s-btn.publish { border-color: #4caf7d; color: #4caf7d; }
   .s-btn.publish:hover { background: rgba(76,175,125,.1); }
+  .s-btn.publish-online { border-color: #4a9edd; color: #4a9edd; }
+  .s-btn.publish-online:hover { background: rgba(74,158,221,.1); }
+  .s-btn.publish-online:disabled { opacity: .55; cursor: not-allowed; }
 
   .settings-body { padding: 16px 20px 40px; }
 
@@ -1587,6 +1590,7 @@
       <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
     </label>
     <button class="s-btn publish" onclick="exportHTML()">📥 Scarica HTML Aggiornato</button>
+    <button class="s-btn publish-online" id="btn-publish-online" onclick="publishToGitHub()">🌐 Pubblica Online</button>
   </div>
 
   <div class="settings-body">
@@ -1701,6 +1705,20 @@
         <div class="s-field"><label>Conferma nuovo PIN</label><input type="password" id="s-pin-confirm" placeholder="••••" maxlength="4" inputmode="numeric"></div>
         <div id="s-pin-msg" style="font-size:12px;min-height:18px;margin-top:4px"></div>
         <button class="s-btn" onclick="changePin()" style="margin-top:8px">🔐 Cambia PIN</button>
+      </div>
+    </details>
+
+    <!-- Pubblicazione Online -->
+    <details class="s-section">
+      <summary class="s-section-title">🌐 Pubblicazione Online</summary>
+      <div class="s-fields">
+        <div class="s-sub-title">Pubblica su GitHub Pages</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Inserisci un <strong>GitHub Personal Access Token</strong> con permesso <code>repo</code> (o <code>contents: write</code> per i fine-grained token) per aggiornare il file online. Il token viene salvato solo su questo dispositivo.</p>
+        <div class="s-field"><label>GitHub Token</label><input type="password" id="s-gh-token" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off"></div>
+        <div class="s-field"><label>Repository (owner/repo)</label><input type="text" id="s-gh-repo" placeholder="augustof2/guestguide-bnb"></div>
+        <div class="s-field"><label>Branch</label><input type="text" id="s-gh-branch" placeholder="main"></div>
+        <div id="s-gh-msg" style="font-size:12px;min-height:18px;margin-top:4px"></div>
+        <button class="s-btn" onclick="saveGitHubSettings()" style="margin-top:8px">💾 Salva Impostazioni GitHub</button>
       </div>
     </details>
 
@@ -3549,7 +3567,10 @@ function populateSettingsForms() {
   document.getElementById('s-st-transportEyebrowIt').value = st.transportEyebrowIt || '';
   document.getElementById('s-st-transportTitleIt').value = st.transportTitleIt || '';
   document.getElementById('s-st-departureEyebrowIt').value = st.departureEyebrowIt || '';
-  document.getElementById('s-st-departureTitleIt').value = st.departureTitleIt || '';
+  // GitHub settings
+  document.getElementById('s-gh-token').value  = localStorage.getItem('bnb_github_token')  || '';
+  document.getElementById('s-gh-repo').value   = localStorage.getItem('bnb_github_repo')   || 'augustof2/guestguide-bnb';
+  document.getElementById('s-gh-branch').value = localStorage.getItem('bnb_github_branch') || 'main';
 }
 
 function collectFormData() {
@@ -3681,6 +3702,96 @@ async function exportHTML() {
     URL.revokeObjectURL(url);
   } catch(err) {
     alert('Errore nella generazione del file HTML: ' + err.message + '\nAssicurati di usare il sito online (non file://).');
+  }
+}
+
+function saveGitHubSettings() {
+  const token  = document.getElementById('s-gh-token').value.trim();
+  const repo   = document.getElementById('s-gh-repo').value.trim();
+  const branch = document.getElementById('s-gh-branch').value.trim() || 'main';
+  const msg    = document.getElementById('s-gh-msg');
+  if (token)  localStorage.setItem('bnb_github_token',  token);  else localStorage.removeItem('bnb_github_token');
+  if (repo)   localStorage.setItem('bnb_github_repo',   repo);   else localStorage.removeItem('bnb_github_repo');
+  localStorage.setItem('bnb_github_branch', branch);
+  msg.style.color = '#4caf7d';
+  msg.textContent = '✅ Impostazioni GitHub salvate.';
+  setTimeout(() => { msg.textContent = ''; }, 3000);
+}
+
+async function publishToGitHub() {
+  const token  = localStorage.getItem('bnb_github_token')  || '';
+  const repo   = localStorage.getItem('bnb_github_repo')   || '';
+  const branch = localStorage.getItem('bnb_github_branch') || 'main';
+  if (!token || !repo) {
+    alert('Configura il GitHub Token e il Repository nella sezione "🌐 Pubblicazione Online" delle impostazioni.');
+    return;
+  }
+  const [owner, repoName] = repo.split('/');
+  if (!owner || !repoName) {
+    alert('Il campo Repository deve avere il formato owner/repo (es. augustof2/guestguide-bnb).');
+    return;
+  }
+  const btn = document.getElementById('btn-publish-online');
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Pubblicazione…';
+  try {
+    // Build updated HTML
+    const d = collectFormData();
+    const resp = await fetch(location.origin + location.pathname);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const html = await resp.text();
+    const startMarker = '/* DEFAULT_DATA_START */';
+    const endMarker   = '/* DEFAULT_DATA_END */';
+    const startIdx = html.indexOf(startMarker);
+    const endIdx   = html.indexOf(endMarker);
+    if (startIdx === -1 || endIdx === -1) throw new Error('Marker dati non trovato nel file HTML. Ricarica la pagina e riprova.');
+    const newSection = startMarker + '\nconst DEFAULT_DATA = ' + JSON.stringify(d, null, 2) + ';\n' + endMarker;
+    const updatedHtml = html.substring(0, startIdx) + newSection + html.substring(endIdx + endMarker.length);
+
+    // Get current file SHA (required by GitHub API to update an existing file)
+    const shaResp = await fetch(
+      `https://api.github.com/repos/${owner}/${repoName}/contents/index.html?ref=${encodeURIComponent(branch)}`,
+      { headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' } }
+    );
+    if (!shaResp.ok) {
+      const e = await shaResp.json().catch(() => ({}));
+      throw new Error(e.message || 'Impossibile leggere il file da GitHub (status ' + shaResp.status + '). Verifica token e repository.');
+    }
+    const { sha } = await shaResp.json();
+
+    // Encode content as base64 (UTF-8 safe)
+    const bytes = new TextEncoder().encode(updatedHtml);
+    let binary = '';
+    bytes.forEach(b => { binary += String.fromCharCode(b); });
+    const content = btoa(binary);
+
+    // Push updated file
+    const updateResp = await fetch(
+      `https://api.github.com/repos/${owner}/${repoName}/contents/index.html`,
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${token}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: 'Aggiorna dati guida BnB', content, sha, branch })
+      }
+    );
+    if (!updateResp.ok) {
+      const e = await updateResp.json().catch(() => ({}));
+      throw new Error(e.message || 'Errore nel caricamento su GitHub (status ' + updateResp.status + ').');
+    }
+    alert('✅ Pubblicato su GitHub!\nLe modifiche saranno visibili online in pochi minuti dopo il completamento del deploy automatico.');
+    // Also save locally so this device is in sync
+    currentData = d;
+    saveData(currentData);
+  } catch(err) {
+    alert('❌ Errore nella pubblicazione: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = origText;
   }
 }
 
