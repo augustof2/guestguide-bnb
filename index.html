@@ -139,11 +139,6 @@
     border: 1px solid var(--border);
     border-radius: 18px;
     padding: 20px;
-    cursor: pointer;
-    transition: transform .2s, border-color .2s, box-shadow .2s;
-    display: flex;
-    align-items: center;
-    gap: 16px;
     position: relative;
     overflow: hidden;
   }
@@ -155,48 +150,71 @@
     background: linear-gradient(180deg, var(--gold), var(--teal));
     border-radius: 4px 0 0 4px;
   }
-  .apt-card:hover, .apt-card:active {
-    transform: translateY(-2px);
-    border-color: var(--gold);
-    box-shadow: 0 8px 32px rgba(201,168,76,.15);
-  }
 
-  .apt-card-icon {
-    font-size: 28px;
-    flex-shrink: 0;
+  .apt-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
   }
-
-  .apt-card-body { flex: 1; min-width: 0; }
 
   .apt-card-name {
     font-family: 'Playfair Display', serif;
     font-size: 18px;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 4px;
+    line-height: 1.2;
   }
 
-  .apt-card-superhost {
+  .apt-card-superhost-badge {
+    flex-shrink: 0;
+    background: var(--gold);
+    color: #1a1200;
     font-size: 11px;
-    color: var(--gold);
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: .5px;
-    margin-bottom: 4px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
   }
 
   .apt-card-addr {
     font-size: 12px;
     color: var(--text2);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    margin-bottom: 16px;
   }
 
-  .apt-card-arrow {
-    font-size: 20px;
-    color: var(--gold);
-    flex-shrink: 0;
+  .apt-lang-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
+
+  .apt-lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform .15s, border-color .15s, box-shadow .15s;
+    text-align: left;
+    color: var(--text);
+  }
+  .apt-lang-btn:hover, .apt-lang-btn:active {
+    border-color: var(--gold);
+    box-shadow: 0 4px 16px rgba(201,168,76,.15);
+    transform: translateY(-1px);
+  }
+
+  .apt-lang-flag { font-size: 22px; flex-shrink: 0; }
+  .apt-lang-body { flex: 1; min-width: 0; }
+  .apt-lang-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .apt-lang-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+  .apt-lang-arrow { font-size: 16px; color: var(--gold); flex-shrink: 0; }
 
   .gear-btn {
     position: fixed;
@@ -1244,12 +1262,12 @@
       </div>
 
       <div class="quick-nav">
-        <div class="quick-nav-title">Esplora la guida</div>
+        <div class="quick-nav-title" id="qn-title">Esplora la guida</div>
         <div class="quick-nav-card" onclick="switchTab('stay')">
           <div class="quick-nav-icon">🛋️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Soggiorno</div>
-            <div class="quick-nav-desc">WiFi, regole, spazi, servizi</div>
+            <div class="quick-nav-desc" id="qn-stay-desc">WiFi, regole, spazi, servizi</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1257,7 +1275,7 @@
           <div class="quick-nav-icon">🗺️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Luoghi</div>
-            <div class="quick-nav-desc">Attrazioni e punti di interesse</div>
+            <div class="quick-nav-desc" id="qn-places-desc">Attrazioni e punti di interesse</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1265,7 +1283,7 @@
           <div class="quick-nav-icon">🍽️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Mangiare</div>
-            <div class="quick-nav-desc">Ristoranti, bar, supermercati</div>
+            <div class="quick-nav-desc" id="qn-food-desc">Ristoranti, bar, supermercati</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1273,7 +1291,7 @@
           <div class="quick-nav-icon">🚇</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Muoversi</div>
-            <div class="quick-nav-desc">Metro, bus, taxi, emergenze</div>
+            <div class="quick-nav-desc" id="qn-transport-desc">Metro, bus, taxi, emergenze</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1281,14 +1299,14 @@
           <div class="quick-nav-icon">🧳</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Partenza</div>
-            <div class="quick-nav-desc">Check-out e recensione</div>
+            <div class="quick-nav-desc" id="qn-departure-desc">Check-out e recensione</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
       </div>
 
       <div id="home-review-section" style="display:none;padding:0 0 4px">
-        <a id="home-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn" style="display:flex"><span>⭐ Lascia una Recensione su Google</span></a>
+        <a id="home-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn" style="display:flex"><span id="home-review-btn-label">⭐ Lascia una Recensione su Google</span></a>
       </div>
 
     </div><!-- /tab-home -->
@@ -1320,7 +1338,7 @@
         <div class="info-card">
           <div class="info-card-header">
             <span class="info-card-icon">📍</span>
-            <span class="info-card-title">Come raggiungerci</span>
+            <span class="info-card-title" id="st-how-reach-title">Come raggiungerci</span>
           </div>
           <p class="info-card-body" id="st-how-reach"></p>
           <a class="maps-btn" id="st-maps" href="#" target="_blank">🧭 <span>Apri su Maps</span></a>
@@ -1330,7 +1348,7 @@
         <div class="info-card">
           <div class="info-card-header">
             <span class="info-card-icon">🗝️</span>
-            <span class="info-card-title">Come accedere</span>
+            <span class="info-card-title" id="st-how-access-title">Come accedere</span>
           </div>
           <p class="info-card-body" id="st-how-access"></p>
         </div>
@@ -1339,7 +1357,7 @@
         <div class="info-card">
           <div class="info-card-header">
             <span class="info-card-icon">🚗</span>
-            <span class="info-card-title">Parcheggio</span>
+            <span class="info-card-title" id="st-parking-title">Parcheggio</span>
           </div>
           <p class="info-card-body" id="st-parking"></p>
         </div>
@@ -1356,19 +1374,19 @@
 
         <!-- House Rules -->
         <div class="card" style="margin-bottom:14px">
-          <div class="card-title">🏠 Regole della casa</div>
+          <div class="card-title" id="st-rules-title">🏠 Regole della casa</div>
           <ul class="rules-list" id="st-rules-list">
             <!-- populated by JS -->
           </ul>
         </div>
 
         <!-- Spaces -->
-        <div class="card-title" style="margin-bottom:10px">🏡 Gli Spazi</div>
+        <div class="card-title" id="st-spaces-title" style="margin-bottom:10px">🏡 Gli Spazi</div>
 
         <div class="space-card">
           <div class="space-header">
             <span class="space-icon">🛌</span>
-            <span class="space-name">Camera da Letto</span>
+            <span class="space-name" id="st-bedroom-name">Camera da Letto</span>
           </div>
           <div class="amenity-tags" id="st-bedroom-tags">
             <!-- populated by JS -->
@@ -1378,7 +1396,7 @@
         <div class="space-card">
           <div class="space-header">
             <span class="space-icon">🍳</span>
-            <span class="space-name">Cucina</span>
+            <span class="space-name" id="st-kitchen-name">Cucina</span>
           </div>
           <div class="amenity-tags" id="st-kitchen-tags">
             <!-- populated by JS -->
@@ -1388,7 +1406,7 @@
         <div class="space-card" style="margin-bottom:20px">
           <div class="space-header">
             <span class="space-icon">🚿</span>
-            <span class="space-name">Bagno</span>
+            <span class="space-name" id="st-bathroom-name">Bagno</span>
           </div>
           <div class="amenity-tags" id="st-bathroom-tags">
             <!-- populated by JS -->
@@ -1396,7 +1414,7 @@
         </div>
 
         <!-- Extra Services -->
-        <div class="card-title" style="margin-bottom:10px">✨ Servizi Extra</div>
+        <div class="card-title" id="st-services-title" style="margin-bottom:10px">✨ Servizi Extra</div>
         <div class="service-grid" id="st-extra-services" style="margin-bottom:20px">
           <!-- populated by JS -->
         </div>
@@ -1409,7 +1427,7 @@
       <div class="tab-header">
         <div class="section-eyebrow">Scopri la Città</div>
         <div class="section-title">Luoghi</div>
-        <div class="section-sub">Le attrazioni più belle nei dintorni</div>
+        <div class="section-sub" id="places-section-sub">Le attrazioni più belle nei dintorni</div>
       </div>
       <div class="section-pad" style="padding-top:0" id="places-container">
         <!-- populated by JS -->
@@ -1421,7 +1439,7 @@
       <div class="tab-header">
         <div class="section-eyebrow">Dove Mangiare</div>
         <div class="section-title">Mangiare</div>
-        <div class="section-sub">I migliori locali consigliati dall'host</div>
+        <div class="section-sub" id="food-section-sub">I migliori locali consigliati dall'host</div>
       </div>
       <div class="section-pad" style="padding-top:0" id="food-container">
         <!-- populated by JS -->
@@ -1433,7 +1451,7 @@
       <div class="tab-header">
         <div class="section-eyebrow">In Città</div>
         <div class="section-title">Muoversi</div>
-        <div class="section-sub">Come spostarsi in città</div>
+        <div class="section-sub" id="transport-section-sub">Come spostarsi in città</div>
       </div>
       <div class="section-pad" style="padding-top:0">
 
@@ -1443,7 +1461,7 @@
         <div class="transport-card">
           <div class="transport-header">
             <span class="transport-icon">🎫</span>
-            <span class="transport-title">Biglietti</span>
+            <span class="transport-title" id="tr-tickets-title">Biglietti</span>
           </div>
           <p class="transport-desc" id="tr-tickets-desc">
             Biglietto singolo: ~€1,50 (valido 90 minuti). Abbonamento giornaliero: ~€5,00.
@@ -1454,7 +1472,7 @@
         <div class="transport-card">
           <div class="transport-header">
             <span class="transport-icon">🚖</span>
-            <span class="transport-title">Taxi &amp; App</span>
+            <span class="transport-title" id="tr-taxi-title">Taxi &amp; App</span>
           </div>
           <p class="transport-desc" id="tr-taxi-desc">
             Taxi ufficiali disponibili in piazza e in stazione. App: Uber, FREE NOW, Bolt.
@@ -1463,12 +1481,12 @@
 
         <!-- Emergencies -->
         <div class="sos-section" style="margin-top:24px">
-          <div class="sos-title">🆘 <span>Emergenze</span></div>
+          <div class="sos-title">🆘 <span id="sos-emergencies-title">Emergenze</span></div>
 
           <div class="sos-card">
             <div class="sos-icon">🏥</div>
             <div class="sos-body">
-              <div class="sos-name">Pronto Soccorso</div>
+              <div class="sos-name" id="sos-hospital-name">Pronto Soccorso</div>
               <div class="sos-number">📞 118</div>
             </div>
             <a class="call-btn" href="tel:118">📞 118</a>
@@ -1477,7 +1495,7 @@
           <div class="sos-card">
             <div class="sos-icon">👮</div>
             <div class="sos-body">
-              <div class="sos-name">Carabinieri</div>
+              <div class="sos-name" id="sos-police-name">Carabinieri</div>
               <div class="sos-number">📞 112</div>
             </div>
             <a class="call-btn" href="tel:112">📞 112</a>
@@ -1486,7 +1504,7 @@
           <div class="sos-card">
             <div class="sos-icon">🔥</div>
             <div class="sos-body">
-              <div class="sos-name">Vigili del Fuoco</div>
+              <div class="sos-name" id="sos-fire-name">Vigili del Fuoco</div>
               <div class="sos-number">📞 115</div>
             </div>
             <a class="call-btn" href="tel:115">📞 115</a>
@@ -1498,7 +1516,7 @@
               <div class="sos-name">Host: <span id="sos-host-name">Nome Host</span></div>
               <div class="sos-number" id="sos-host-phone">📞 +39 000 000 0000</div>
             </div>
-            <a class="call-btn host" id="sos-host-call" href="tel:+390000000000">📞 <span>Chiama</span></a>
+            <a class="call-btn host" id="sos-host-call" href="tel:+390000000000">📞 <span id="sos-host-call-label">Chiama</span></a>
           </div>
 
           <div id="sos-extra-contacts"><!-- populated by JS --></div>
@@ -1512,18 +1530,18 @@
       <div class="tab-header">
         <div class="section-eyebrow">È Ora di Partire</div>
         <div class="section-title">Partenza</div>
-        <div class="section-sub">Tutto quello che c'è da sapere prima di andare</div>
+        <div class="section-sub" id="departure-section-sub">Tutto quello che c'è da sapere prima di andare</div>
       </div>
       <div class="section-pad" style="padding-top:0">
 
         <!-- Checkout steps -->
         <div class="checkout-steps">
-          <div class="checkout-title">🏁 <span>Al Check-out</span></div>
+          <div class="checkout-title">🏁 <span id="departure-checkout-title">Al Check-out</span></div>
           <div id="departure-steps-list">
             <!-- populated by JS -->
           </div>
           <div id="google-review-btn-container" style="display:none;margin-top:12px;padding:0 4px">
-            <a id="google-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn"><span>⭐ Lascia una Recensione su Google</span></a>
+            <a id="google-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn"><span id="google-review-btn-label">⭐ Lascia una Recensione su Google</span></a>
           </div>
         </div>
 
@@ -1599,6 +1617,7 @@
         <div class="s-divider"></div>
         <div class="s-sub-title">💬 Messaggio di Benvenuto</div>
         <div class="s-field"><label>Testo di Benvenuto</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Welcome Text (EN)</label><textarea id="s-welcomeEn" placeholder="We are happy to have you..."></textarea></div>
       </div>
     </details>
 
@@ -1614,7 +1633,9 @@
       <div class="s-fields">
         <div class="s-sub-title">🌟 Messaggio di Chiusura</div>
         <div class="s-field"><label>Titolo</label><input type="text" id="s-closingTitleIt" placeholder="Grazie per aver scelto il nostro B&amp;B!"></div>
+        <div class="s-field"><label>Closing Title (EN)</label><input type="text" id="s-closingTitleEn" placeholder="Thank you for choosing our B&amp;B!"></div>
         <div class="s-field"><label>Testo</label><textarea id="s-closingTextIt" placeholder="È stato un piacere avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Closing Text (EN)</label><textarea id="s-closingTextEn" placeholder="It was a pleasure..."></textarea></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">⭐ Recensione Google</div>
         <div class="s-field"><label>Link recensione Google</label><input type="url" id="s-googleReviewUrl" placeholder="https://g.page/r/..."></div>
@@ -2152,6 +2173,12 @@ const PUBLISHED_DATA = {
 // ════════════════════════════════════════════
 let currentData = null;
 let currentAptIndex = 0;
+let currentLang = 'it';
+
+function tr(itVal, enVal) {
+  if (currentLang === 'en') return (enVal && enVal.trim()) ? enVal : (itVal || '');
+  return itVal || '';
+}
 
 // PIN state
 let pinBuffer = '';
@@ -2258,16 +2285,30 @@ function renderLanding() {
   d.apts.forEach((apt, i) => {
     const card = document.createElement('div');
     card.className = 'apt-card';
-    card.onclick = () => openGuide(i);
-    const aptName = apt.name;
     card.innerHTML = `
-      <div class="apt-card-icon">🏠</div>
-      <div class="apt-card-body">
-        <div class="apt-card-name">${escHtml(aptName)}</div>
-        <div class="apt-card-superhost">★ Superhost</div>
-        <div class="apt-card-addr">${escHtml(apt.addressShort || apt.address)} · ${escHtml(d.cityZone)}</div>
+      <div class="apt-card-top">
+        <div class="apt-card-name">${escHtml(apt.name)}</div>
+        <div class="apt-card-superhost-badge">★ Superhost</div>
       </div>
-      <div class="apt-card-arrow">›</div>
+      <div class="apt-card-addr">${escHtml(apt.addressShort || apt.address)} · ${escHtml(d.cityZone)}</div>
+      <div class="apt-lang-buttons">
+        <button class="apt-lang-btn" onclick="openGuide(${i}, 'it')">
+          <span class="apt-lang-flag">🇮🇹</span>
+          <div class="apt-lang-body">
+            <div class="apt-lang-name">Italiano</div>
+            <div class="apt-lang-sub">Guida Ospiti</div>
+          </div>
+          <span class="apt-lang-arrow">›</span>
+        </button>
+        <button class="apt-lang-btn" onclick="openGuide(${i}, 'en')">
+          <span class="apt-lang-flag">🇬🇧</span>
+          <div class="apt-lang-body">
+            <div class="apt-lang-name">English</div>
+            <div class="apt-lang-sub">Guest Guide</div>
+          </div>
+          <span class="apt-lang-arrow">›</span>
+        </button>
+      </div>
     `;
     container.appendChild(card);
   });
@@ -2278,7 +2319,8 @@ function renderLanding() {
 // ════════════════════════════════════════════
 //  OPEN / CLOSE GUIDE
 // ════════════════════════════════════════════
-function openGuide(aptIndex) {
+function openGuide(aptIndex, lang) {
+  currentLang = lang || 'it';
   currentAptIndex = aptIndex;
   document.getElementById('landing').style.display = 'none';
   document.getElementById('gear-btn').classList.add('hidden');
@@ -2301,6 +2343,33 @@ function goBack() {
 function renderApp(aptIndex) {
   const d = currentData;
   const apt = d.apts[aptIndex] || d.apts[0];
+  const isEn = currentLang === 'en';
+  const L = {
+    welcome:         isEn ? 'Welcome! 👋'                              : 'Benvenuti! 👋',
+    openMaps:        isEn ? 'Open Maps'                                : 'Apri Maps',
+    mapsBtn:         isEn ? '🧭 Open on Maps'                         : '🧭 Apri su Maps',
+    howToReach:      isEn ? 'How to Reach Us'                          : 'Come raggiungerci',
+    howToAccess:     isEn ? 'How to Access'                            : 'Come accedere',
+    parking:         isEn ? 'Parking'                                  : 'Parcheggio',
+    houseRules:      isEn ? '🏠 House Rules'                          : '🏠 Regole della casa',
+    spaces:          isEn ? '🏡 The Spaces'                           : '🏡 Gli Spazi',
+    bedroom:         isEn ? 'Bedroom'                                  : 'Camera da Letto',
+    kitchen:         isEn ? 'Kitchen'                                  : 'Cucina',
+    bathroom:        isEn ? 'Bathroom'                                 : 'Bagno',
+    extraServices:   isEn ? '✨ Extra Services'                        : '✨ Servizi Extra',
+    exploreGuide:    isEn ? 'Explore the guide'                        : 'Esplora la guida',
+    qnStayDesc:      isEn ? 'WiFi, rules, spaces, services'            : 'WiFi, regole, spazi, servizi',
+    qnPlacesDesc:    isEn ? 'Attractions and points of interest'       : 'Attrazioni e punti di interesse',
+    qnFoodDesc:      isEn ? 'Restaurants, bars, supermarkets'          : 'Ristoranti, bar, supermercati',
+    qnTransportDesc: isEn ? 'Metro, bus, taxi, emergencies'            : 'Metro, bus, taxi, emergenze',
+    qnDepartureDesc: isEn ? 'Check-out and review'                     : 'Check-out e recensione',
+    placesSub:       isEn ? 'The most beautiful attractions nearby'    : 'Le attrazioni più belle nei dintorni',
+    foodSub:         isEn ? 'The best places recommended by the host'  : 'I migliori locali consigliati dall\'host',
+    transportSub:    isEn ? 'How to get around the city'               : 'Come spostarsi in città',
+    departureSub:    isEn ? 'Everything you need to know before leaving' : 'Tutto quello che c\'è da sapere prima di andare',
+    reviewBtn:       isEn ? '⭐ Leave a Google Review'                 : '⭐ Lascia una Recensione su Google',
+  };
+  const setEl = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
 
   // Header
   document.getElementById('guide-apt-name').textContent = apt.name;
@@ -2314,11 +2383,11 @@ function renderApp(aptIndex) {
   document.getElementById('s-wifi').textContent = apt.wifi;
   const sMaps = document.getElementById('s-maps');
   sMaps.href = apt.mapsLink || '#';
-  sMaps.textContent = 'Apri Maps';
+  sMaps.textContent = L.openMaps;
 
-  document.getElementById('w-title').textContent = 'Benvenuti! 👋';
+  setEl('w-title', L.welcome);
   const wItEl = document.getElementById('w-text-it');
-  wItEl.innerHTML = renderRichText(d.welcomeIt || '');
+  wItEl.innerHTML = renderRichText(tr(d.welcomeIt || '', d.welcomeEn || ''));
   document.getElementById('w-sign').textContent = '★ ' + d.hostName;
 
   // Stay tab
@@ -2330,11 +2399,12 @@ function renderApp(aptIndex) {
 
   const stMaps = document.getElementById('st-maps');
   stMaps.href = apt.mapsLink || '#';
+  const stMapsSpan = document.querySelector('#st-maps span');
+  if (stMapsSpan) stMapsSpan.textContent = isEn ? 'Open on Maps' : 'Apri su Maps';
 
-  // Stay tab - soggiorno extended fields
-  document.getElementById('st-how-reach').innerHTML = renderRichText(apt.howToReachIt || '');
-  document.getElementById('st-how-access').innerHTML = renderRichText(apt.howToAccessIt || '');
-  document.getElementById('st-parking').innerHTML = renderRichText(apt.parkingIt || '');
+  document.getElementById('st-how-reach').innerHTML = renderRichText(tr(apt.howToReachIt || '', apt.howToReachEn || ''));
+  document.getElementById('st-how-access').innerHTML = renderRichText(tr(apt.howToAccessIt || '', apt.howToAccessEn || ''));
+  document.getElementById('st-parking').innerHTML = renderRichText(tr(apt.parkingIt || '', apt.parkingEn || ''));
 
   // House Rules
   const rulesList = document.getElementById('st-rules-list');
@@ -2342,8 +2412,8 @@ function renderApp(aptIndex) {
   (apt.houseRules || []).forEach(r => {
     const li = document.createElement('li');
     li.className = 'rule-item';
-    const title = r.titleIt;
-    const desc = r.descIt;
+    const title = tr(r.titleIt, r.titleEn);
+    const desc = tr(r.descIt, r.descEn);
     li.innerHTML = `<span class="rule-icon">${escHtml(r.icon || '')}</span><div><div class="rule-title">${escHtml(title || '')}</div><div class="rule-desc">${renderRichText(desc || '')}</div></div>`;
     rulesList.appendChild(li);
   });
@@ -2351,7 +2421,7 @@ function renderApp(aptIndex) {
   // Bedroom tags
   const bedroomTagsEl = document.getElementById('st-bedroom-tags');
   if (bedroomTagsEl) {
-    const bedroomRaw = apt.bedroomTagsIt || '';
+    const bedroomRaw = tr(apt.bedroomTagsIt || '', apt.bedroomTagsEn || '');
     bedroomTagsEl.innerHTML = bedroomRaw
       ? bedroomRaw.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')
       : '';
@@ -2360,7 +2430,7 @@ function renderApp(aptIndex) {
   // Kitchen tags
   const kitchenTagsEl = document.getElementById('st-kitchen-tags');
   if (kitchenTagsEl) {
-    const kitchenRaw = apt.kitchenTagsIt || '';
+    const kitchenRaw = tr(apt.kitchenTagsIt || '', apt.kitchenTagsEn || '');
     kitchenTagsEl.innerHTML = kitchenRaw
       ? kitchenRaw.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')
       : '';
@@ -2369,7 +2439,7 @@ function renderApp(aptIndex) {
   // Bathroom tags
   const bathroomTagsEl = document.getElementById('st-bathroom-tags');
   if (bathroomTagsEl) {
-    const bathroomRaw = apt.bathroomTagsIt || '';
+    const bathroomRaw = tr(apt.bathroomTagsIt || '', apt.bathroomTagsEn || '');
     bathroomTagsEl.innerHTML = bathroomRaw
       ? bathroomRaw.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')
       : '';
@@ -2379,16 +2449,16 @@ function renderApp(aptIndex) {
   const servicesEl = document.getElementById('st-extra-services');
   if (servicesEl) {
     servicesEl.innerHTML = '';
-    const waHint = '💬 Richiedi su WhatsApp';
+    const waHint = isEn ? '💬 Request on WhatsApp' : '💬 Richiedi su WhatsApp';
     (apt.extraServices || []).forEach(svc => {
-      const name = svc.nameIt || '';
-      const desc = svc.descIt || '';
+      const name = tr(svc.nameIt || '', svc.nameEn || '');
+      const desc = tr(svc.descIt || '', svc.descEn || '');
       const a = document.createElement('a');
       a.className = 'service-item';
       a.href = '#';
       a.addEventListener('click', function(e) {
         e.preventDefault();
-        requestService(svc.nameIt || '');
+        requestService(tr(svc.nameIt || '', svc.nameEn || ''));
       });
       a.innerHTML = `
         <div class="service-icon">${escHtml(svc.icon || '✨')}</div>
@@ -2399,11 +2469,42 @@ function renderApp(aptIndex) {
     });
   }
 
+  // Static label updates
+  setEl('st-how-reach-title', L.howToReach);
+  setEl('st-how-access-title', L.howToAccess);
+  setEl('st-parking-title', L.parking);
+  setEl('st-rules-title', L.houseRules);
+  setEl('st-spaces-title', L.spaces);
+  setEl('st-bedroom-name', L.bedroom);
+  setEl('st-kitchen-name', L.kitchen);
+  setEl('st-bathroom-name', L.bathroom);
+  setEl('st-services-title', L.extraServices);
+  setEl('qn-title', L.exploreGuide);
+  setEl('qn-stay-desc', L.qnStayDesc);
+  setEl('qn-places-desc', L.qnPlacesDesc);
+  setEl('qn-food-desc', L.qnFoodDesc);
+  setEl('qn-transport-desc', L.qnTransportDesc);
+  setEl('qn-departure-desc', L.qnDepartureDesc);
+  setEl('places-section-sub', L.placesSub);
+  setEl('food-section-sub', L.foodSub);
+  setEl('transport-section-sub', L.transportSub);
+  setEl('departure-section-sub', L.departureSub);
+  setEl('sos-emergencies-title', isEn ? 'Emergencies' : 'Emergenze');
+  setEl('sos-hospital-name', isEn ? 'Emergency Room' : 'Pronto Soccorso');
+  setEl('sos-police-name', isEn ? 'Police' : 'Carabinieri');
+  setEl('sos-fire-name', isEn ? 'Fire Department' : 'Vigili del Fuoco');
+  setEl('sos-host-call-label', isEn ? 'Call' : 'Chiama');
+  setEl('departure-checkout-title', isEn ? 'At Check-out' : 'Al Check-out');
+  const reviewLabelHome = document.getElementById('home-review-btn-label');
+  if (reviewLabelHome) reviewLabelHome.textContent = L.reviewBtn;
+  const reviewLabelDep = document.getElementById('google-review-btn-label');
+  if (reviewLabelDep) reviewLabelDep.textContent = L.reviewBtn;
+
   // Places
   renderPlaces(apt.places || []);
 
   // Food
-  renderFood(apt.restaurants || [], apt.supermarketIt, apt.supermarketMaps);
+  renderFood(apt.restaurants || [], apt.supermarketIt, apt.supermarketMaps, apt.supermarketEn);
 
   // Transport
   renderTransport(apt.transport || {});
@@ -2434,12 +2535,12 @@ function renderApp(aptIndex) {
   // Update nav labels from data
   const nl = d.navLabels || DEFAULT_DATA.navLabels;
   const navLabelMap = {
-    home: nl.homeIt,
-    stay: nl.stayIt,
-    places: nl.placesIt,
-    food: nl.foodIt,
-    transport: nl.transportIt,
-    departure: nl.departureIt
+    home:      nl.homeEn      || (isEn ? 'Home'      : nl.homeIt),
+    stay:      nl.stayEn      || (isEn ? 'Stay'      : nl.stayIt),
+    places:    nl.placesEn    || (isEn ? 'Places'    : nl.placesIt),
+    food:      nl.foodEn      || (isEn ? 'Food'      : nl.foodIt),
+    transport: nl.transportEn || (isEn ? 'Transport' : nl.transportIt),
+    departure: nl.departureEn || (isEn ? 'Departure' : nl.departureIt)
   };
   const navIconMap = {
     home: nl.homeIcon || DEFAULT_DATA.navLabels.homeIcon,
@@ -2471,11 +2572,11 @@ function renderApp(aptIndex) {
   // Update section headers from data
   const st = d.sectionTitles || DEFAULT_DATA.sectionTitles;
   const sectionHeaderMap = [
-    { tab: 'stay',      eyebrow: st.stayEyebrowIt,      title: st.stayTitleIt },
-    { tab: 'places',    eyebrow: st.placesEyebrowIt,    title: st.placesTitleIt },
-    { tab: 'food',      eyebrow: st.foodEyebrowIt,      title: st.foodTitleIt },
-    { tab: 'transport', eyebrow: st.transportEyebrowIt, title: st.transportTitleIt },
-    { tab: 'departure', eyebrow: st.departureEyebrowIt, title: st.departureTitleIt }
+    { tab: 'stay',      eyebrow: st.stayEyebrowEn      || (isEn ? 'Your Apartment'    : st.stayEyebrowIt),      title: st.stayTitleEn      || (isEn ? 'Stay'       : st.stayTitleIt) },
+    { tab: 'places',    eyebrow: st.placesEyebrowEn    || (isEn ? 'Discover the City' : st.placesEyebrowIt),    title: st.placesTitleEn    || (isEn ? 'Places'     : st.placesTitleIt) },
+    { tab: 'food',      eyebrow: st.foodEyebrowEn      || (isEn ? 'Where to Eat'      : st.foodEyebrowIt),      title: st.foodTitleEn      || (isEn ? 'Food'       : st.foodTitleIt) },
+    { tab: 'transport', eyebrow: st.transportEyebrowEn || (isEn ? 'Getting Around'    : st.transportEyebrowIt), title: st.transportTitleEn || (isEn ? 'Transport'  : st.transportTitleIt) },
+    { tab: 'departure', eyebrow: st.departureEyebrowEn || (isEn ? 'Time to Leave'     : st.departureEyebrowIt), title: st.departureTitleEn || (isEn ? 'Departure'  : st.departureTitleIt) }
   ];
   sectionHeaderMap.forEach(({ tab, eyebrow, title }) => {
     const tabEl = document.getElementById('tab-' + tab);
@@ -2488,13 +2589,14 @@ function renderApp(aptIndex) {
 }
 
 function renderPlaces(places) {
+  const isEn = currentLang === 'en';
   const container = document.getElementById('places-container');
   container.innerHTML = '';
   places.forEach(p => {
-    const desc = p.descIt;
-    const how = p.howIt;
-    const howLabel = 'Come arrivarci';
-    const mapsLabel = '🧭 Guidami qui';
+    const desc = tr(p.descIt, p.descEn);
+    const how = tr(p.howIt, p.howEn);
+    const howLabel = isEn ? 'How to get there' : 'Come arrivarci';
+    const mapsLabel = isEn ? '🧭 Guide me here' : '🧭 Guidami qui';
     const card = document.createElement('div');
     card.className = 'place-card';
     card.innerHTML = `
@@ -2513,12 +2615,13 @@ function renderPlaces(places) {
   });
 }
 
-function renderFood(restaurants, supermarketIt, supermarketMaps) {
+function renderFood(restaurants, supermarketIt, supermarketMaps, supermarketEn) {
+  const isEn = currentLang === 'en';
   const container = document.getElementById('food-container');
   container.innerHTML = '';
   restaurants.forEach(r => {
-    const desc = r.descIt;
-    const mapsLabel = '🧭 Vedi su Maps';
+    const desc = tr(r.descIt, r.descEn);
+    const mapsLabel = isEn ? '🧭 See on Maps' : '🧭 Vedi su Maps';
     const card = document.createElement('div');
     card.className = 'restaurant-card';
     card.innerHTML = `
@@ -2537,10 +2640,10 @@ function renderFood(restaurants, supermarketIt, supermarketMaps) {
   });
 
   // Supermercato
-  const superLabel = 'Supermercato';
-  const superDesc = supermarketIt || 'Supermercato più vicino a ~300 metri. Orari: Lun–Sab 8:00–20:00, Dom 9:00–13:00.';
+  const superLabel = isEn ? 'Supermarket' : 'Supermercato';
+  const superDesc = tr(supermarketIt, supermarketEn) || (isEn ? 'Nearest supermarket at ~300m. Hours: Mon–Sat 8:00–20:00, Sun 9:00–13:00.' : 'Supermercato più vicino a ~300 metri. Orari: Lun–Sab 8:00–20:00, Dom 9:00–13:00.');
   const superMaps = supermarketMaps || '';
-  const superMapsLabel = '🧭 Vedi su Maps';
+  const superMapsLabel = isEn ? '🧭 See on Maps' : '🧭 Vedi su Maps';
   const superMapsBtn = superMaps ? `<a class="maps-btn" href="${escAttr(superMaps)}" target="_blank" rel="noopener">${superMapsLabel}</a>` : '';
   const superCard = document.createElement('div');
   superCard.className = 'supermercato-card';
@@ -2558,15 +2661,17 @@ function renderFood(restaurants, supermarketIt, supermarketMaps) {
 }
 
 function renderTransport(transport) {
+  const isEn = currentLang === 'en';
+  const setEl = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
   const container = document.getElementById('transport-container');
   container.innerHTML = '';
   const items = [
-    { key: 'airport', icon: transport.airportIcon || '✈️', label: "Dall'Aeroporto", text: transport.airportIt, maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
-    { key: 'station', icon: transport.stationIcon || '🚉', label: 'Dalla Stazione', text: transport.stationIt, maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
-    { key: 'metro', icon: transport.metroIcon || '🚇', label: 'Metro', text: transport.metroIt, maps: transport.metroMaps, enabled: transport.metroEnabled !== false },
-    { key: 'bus', icon: transport.busIcon || '🚌', label: 'Bus', text: transport.busIt, maps: transport.busMaps, enabled: transport.busEnabled !== false }
+    { key: 'airport', icon: transport.airportIcon || '✈️', label: isEn ? 'From the Airport' : "Dall'Aeroporto", text: tr(transport.airportIt, transport.airportEn), maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
+    { key: 'station', icon: transport.stationIcon || '🚉', label: isEn ? 'From the Station' : 'Dalla Stazione', text: tr(transport.stationIt, transport.stationEn), maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
+    { key: 'metro', icon: transport.metroIcon || '🚇', label: isEn ? 'Metro' : 'Metro', text: tr(transport.metroIt, transport.metroEn), maps: transport.metroMaps, enabled: transport.metroEnabled !== false },
+    { key: 'bus', icon: transport.busIcon || '🚌', label: isEn ? 'Bus' : 'Bus', text: tr(transport.busIt, transport.busEn), maps: transport.busMaps, enabled: transport.busEnabled !== false }
   ];
-  const mapsLabel = '🧭 Vedi su Maps';
+  const mapsLabel = isEn ? '🧭 See on Maps' : '🧭 Vedi su Maps';
   items.forEach(item => {
     if (!item.enabled) return;
     const title = item.label;
@@ -2585,13 +2690,13 @@ function renderTransport(transport) {
     container.appendChild(card);
   });
 
-  // Biglietti
-  const ticketsEl = document.getElementById('tr-tickets-desc');
-  if (ticketsEl) ticketsEl.innerHTML = renderRichText(transport.ticketsIt || '');
+  setEl('tr-tickets-title', isEn ? 'Tickets' : 'Biglietti');
+  setEl('tr-taxi-title', isEn ? 'Taxi & Apps' : 'Taxi & App');
 
-  // Taxi & App
+  const ticketsEl = document.getElementById('tr-tickets-desc');
+  if (ticketsEl) ticketsEl.innerHTML = renderRichText(tr(transport.ticketsIt || '', transport.ticketsEn || ''));
   const taxiEl = document.getElementById('tr-taxi-desc');
-  if (taxiEl) taxiEl.innerHTML = renderRichText(transport.taxiIt || '');
+  if (taxiEl) taxiEl.innerHTML = renderRichText(tr(transport.taxiIt || '', transport.taxiEn || ''));
 }
 
 // ════════════════════════════════════════════
@@ -2600,7 +2705,7 @@ function renderTransport(transport) {
 function renderExtraContacts(contacts) {
   const container = document.getElementById('sos-extra-contacts');
   container.innerHTML = '';
-  const callLabel = 'Chiama';
+  const callLabel = currentLang === 'en' ? 'Call' : 'Chiama';
   (contacts || []).forEach(c => {
     if (!c.name && !c.phone) return;
     const card = document.createElement('div');
