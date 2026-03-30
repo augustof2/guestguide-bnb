@@ -2220,6 +2220,10 @@ const DEFAULT_DATA = {
 };
 /* DEFAULT_DATA_END */
 
+/* DEFAULT_PIN_HASH_START */
+const DEFAULT_PIN_HASH = '';
+/* DEFAULT_PIN_HASH_END */
+
 // ════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════
@@ -2322,6 +2326,9 @@ const LABELS = {
 // PIN state
 let pinBuffer = '';
 const PIN_KEY = 'bnb_admin_pin';
+const PIN_HASH_MARKER_START = '/* DEFAULT_PIN_HASH_START */';
+const PIN_HASH_MARKER_END   = '/* DEFAULT_PIN_HASH_END */';
+const SHA256_HEX_LENGTH = 64; // SHA-256 produces 256 bits = 32 bytes = 64 hex chars
 
 async function hashPin(pin) {
   const data = new TextEncoder().encode(pin);
@@ -2331,10 +2338,15 @@ async function hashPin(pin) {
 
 async function getStoredPinHash() {
   const stored = localStorage.getItem(PIN_KEY);
-  // If not set or still a plain 4-digit PIN (legacy), hash on the fly
-  if (!stored || /^\d{4}$/.test(stored)) {
-    const hash = await hashPin(stored || '1234');
-    if (stored) localStorage.setItem(PIN_KEY, hash); // persist migration
+  // If not set, use the PIN hash embedded in the HTML (set at publish/export time)
+  if (!stored) {
+    if (DEFAULT_PIN_HASH && DEFAULT_PIN_HASH.length === SHA256_HEX_LENGTH) return DEFAULT_PIN_HASH;
+    return await hashPin('1234');
+  }
+  // Legacy: still a plain 4-digit PIN — migrate to hash
+  if (/^\d{4}$/.test(stored)) {
+    const hash = await hashPin(stored);
+    localStorage.setItem(PIN_KEY, hash);
     return hash;
   }
   return stored;
@@ -3902,6 +3914,7 @@ function importJSON(event) {
 
 async function exportHTML() {
   const d = collectFormData();
+  const currentPinHash = await getStoredPinHash();
   try {
     const resp = await fetch(location.origin + location.pathname);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
@@ -3915,7 +3928,14 @@ async function exportHTML() {
       return;
     }
     const newSection = startMarker + '\nconst DEFAULT_DATA = ' + JSON.stringify(d, null, 2) + ';\n' + endMarker;
-    const updated = html.substring(0, startIdx) + newSection + html.substring(endIdx + endMarker.length);
+    let updated = html.substring(0, startIdx) + newSection + html.substring(endIdx + endMarker.length);
+    // Embed PIN hash so other devices don't fall back to 1234
+    const pinStartIdx = updated.indexOf(PIN_HASH_MARKER_START);
+    const pinEndIdx = updated.indexOf(PIN_HASH_MARKER_END);
+    if (pinStartIdx !== -1 && pinEndIdx !== -1) {
+      const pinSection = PIN_HASH_MARKER_START + '\nconst DEFAULT_PIN_HASH = ' + JSON.stringify(currentPinHash) + ';\n' + PIN_HASH_MARKER_END;
+      updated = updated.substring(0, pinStartIdx) + pinSection + updated.substring(pinEndIdx + PIN_HASH_MARKER_END.length);
+    }
     const blob = new Blob([updated], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -3963,6 +3983,7 @@ async function publishToGitHub() {
   try {
     // Build updated HTML
     const d = collectFormData();
+    const currentPinHash = await getStoredPinHash();
     const resp = await fetch(location.origin + location.pathname);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const html = await resp.text();
@@ -3972,7 +3993,14 @@ async function publishToGitHub() {
     const endIdx   = html.indexOf(endMarker);
     if (startIdx === -1 || endIdx === -1) throw new Error('Marker dati non trovato nel file HTML. Ricarica la pagina e riprova.');
     const newSection = startMarker + '\nconst DEFAULT_DATA = ' + JSON.stringify(d, null, 2) + ';\n' + endMarker;
-    const updatedHtml = html.substring(0, startIdx) + newSection + html.substring(endIdx + endMarker.length);
+    let updatedHtml = html.substring(0, startIdx) + newSection + html.substring(endIdx + endMarker.length);
+    // Embed PIN hash so other devices don't fall back to 1234
+    const pinStartIdx = updatedHtml.indexOf(PIN_HASH_MARKER_START);
+    const pinEndIdx   = updatedHtml.indexOf(PIN_HASH_MARKER_END);
+    if (pinStartIdx !== -1 && pinEndIdx !== -1) {
+      const pinSection = PIN_HASH_MARKER_START + '\nconst DEFAULT_PIN_HASH = ' + JSON.stringify(currentPinHash) + ';\n' + PIN_HASH_MARKER_END;
+      updatedHtml = updatedHtml.substring(0, pinStartIdx) + pinSection + updatedHtml.substring(pinEndIdx + PIN_HASH_MARKER_END.length);
+    }
 
     // Get current file SHA (required by GitHub API to update an existing file)
     const shaResp = await fetch(
