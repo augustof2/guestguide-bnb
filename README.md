@@ -21,7 +21,7 @@ Una **Guest Guide interattiva** per il tuo Bed & Breakfast — un singolo file `
 
 **Passo 3 — Aspetta 1-2 minuti e apri il link**
 - Vai su **Actions** (menu in alto) e attendi che il deployment finisca (cerchio verde ✅)
-- Il sito sarà live su: **`https://augustof2.github.io/guestguide-bnb/`**
+- Il sito sarà live su: **`https://www.ffeliteapartments.github.io/`**
 
 > 💡 Dopo aver aperto il sito, clicca il pulsante **⚙️** in basso a destra per personalizzare nome, appartamenti, WiFi, luoghi e tutto il resto — senza toccare il codice.
 
@@ -31,7 +31,7 @@ Una **Guest Guide interattiva** per il tuo Bed & Breakfast — un singolo file `
 
 Le personalizzazioni fatte tramite il pannello ⚙️ sono salvate nel tuo browser (`localStorage`). Per pubblicarle online in modo che **tutti** vedano la versione aggiornata, segui questi passi:
 
-**1. Personalizza il sito** — Apri `https://augustof2.github.io/guestguide-bnb/`, clicca ⚙️ e modifica tutti i campi. Poi clicca **💾 Salva e Applica**.
+**1. Personalizza il sito** — Apri `https://www.ffeliteapartments.github.io/`, clicca ⚙️ e modifica tutti i campi. Poi clicca **💾 Salva e Applica**.
 
 **2. Scarica l'HTML aggiornato** — Nel pannello ⚙️, clicca il pulsante **📥 Scarica HTML Aggiornato**. Verrà scaricato un file `index.html` con i tuoi dati incorporati.
 
@@ -75,7 +75,7 @@ Il repository include un workflow GitHub Actions che pubblica automaticamente il
 2. In **Source**, seleziona **GitHub Actions**
 3. Clicca **Save**
 4. Il sito si pubblicherà automaticamente ad ogni push su `main`
-5. Sarà live su `https://TUO-USERNAME.github.io/guestguide-bnb/`
+5. Sarà live su `https://www.ffeliteapartments.github.io/`
 
 > **Nota:** Se vedi ancora una pagina vuota o un errore 404 subito dopo il merge, attendi 1-2 minuti che il deployment finisca, poi ricarica la pagina.
 
