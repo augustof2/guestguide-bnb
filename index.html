@@ -1160,6 +1160,245 @@
     flex: 1;
     gap: 8px;
   }
+
+  /* ═══════════════════════════════════════════════════════════
+     RESPONSIVE — TABLET  (≥ 640px)
+  ═══════════════════════════════════════════════════════════ */
+  @media (min-width: 640px) {
+    .app-shell {
+      max-width: 700px;
+    }
+
+    .gear-btn {
+      right: max(20px, calc((100vw - 700px) / 2 + 20px));
+    }
+
+    .landing-title {
+      font-size: 54px;
+    }
+
+    .apt-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .service-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .checkinout-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     RESPONSIVE — DESKTOP  (≥ 1024px)
+  ═══════════════════════════════════════════════════════════ */
+  @media (min-width: 1024px) {
+    /* ── App shell: full width ── */
+    .app-shell {
+      max-width: 100%;
+    }
+
+    /* ── Gear button: fixed top-right ── */
+    .gear-btn {
+      right: 30px;
+      bottom: 30px;
+    }
+
+    /* ── Landing: 2-column hero + cards ── */
+    #landing {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto 1fr;
+      grid-template-areas:
+        "topbar topbar"
+        "hero   cards"
+        "intro  cards";
+      align-items: start;
+      min-height: 100vh;
+      padding-bottom: 0;
+    }
+
+    .landing-topbar { grid-area: topbar; }
+
+    .landing-hero {
+      grid-area: hero;
+      padding: 64px 60px 24px;
+    }
+
+    .landing-title {
+      font-size: 72px;
+    }
+
+    .landing-intro {
+      grid-area: intro;
+      padding: 0 60px 60px;
+      font-size: 15px;
+    }
+
+    .apt-cards {
+      grid-area: cards;
+      padding: 64px 48px 64px 20px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    /* ── Guide page: sidebar navigation ── */
+    #guide.active {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      grid-template-rows: auto 1fr;
+      grid-template-areas:
+        "sidebar header"
+        "sidebar content";
+      height: 100vh;
+      height: 100dvh;
+      min-height: unset;
+      overflow: hidden;
+    }
+
+    .guide-header {
+      grid-area: header;
+      position: static;
+      border-left: 1px solid var(--border);
+    }
+
+    .guide-content {
+      grid-area: content;
+      overflow-y: auto;
+      height: 100%;
+      padding-bottom: 40px;
+      border-left: 1px solid var(--border);
+    }
+
+    .bottom-nav {
+      grid-area: sidebar;
+      position: static;
+      transform: none;
+      flex-direction: column;
+      width: 230px;
+      height: 100%;
+      max-width: none;
+      border-right: 1px solid var(--border);
+      border-top: none;
+      padding: 28px 0 20px;
+      justify-content: flex-start;
+      align-items: stretch;
+      left: auto;
+      bottom: auto;
+    }
+
+    .nav-item {
+      flex-direction: row;
+      justify-content: flex-start;
+      padding: 14px 24px;
+      gap: 14px;
+      border-radius: 0;
+      min-height: 52px;
+    }
+
+    .nav-item .nav-icon {
+      font-size: 20px;
+    }
+
+    .nav-item .nav-label {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    .nav-item.active {
+      background: rgba(201, 168, 76, 0.1);
+      border-left: 3px solid var(--gold);
+      padding-left: 21px;
+    }
+
+    /* ── Guide content: wider padding & grids ── */
+    .home-hero {
+      padding: 36px 32px 28px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+      padding: 20px 32px;
+    }
+
+    .welcome-card {
+      margin: 0 32px 16px;
+    }
+
+    .quick-nav {
+      padding: 4px 32px 24px;
+    }
+
+    .tab-header {
+      padding: 32px 32px 0;
+    }
+
+    .section-pad {
+      padding: 24px 32px;
+    }
+
+    .service-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Two-column layout for places and food cards */
+    #places-container,
+    #food-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .place-card,
+    .restaurant-card {
+      margin-bottom: 0;
+    }
+
+    /* SOS cards in 2 columns */
+    .sos-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .sos-title {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Settings panel: right-side drawer ── */
+    #settings-panel {
+      left: auto;
+      right: 0;
+      width: min(600px, 100vw);
+      box-shadow: -8px 0 60px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+     RESPONSIVE — WIDE DESKTOP  (≥ 1440px)
+  ═══════════════════════════════════════════════════════════ */
+  @media (min-width: 1440px) {
+    .apt-cards {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .landing-title {
+      font-size: 80px;
+    }
+  }
 </style>
 </head>
 <body>
