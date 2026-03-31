@@ -1120,8 +1120,8 @@
 
   /* ── RESPONSIVE: TABLET & DESKTOP ─────────────────── */
   @media (min-width: 768px) {
-    .app-shell { max-width: 100%; }
-    .bottom-nav { max-width: 100%; }
+    .app-shell { max-width: 720px; }
+    .bottom-nav { max-width: 720px; }
     #settings-panel { max-width: 100%; left: 0; transform: none; }
     .pin-dialog { width: 360px; }
     .landing-title { font-size: 52px; }
@@ -1130,7 +1130,7 @@
     .apt-cards { flex-direction: row; flex-wrap: wrap; padding: 0 40px; }
     .apt-card { flex: 1; min-width: 280px; max-width: 420px; padding: 22px 20px; }
     .stats-grid { grid-template-columns: repeat(4, 1fr); }
-    .gear-btn { right: 20px; }
+    .gear-btn { right: max(20px, calc((100vw - 720px) / 2 + 20px)); }
     .section-pad { padding: 24px 32px; }
     .tab-header { padding: 32px 32px 0; }
     .home-hero { padding: 40px 32px 32px; }
@@ -1138,8 +1138,8 @@
   }
 
   @media (min-width: 1024px) {
-    .app-shell { max-width: 100%; }
-    .bottom-nav { max-width: 100%; }
+    .app-shell { max-width: 900px; }
+    .bottom-nav { max-width: 900px; }
     #settings-panel { max-width: 100%; }
     .landing-title { font-size: 58px; }
     .section-title { font-size: 30px; }
@@ -1157,6 +1157,7 @@
     .place-card { margin-bottom: 20px; }
     .restaurant-card { margin-bottom: 20px; }
     .supermercato-card { margin-bottom: 20px; }
+    .gear-btn { right: max(20px, calc((100vw - 900px) / 2 + 20px)); }
   }
 
   /* ── LANGUAGE SELECTION CARDS (landing) ─────────── */
