@@ -1690,7 +1690,8 @@
         <div class="s-field"><label>Telefono Host</label><input type="tel" id="s-hostPhone" placeholder="+39 000 000 0000"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">💬 Messaggio di Benvenuto</div>
-        <div class="s-field"><label>Testo di Benvenuto</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Testo di Benvenuto 🇮🇹</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..." onblur="autoTranslateField('s-welcomeIt','s-welcomeEn')"></textarea></div>
+        <div class="s-field"><label>Testo di Benvenuto 🇬🇧</label><textarea id="s-welcomeEn" placeholder="We are delighted to have you as our guests..."></textarea></div>
       </div>
     </details>
 
@@ -1705,8 +1706,10 @@
       <summary class="s-section-title">🧳 Partenza</summary>
       <div class="s-fields">
         <div class="s-sub-title">🌟 Messaggio di Chiusura</div>
-        <div class="s-field"><label>Titolo</label><input type="text" id="s-closingTitleIt" placeholder="Grazie per aver scelto il nostro B&amp;B!"></div>
-        <div class="s-field"><label>Testo</label><textarea id="s-closingTextIt" placeholder="È stato un piacere avervi come ospiti..."></textarea></div>
+        <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-closingTitleIt" placeholder="Grazie per aver scelto il nostro B&amp;B!" onblur="autoTranslateField('s-closingTitleIt','s-closingTitleEn')"></div>
+        <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-closingTitleEn" placeholder="Thank you for choosing our B&amp;B!"></div>
+        <div class="s-field"><label>Testo 🇮🇹</label><textarea id="s-closingTextIt" placeholder="È stato un piacere avervi come ospiti..." onblur="autoTranslateField('s-closingTextIt','s-closingTextEn')"></textarea></div>
+        <div class="s-field"><label>Testo 🇬🇧</label><textarea id="s-closingTextEn" placeholder="It was a pleasure having you as our guests..."></textarea></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">⭐ Recensione Google</div>
         <div class="s-field"><label>Link recensione Google</label><input type="url" id="s-googleReviewUrl" placeholder="https://g.page/r/..."></div>
@@ -1723,49 +1726,65 @@
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🏠 Home</div>
         <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-homeIcon" placeholder="🏠" style="max-width:80px"></div>
-        <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-homeIt" placeholder="Home"></div>
+        <div class="s-field"><label>Etichetta 🇮🇹</label><input type="text" id="s-nl-homeIt" placeholder="Home" onblur="autoTranslateField('s-nl-homeIt','s-nl-homeEn')"></div>
+        <div class="s-field"><label>Etichetta 🇬🇧</label><input type="text" id="s-nl-homeEn" placeholder="Home"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🛋️ Soggiorno</div>
         <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-stayIcon" placeholder="🛋️" style="max-width:80px"></div>
-        <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-stayIt" placeholder="Soggiorno"></div>
+        <div class="s-field"><label>Etichetta 🇮🇹</label><input type="text" id="s-nl-stayIt" placeholder="Soggiorno" onblur="autoTranslateField('s-nl-stayIt','s-nl-stayEn')"></div>
+        <div class="s-field"><label>Etichetta 🇬🇧</label><input type="text" id="s-nl-stayEn" placeholder="Stay"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🗺️ Luoghi</div>
         <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-placesIcon" placeholder="🗺️" style="max-width:80px"></div>
-        <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-placesIt" placeholder="Luoghi"></div>
+        <div class="s-field"><label>Etichetta 🇮🇹</label><input type="text" id="s-nl-placesIt" placeholder="Luoghi" onblur="autoTranslateField('s-nl-placesIt','s-nl-placesEn')"></div>
+        <div class="s-field"><label>Etichetta 🇬🇧</label><input type="text" id="s-nl-placesEn" placeholder="Places"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🍽️ Mangiare</div>
         <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-foodIcon" placeholder="🍽️" style="max-width:80px"></div>
-        <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-foodIt" placeholder="Mangiare"></div>
+        <div class="s-field"><label>Etichetta 🇮🇹</label><input type="text" id="s-nl-foodIt" placeholder="Mangiare" onblur="autoTranslateField('s-nl-foodIt','s-nl-foodEn')"></div>
+        <div class="s-field"><label>Etichetta 🇬🇧</label><input type="text" id="s-nl-foodEn" placeholder="Food"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🚇 Muoversi</div>
         <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-transportIcon" placeholder="🚇" style="max-width:80px"></div>
-        <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-transportIt" placeholder="Muoversi"></div>
+        <div class="s-field"><label>Etichetta 🇮🇹</label><input type="text" id="s-nl-transportIt" placeholder="Muoversi" onblur="autoTranslateField('s-nl-transportIt','s-nl-transportEn')"></div>
+        <div class="s-field"><label>Etichetta 🇬🇧</label><input type="text" id="s-nl-transportEn" placeholder="Transport"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🧳 Partenza</div>
         <div class="s-field"><label>Emoji</label><input type="text" id="s-nl-departureIcon" placeholder="🧳" style="max-width:80px"></div>
-        <div class="s-field"><label>Etichetta</label><input type="text" id="s-nl-departureIt" placeholder="Partenza"></div>
+        <div class="s-field"><label>Etichetta 🇮🇹</label><input type="text" id="s-nl-departureIt" placeholder="Partenza" onblur="autoTranslateField('s-nl-departureIt','s-nl-departureEn')"></div>
+        <div class="s-field"><label>Etichetta 🇬🇧</label><input type="text" id="s-nl-departureEn" placeholder="Departure"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">📄 Intestazioni Sezioni</div>
         <p style="font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.5">Personalizza i titoli delle sezioni all'interno della guida.</p>
         <div class="s-sub-title" style="font-size:12px">🛋️ Sezione Soggiorno</div>
-        <div class="s-field"><label>Eyebrow</label><input type="text" id="s-st-stayEyebrowIt" placeholder="Il Tuo Appartamento"></div>
-        <div class="s-field"><label>Titolo</label><input type="text" id="s-st-stayTitleIt" placeholder="Soggiorno"></div>
+        <div class="s-field"><label>Eyebrow 🇮🇹</label><input type="text" id="s-st-stayEyebrowIt" placeholder="Il Tuo Appartamento" onblur="autoTranslateField('s-st-stayEyebrowIt','s-st-stayEyebrowEn')"></div>
+        <div class="s-field"><label>Eyebrow 🇬🇧</label><input type="text" id="s-st-stayEyebrowEn" placeholder="Your Apartment"></div>
+        <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-st-stayTitleIt" placeholder="Soggiorno" onblur="autoTranslateField('s-st-stayTitleIt','s-st-stayTitleEn')"></div>
+        <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-st-stayTitleEn" placeholder="Stay"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🗺️ Sezione Luoghi</div>
-        <div class="s-field"><label>Eyebrow</label><input type="text" id="s-st-placesEyebrowIt" placeholder="Scopri la Città"></div>
-        <div class="s-field"><label>Titolo</label><input type="text" id="s-st-placesTitleIt" placeholder="Luoghi"></div>
+        <div class="s-field"><label>Eyebrow 🇮🇹</label><input type="text" id="s-st-placesEyebrowIt" placeholder="Scopri la Città" onblur="autoTranslateField('s-st-placesEyebrowIt','s-st-placesEyebrowEn')"></div>
+        <div class="s-field"><label>Eyebrow 🇬🇧</label><input type="text" id="s-st-placesEyebrowEn" placeholder="Discover the City"></div>
+        <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-st-placesTitleIt" placeholder="Luoghi" onblur="autoTranslateField('s-st-placesTitleIt','s-st-placesTitleEn')"></div>
+        <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-st-placesTitleEn" placeholder="Places"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🍽️ Sezione Mangiare</div>
-        <div class="s-field"><label>Eyebrow</label><input type="text" id="s-st-foodEyebrowIt" placeholder="Dove Mangiare"></div>
-        <div class="s-field"><label>Titolo</label><input type="text" id="s-st-foodTitleIt" placeholder="Mangiare"></div>
+        <div class="s-field"><label>Eyebrow 🇮🇹</label><input type="text" id="s-st-foodEyebrowIt" placeholder="Dove Mangiare" onblur="autoTranslateField('s-st-foodEyebrowIt','s-st-foodEyebrowEn')"></div>
+        <div class="s-field"><label>Eyebrow 🇬🇧</label><input type="text" id="s-st-foodEyebrowEn" placeholder="Where to Eat"></div>
+        <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-st-foodTitleIt" placeholder="Mangiare" onblur="autoTranslateField('s-st-foodTitleIt','s-st-foodTitleEn')"></div>
+        <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-st-foodTitleEn" placeholder="Food"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🚇 Sezione Muoversi</div>
-        <div class="s-field"><label>Eyebrow</label><input type="text" id="s-st-transportEyebrowIt" placeholder="In Città"></div>
-        <div class="s-field"><label>Titolo</label><input type="text" id="s-st-transportTitleIt" placeholder="Muoversi"></div>
+        <div class="s-field"><label>Eyebrow 🇮🇹</label><input type="text" id="s-st-transportEyebrowIt" placeholder="In Città" onblur="autoTranslateField('s-st-transportEyebrowIt','s-st-transportEyebrowEn')"></div>
+        <div class="s-field"><label>Eyebrow 🇬🇧</label><input type="text" id="s-st-transportEyebrowEn" placeholder="In the City"></div>
+        <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-st-transportTitleIt" placeholder="Muoversi" onblur="autoTranslateField('s-st-transportTitleIt','s-st-transportTitleEn')"></div>
+        <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-st-transportTitleEn" placeholder="Transport"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title" style="font-size:12px">🧳 Sezione Partenza</div>
-        <div class="s-field"><label>Eyebrow</label><input type="text" id="s-st-departureEyebrowIt" placeholder="È Ora di Partire"></div>
-        <div class="s-field"><label>Titolo</label><input type="text" id="s-st-departureTitleIt" placeholder="Partenza"></div>
+        <div class="s-field"><label>Eyebrow 🇮🇹</label><input type="text" id="s-st-departureEyebrowIt" placeholder="È Ora di Partire" onblur="autoTranslateField('s-st-departureEyebrowIt','s-st-departureEyebrowEn')"></div>
+        <div class="s-field"><label>Eyebrow 🇬🇧</label><input type="text" id="s-st-departureEyebrowEn" placeholder="Time to Leave"></div>
+        <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-st-departureTitleIt" placeholder="Partenza" onblur="autoTranslateField('s-st-departureTitleIt','s-st-departureTitleEn')"></div>
+        <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-st-departureTitleEn" placeholder="Departure"></div>
       </div>
     </details>
 
@@ -2832,12 +2851,12 @@ function renderApp(aptIndex) {
   // Update nav labels (language-aware: EN from t(), IT from data)
   const nl = d.navLabels || DEFAULT_DATA.navLabels;
   const navLabelMap = {
-    home:      currentLang === 'en' ? t('navHome')      : (nl.homeIt      || t('navHome')),
-    stay:      currentLang === 'en' ? t('navStay')      : (nl.stayIt      || t('navStay')),
-    places:    currentLang === 'en' ? t('navPlaces')    : (nl.placesIt    || t('navPlaces')),
-    food:      currentLang === 'en' ? t('navFood')      : (nl.foodIt      || t('navFood')),
-    transport: currentLang === 'en' ? t('navTransport') : (nl.transportIt || t('navTransport')),
-    departure: currentLang === 'en' ? t('navDeparture') : (nl.departureIt || t('navDeparture'))
+    home:      currentLang === 'en' ? (nl.homeEn      || t('navHome'))      : (nl.homeIt      || t('navHome')),
+    stay:      currentLang === 'en' ? (nl.stayEn      || t('navStay'))      : (nl.stayIt      || t('navStay')),
+    places:    currentLang === 'en' ? (nl.placesEn    || t('navPlaces'))    : (nl.placesIt    || t('navPlaces')),
+    food:      currentLang === 'en' ? (nl.foodEn      || t('navFood'))      : (nl.foodIt      || t('navFood')),
+    transport: currentLang === 'en' ? (nl.transportEn || t('navTransport')) : (nl.transportIt || t('navTransport')),
+    departure: currentLang === 'en' ? (nl.departureEn || t('navDeparture')) : (nl.departureIt || t('navDeparture'))
   };
   const navIconMap = {
     home:      nl.homeIcon      || DEFAULT_DATA.navLabels.homeIcon,
@@ -2869,11 +2888,11 @@ function renderApp(aptIndex) {
   // Update section headers (language-aware)
   const st = d.sectionTitles || DEFAULT_DATA.sectionTitles;
   const sectionHeaderMap = [
-    { tab: 'stay',      eyebrow: currentLang === 'en' ? t('stayEyebrow')      : (st.stayEyebrowIt      || t('stayEyebrow')),      title: currentLang === 'en' ? t('stayTitle')      : (st.stayTitleIt      || t('stayTitle')) },
-    { tab: 'places',    eyebrow: currentLang === 'en' ? t('placesEyebrow')    : (st.placesEyebrowIt    || t('placesEyebrow')),    title: currentLang === 'en' ? t('placesTitle')    : (st.placesTitleIt    || t('placesTitle')) },
-    { tab: 'food',      eyebrow: currentLang === 'en' ? t('foodEyebrow')      : (st.foodEyebrowIt      || t('foodEyebrow')),      title: currentLang === 'en' ? t('foodTitle')      : (st.foodTitleIt      || t('foodTitle')) },
-    { tab: 'transport', eyebrow: currentLang === 'en' ? t('transportEyebrow') : (st.transportEyebrowIt || t('transportEyebrow')), title: currentLang === 'en' ? t('transportTitle') : (st.transportTitleIt || t('transportTitle')) },
-    { tab: 'departure', eyebrow: currentLang === 'en' ? t('departureEyebrow') : (st.departureEyebrowIt || t('departureEyebrow')), title: currentLang === 'en' ? t('departureTitle') : (st.departureTitleIt || t('departureTitle')) }
+    { tab: 'stay',      eyebrow: currentLang === 'en' ? (st.stayEyebrowEn      || t('stayEyebrow'))      : (st.stayEyebrowIt      || t('stayEyebrow')),      title: currentLang === 'en' ? (st.stayTitleEn      || t('stayTitle'))      : (st.stayTitleIt      || t('stayTitle')) },
+    { tab: 'places',    eyebrow: currentLang === 'en' ? (st.placesEyebrowEn    || t('placesEyebrow'))    : (st.placesEyebrowIt    || t('placesEyebrow')),    title: currentLang === 'en' ? (st.placesTitleEn    || t('placesTitle'))    : (st.placesTitleIt    || t('placesTitle')) },
+    { tab: 'food',      eyebrow: currentLang === 'en' ? (st.foodEyebrowEn      || t('foodEyebrow'))      : (st.foodEyebrowIt      || t('foodEyebrow')),      title: currentLang === 'en' ? (st.foodTitleEn      || t('foodTitle'))      : (st.foodTitleIt      || t('foodTitle')) },
+    { tab: 'transport', eyebrow: currentLang === 'en' ? (st.transportEyebrowEn || t('transportEyebrow')) : (st.transportEyebrowIt || t('transportEyebrow')), title: currentLang === 'en' ? (st.transportTitleEn || t('transportTitle')) : (st.transportTitleIt || t('transportTitle')) },
+    { tab: 'departure', eyebrow: currentLang === 'en' ? (st.departureEyebrowEn || t('departureEyebrow')) : (st.departureEyebrowIt || t('departureEyebrow')), title: currentLang === 'en' ? (st.departureTitleEn || t('departureTitle')) : (st.departureTitleIt || t('departureTitle')) }
   ];
   sectionHeaderMap.forEach(({ tab, eyebrow, title }) => {
     const tabEl = document.getElementById('tab-' + tab);
@@ -3342,26 +3361,32 @@ function renderSettingsApts(apts) {
         <div class="s-field"><label>Check-out (orario)</label><input type="text" id="s-a${i}-checkout" value="${escAttr(apt.checkout || '')}" placeholder="10:00"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">📍 Come raggiungerci</div>
-        <div class="s-field"><label>Come raggiungerci</label><textarea id="s-a${i}-howToReachIt" placeholder="Dalla stazione centrale...">${escHtml(apt.howToReachIt || '')}</textarea></div>
+        <div class="s-field"><label>Come raggiungerci 🇮🇹</label><textarea id="s-a${i}-howToReachIt" placeholder="Dalla stazione centrale..." onblur="autoTranslateField('s-a${i}-howToReachIt','s-a${i}-howToReachEn')">${escHtml(apt.howToReachIt || '')}</textarea></div>
+        <div class="s-field"><label>Come raggiungerci 🇬🇧</label><textarea id="s-a${i}-howToReachEn">${escHtml(apt.howToReachEn || '')}</textarea></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🗝️ Come accedere</div>
-        <div class="s-field"><label>Come accedere</label><textarea id="s-a${i}-howToAccessIt" placeholder="Le chiavi vi verranno consegnate...">${escHtml(apt.howToAccessIt || '')}</textarea></div>
+        <div class="s-field"><label>Come accedere 🇮🇹</label><textarea id="s-a${i}-howToAccessIt" placeholder="Le chiavi vi verranno consegnate..." onblur="autoTranslateField('s-a${i}-howToAccessIt','s-a${i}-howToAccessEn')">${escHtml(apt.howToAccessIt || '')}</textarea></div>
+        <div class="s-field"><label>Come accedere 🇬🇧</label><textarea id="s-a${i}-howToAccessEn">${escHtml(apt.howToAccessEn || '')}</textarea></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🚗 Parcheggio</div>
-        <div class="s-field"><label>Parcheggio</label><textarea id="s-a${i}-parkingIt" placeholder="Parcheggio pubblico disponibile...">${escHtml(apt.parkingIt || '')}</textarea></div>
+        <div class="s-field"><label>Parcheggio 🇮🇹</label><textarea id="s-a${i}-parkingIt" placeholder="Parcheggio pubblico disponibile..." onblur="autoTranslateField('s-a${i}-parkingIt','s-a${i}-parkingEn')">${escHtml(apt.parkingIt || '')}</textarea></div>
+        <div class="s-field"><label>Parcheggio 🇬🇧</label><textarea id="s-a${i}-parkingEn">${escHtml(apt.parkingEn || '')}</textarea></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🏠 Regole della casa</div>
         <div id="s-a${i}-rules" data-count="0"></div>
         <button class="s-add-btn" style="margin-top:8px" onclick="addAptHouseRule(${i})">➕ Aggiungi Regola</button>
         <div class="s-divider"></div>
         <div class="s-sub-title">🛌 Camera da Letto — Dotazioni (comma-separato)</div>
-        <div class="s-field"><label>Dotazioni camera</label><input type="text" id="s-a${i}-bedroomTagsIt" value="${escAttr(apt.bedroomTagsIt || '')}" placeholder="Letto matrimoniale,Armadio,Biancheria..."></div>
+        <div class="s-field"><label>Dotazioni camera 🇮🇹</label><input type="text" id="s-a${i}-bedroomTagsIt" value="${escAttr(apt.bedroomTagsIt || '')}" placeholder="Letto matrimoniale,Armadio,Biancheria..." onblur="autoTranslateField('s-a${i}-bedroomTagsIt','s-a${i}-bedroomTagsEn')"></div>
+        <div class="s-field"><label>Dotazioni camera 🇬🇧</label><input type="text" id="s-a${i}-bedroomTagsEn" value="${escAttr(apt.bedroomTagsEn || '')}" placeholder="Double bed,Wardrobe,Linen..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🍳 Cucina — Dotazioni (comma-separato)</div>
-        <div class="s-field"><label>Dotazioni cucina</label><input type="text" id="s-a${i}-kitchenTagsIt" value="${escAttr(apt.kitchenTagsIt || '')}" placeholder="Piano cottura,Forno,Frigorifero..."></div>
+        <div class="s-field"><label>Dotazioni cucina 🇮🇹</label><input type="text" id="s-a${i}-kitchenTagsIt" value="${escAttr(apt.kitchenTagsIt || '')}" placeholder="Piano cottura,Forno,Frigorifero..." onblur="autoTranslateField('s-a${i}-kitchenTagsIt','s-a${i}-kitchenTagsEn')"></div>
+        <div class="s-field"><label>Dotazioni cucina 🇬🇧</label><input type="text" id="s-a${i}-kitchenTagsEn" value="${escAttr(apt.kitchenTagsEn || '')}" placeholder="Hob,Oven,Fridge..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🚿 Bagno — Dotazioni (comma-separato)</div>
-        <div class="s-field"><label>Dotazioni bagno</label><input type="text" id="s-a${i}-bathroomTagsIt" value="${escAttr(apt.bathroomTagsIt || '')}" placeholder="Doccia,Asciugamani,Phon..."></div>
+        <div class="s-field"><label>Dotazioni bagno 🇮🇹</label><input type="text" id="s-a${i}-bathroomTagsIt" value="${escAttr(apt.bathroomTagsIt || '')}" placeholder="Doccia,Asciugamani,Phon..." onblur="autoTranslateField('s-a${i}-bathroomTagsIt','s-a${i}-bathroomTagsEn')"></div>
+        <div class="s-field"><label>Dotazioni bagno 🇬🇧</label><input type="text" id="s-a${i}-bathroomTagsEn" value="${escAttr(apt.bathroomTagsEn || '')}" placeholder="Shower,Towels,Hair dryer..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">✨ Servizi Extra</div>
         <div id="s-a${i}-services" data-count="0"></div>
@@ -3387,7 +3412,8 @@ function renderSettingsApts(apts) {
             <input type="checkbox" id="s-a${i}-tr-airportEnabled" ${(apt.transport && apt.transport.airportEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
           <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-airportIcon" value="${escAttr((apt.transport && apt.transport.airportIcon) || '✈️')}" placeholder="✈️" style="max-width:80px"></div>
-          <div class="s-field"><label>Descrizione</label><textarea id="s-a${i}-tr-airportIt" placeholder="All'uscita dell'aeroporto...">${escHtml((apt.transport && apt.transport.airportIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-airportIt" placeholder="All'uscita dell'aeroporto..." onblur="autoTranslateField('s-a${i}-tr-airportIt','s-a${i}-tr-airportEn')">${escHtml((apt.transport && apt.transport.airportIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${i}-tr-airportEn">${escHtml((apt.transport && apt.transport.airportEn) || '')}</textarea></div>
           <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-airportMaps" value="${escAttr((apt.transport && apt.transport.airportMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚉 Stazione</div>
@@ -3396,7 +3422,8 @@ function renderSettingsApts(apts) {
             <input type="checkbox" id="s-a${i}-tr-stationEnabled" ${(apt.transport && apt.transport.stationEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
           <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-stationIcon" value="${escAttr((apt.transport && apt.transport.stationIcon) || '🚉')}" placeholder="🚉" style="max-width:80px"></div>
-          <div class="s-field"><label>Descrizione</label><textarea id="s-a${i}-tr-stationIt" placeholder="Dalla stazione...">${escHtml((apt.transport && apt.transport.stationIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-stationIt" placeholder="Dalla stazione..." onblur="autoTranslateField('s-a${i}-tr-stationIt','s-a${i}-tr-stationEn')">${escHtml((apt.transport && apt.transport.stationIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${i}-tr-stationEn">${escHtml((apt.transport && apt.transport.stationEn) || '')}</textarea></div>
           <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-stationMaps" value="${escAttr((apt.transport && apt.transport.stationMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚇 Metro</div>
@@ -3405,7 +3432,8 @@ function renderSettingsApts(apts) {
             <input type="checkbox" id="s-a${i}-tr-metroEnabled" ${(apt.transport && apt.transport.metroEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
           <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-metroIcon" value="${escAttr((apt.transport && apt.transport.metroIcon) || '🚇')}" placeholder="🚇" style="max-width:80px"></div>
-          <div class="s-field"><label>Descrizione</label><input type="text" id="s-a${i}-tr-metroIt" value="${escAttr((apt.transport && apt.transport.metroIt) || '')}" placeholder="Fermata più vicina..."></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${i}-tr-metroIt" value="${escAttr((apt.transport && apt.transport.metroIt) || '')}" placeholder="Fermata più vicina..." onblur="autoTranslateField('s-a${i}-tr-metroIt','s-a${i}-tr-metroEn')"></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${i}-tr-metroEn" value="${escAttr((apt.transport && apt.transport.metroEn) || '')}" placeholder="Nearest stop..."></div>
           <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-metroMaps" value="${escAttr((apt.transport && apt.transport.metroMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚌 Bus</div>
@@ -3414,14 +3442,17 @@ function renderSettingsApts(apts) {
             <input type="checkbox" id="s-a${i}-tr-busEnabled" ${(apt.transport && apt.transport.busEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
           <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-busIcon" value="${escAttr((apt.transport && apt.transport.busIcon) || '🚌')}" placeholder="🚌" style="max-width:80px"></div>
-          <div class="s-field"><label>Descrizione</label><input type="text" id="s-a${i}-tr-busIt" value="${escAttr((apt.transport && apt.transport.busIt) || '')}" placeholder="Linee principali..."></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${i}-tr-busIt" value="${escAttr((apt.transport && apt.transport.busIt) || '')}" placeholder="Linee principali..." onblur="autoTranslateField('s-a${i}-tr-busIt','s-a${i}-tr-busEn')"></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${i}-tr-busEn" value="${escAttr((apt.transport && apt.transport.busEn) || '')}" placeholder="Main lines..."></div>
           <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-busMaps" value="${escAttr((apt.transport && apt.transport.busMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🎫 Biglietti</div>
-          <div class="s-field"><label>Descrizione</label><textarea id="s-a${i}-tr-ticketsIt" placeholder="Biglietto singolo: ~€1,50...">${escHtml((apt.transport && apt.transport.ticketsIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-ticketsIt" placeholder="Biglietto singolo: ~€1,50..." onblur="autoTranslateField('s-a${i}-tr-ticketsIt','s-a${i}-tr-ticketsEn')">${escHtml((apt.transport && apt.transport.ticketsIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${i}-tr-ticketsEn">${escHtml((apt.transport && apt.transport.ticketsEn) || '')}</textarea></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚖 Taxi &amp; App</div>
-          <div class="s-field"><label>Descrizione</label><textarea id="s-a${i}-tr-taxiIt" placeholder="Taxi ufficiali: trovate i posteggi...">${escHtml((apt.transport && apt.transport.taxiIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-taxiIt" placeholder="Taxi ufficiali: trovate i posteggi..." onblur="autoTranslateField('s-a${i}-tr-taxiIt','s-a${i}-tr-taxiEn')">${escHtml((apt.transport && apt.transport.taxiIt) || '')}</textarea></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${i}-tr-taxiEn">${escHtml((apt.transport && apt.transport.taxiEn) || '')}</textarea></div>
         </div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🧳 Istruzioni Check-out</div>
@@ -3444,7 +3475,9 @@ function collectSettingsApts() {
   const apts = [];
   for (let i = 0; i < count; i++) {
     const apt = {};
-    ['name','address','addressShort','mapsLink','maxGuests','wifi','wifiPass','checkin','checkout','howToReachIt','howToAccessIt','parkingIt','bedroomTagsIt','kitchenTagsIt','bathroomTagsIt'].forEach(k => {
+    ['name','address','addressShort','mapsLink','maxGuests','wifi','wifiPass','checkin','checkout',
+     'howToReachIt','howToReachEn','howToAccessIt','howToAccessEn','parkingIt','parkingEn',
+     'bedroomTagsIt','bedroomTagsEn','kitchenTagsIt','kitchenTagsEn','bathroomTagsIt','bathroomTagsEn'].forEach(k => {
       const el = document.getElementById(`s-a${i}-${k}`);
       if (el) apt[k] = el.value;
     });
@@ -3469,19 +3502,19 @@ function addSettingsApt() {
     maxGuests: '4 persone',
     wifi: '', wifiPass: '',
     checkin: '15:00', checkout: '10:00',
-    howToReachIt: '', howToAccessIt: '', parkingIt: '',
+    howToReachIt: '', howToReachEn: '', howToAccessIt: '', howToAccessEn: '', parkingIt: '', parkingEn: '',
     houseRules: [],
-    bedroomTagsIt: '', kitchenTagsIt: '', bathroomTagsIt: '',
+    bedroomTagsIt: '', bedroomTagsEn: '', kitchenTagsIt: '', kitchenTagsEn: '', bathroomTagsIt: '', bathroomTagsEn: '',
     extraServices: [],
     places: [],
     restaurants: [],
     supermarkets: [],
     transport: {
-      airportEnabled: true, airportIcon: '✈️', airportIt: '', airportMaps: '',
-      stationEnabled: true, stationIcon: '🚉', stationIt: '', stationMaps: '',
-      metroEnabled: true, metroIcon: '🚇', metroIt: '', metroMaps: '',
-      busEnabled: true, busIcon: '🚌', busIt: '', busMaps: '',
-      ticketsIt: '', taxiIt: ''
+      airportEnabled: true, airportIcon: '✈️', airportIt: '', airportEn: '', airportMaps: '',
+      stationEnabled: true, stationIcon: '🚉', stationIt: '', stationEn: '', stationMaps: '',
+      metroEnabled: true, metroIcon: '🚇', metroIt: '', metroEn: '', metroMaps: '',
+      busEnabled: true, busIcon: '🚌', busIt: '', busEn: '', busMaps: '',
+      ticketsIt: '', ticketsEn: '', taxiIt: '', taxiEn: ''
     },
     checkoutSteps: []
   });
@@ -3805,21 +3838,27 @@ function collectAptTransport(aptIndex) {
     airportEnabled: g('airportEnabled') ? g('airportEnabled').checked : true,
     airportIcon:  (g('airportIcon')  || {}).value || '✈️',
     airportIt:    (g('airportIt')    || {}).value || '',
+    airportEn:    (g('airportEn')    || {}).value || '',
     airportMaps:  (g('airportMaps')  || {}).value || '',
     stationEnabled: g('stationEnabled') ? g('stationEnabled').checked : true,
     stationIcon:  (g('stationIcon')  || {}).value || '🚉',
     stationIt:    (g('stationIt')    || {}).value || '',
+    stationEn:    (g('stationEn')    || {}).value || '',
     stationMaps:  (g('stationMaps')  || {}).value || '',
     metroEnabled: g('metroEnabled') ? g('metroEnabled').checked : true,
     metroIcon:    (g('metroIcon')    || {}).value || '🚇',
     metroIt:      (g('metroIt')      || {}).value || '',
+    metroEn:      (g('metroEn')      || {}).value || '',
     metroMaps:    (g('metroMaps')    || {}).value || '',
     busEnabled:   g('busEnabled') ? g('busEnabled').checked : true,
     busIcon:      (g('busIcon')      || {}).value || '🚌',
     busIt:        (g('busIt')        || {}).value || '',
+    busEn:        (g('busEn')        || {}).value || '',
     busMaps:      (g('busMaps')      || {}).value || '',
     ticketsIt:    (g('ticketsIt')    || {}).value || '',
-    taxiIt:       (g('taxiIt')       || {}).value || ''
+    ticketsEn:    (g('ticketsEn')    || {}).value || '',
+    taxiIt:       (g('taxiIt')       || {}).value || '',
+    taxiEn:       (g('taxiEn')       || {}).value || ''
   };
 }
 
@@ -3941,9 +3980,12 @@ function populateSettingsForms() {
   document.getElementById('s-hostName').value = d.hostName;
   document.getElementById('s-hostPhone').value = d.hostPhone;
   document.getElementById('s-welcomeIt').value = d.welcomeIt || '';
+  document.getElementById('s-welcomeEn').value = d.welcomeEn || '';
   document.getElementById('s-googleReviewUrl').value = d.googleReviewUrl || '';
   document.getElementById('s-closingTitleIt').value = d.closingTitleIt || '';
+  document.getElementById('s-closingTitleEn').value = d.closingTitleEn || '';
   document.getElementById('s-closingTextIt').value = d.closingTextIt || '';
+  document.getElementById('s-closingTextEn').value = d.closingTextEn || '';
 
   // Apts (dynamic)
   renderSettingsApts(d.apts);
@@ -3955,29 +3997,45 @@ function populateSettingsForms() {
   const nl = d.navLabels || {};
   document.getElementById('s-nl-homeIcon').value = nl.homeIcon || '';
   document.getElementById('s-nl-homeIt').value = nl.homeIt || '';
+  document.getElementById('s-nl-homeEn').value = nl.homeEn || '';
   document.getElementById('s-nl-stayIcon').value = nl.stayIcon || '';
   document.getElementById('s-nl-stayIt').value = nl.stayIt || '';
+  document.getElementById('s-nl-stayEn').value = nl.stayEn || '';
   document.getElementById('s-nl-placesIcon').value = nl.placesIcon || '';
   document.getElementById('s-nl-placesIt').value = nl.placesIt || '';
+  document.getElementById('s-nl-placesEn').value = nl.placesEn || '';
   document.getElementById('s-nl-foodIcon').value = nl.foodIcon || '';
   document.getElementById('s-nl-foodIt').value = nl.foodIt || '';
+  document.getElementById('s-nl-foodEn').value = nl.foodEn || '';
   document.getElementById('s-nl-transportIcon').value = nl.transportIcon || '';
   document.getElementById('s-nl-transportIt').value = nl.transportIt || '';
+  document.getElementById('s-nl-transportEn').value = nl.transportEn || '';
   document.getElementById('s-nl-departureIcon').value = nl.departureIcon || '';
   document.getElementById('s-nl-departureIt').value = nl.departureIt || '';
+  document.getElementById('s-nl-departureEn').value = nl.departureEn || '';
 
   // Section Titles
   const st = d.sectionTitles || {};
   document.getElementById('s-st-stayEyebrowIt').value = st.stayEyebrowIt || '';
+  document.getElementById('s-st-stayEyebrowEn').value = st.stayEyebrowEn || '';
   document.getElementById('s-st-stayTitleIt').value = st.stayTitleIt || '';
+  document.getElementById('s-st-stayTitleEn').value = st.stayTitleEn || '';
   document.getElementById('s-st-placesEyebrowIt').value = st.placesEyebrowIt || '';
+  document.getElementById('s-st-placesEyebrowEn').value = st.placesEyebrowEn || '';
   document.getElementById('s-st-placesTitleIt').value = st.placesTitleIt || '';
+  document.getElementById('s-st-placesTitleEn').value = st.placesTitleEn || '';
   document.getElementById('s-st-foodEyebrowIt').value = st.foodEyebrowIt || '';
+  document.getElementById('s-st-foodEyebrowEn').value = st.foodEyebrowEn || '';
   document.getElementById('s-st-foodTitleIt').value = st.foodTitleIt || '';
+  document.getElementById('s-st-foodTitleEn').value = st.foodTitleEn || '';
   document.getElementById('s-st-transportEyebrowIt').value = st.transportEyebrowIt || '';
+  document.getElementById('s-st-transportEyebrowEn').value = st.transportEyebrowEn || '';
   document.getElementById('s-st-transportTitleIt').value = st.transportTitleIt || '';
+  document.getElementById('s-st-transportTitleEn').value = st.transportTitleEn || '';
   document.getElementById('s-st-departureEyebrowIt').value = st.departureEyebrowIt || '';
+  document.getElementById('s-st-departureEyebrowEn').value = st.departureEyebrowEn || '';
   document.getElementById('s-st-departureTitleIt').value = st.departureTitleIt || '';
+  document.getElementById('s-st-departureTitleEn').value = st.departureTitleEn || '';
 
   // GitHub token (stored separately)
   const ghToken = localStorage.getItem('bnb_github_token') || '';
@@ -3994,9 +4052,12 @@ function collectFormData() {
   d.hostName = document.getElementById('s-hostName').value.trim() || d.hostName;
   d.hostPhone = document.getElementById('s-hostPhone').value.trim() || d.hostPhone;
   d.welcomeIt = document.getElementById('s-welcomeIt').value;
+  d.welcomeEn = document.getElementById('s-welcomeEn').value;
   d.googleReviewUrl = document.getElementById('s-googleReviewUrl').value.trim();
   d.closingTitleIt = document.getElementById('s-closingTitleIt').value.trim();
+  d.closingTitleEn = document.getElementById('s-closingTitleEn').value.trim();
   d.closingTextIt = document.getElementById('s-closingTextIt').value.trim();
+  d.closingTextEn = document.getElementById('s-closingTextEn').value.trim();
 
   // Dynamic apts
   d.apts = collectSettingsApts();
@@ -4007,31 +4068,47 @@ function collectFormData() {
   // Nav Labels
   d.navLabels = {
     homeIt:         document.getElementById('s-nl-homeIt').value.trim() || 'Home',
+    homeEn:         document.getElementById('s-nl-homeEn').value.trim(),
     homeIcon:       document.getElementById('s-nl-homeIcon').value.trim() || '🏠',
     stayIt:         document.getElementById('s-nl-stayIt').value.trim() || 'Soggiorno',
+    stayEn:         document.getElementById('s-nl-stayEn').value.trim(),
     stayIcon:       document.getElementById('s-nl-stayIcon').value.trim() || '🛋️',
     placesIt:       document.getElementById('s-nl-placesIt').value.trim() || 'Luoghi',
+    placesEn:       document.getElementById('s-nl-placesEn').value.trim(),
     placesIcon:     document.getElementById('s-nl-placesIcon').value.trim() || '🗺️',
     foodIt:         document.getElementById('s-nl-foodIt').value.trim() || 'Mangiare',
+    foodEn:         document.getElementById('s-nl-foodEn').value.trim(),
     foodIcon:       document.getElementById('s-nl-foodIcon').value.trim() || '🍽️',
     transportIt:    document.getElementById('s-nl-transportIt').value.trim() || 'Muoversi',
+    transportEn:    document.getElementById('s-nl-transportEn').value.trim(),
     transportIcon:  document.getElementById('s-nl-transportIcon').value.trim() || '🚇',
     departureIt:    document.getElementById('s-nl-departureIt').value.trim() || 'Partenza',
+    departureEn:    document.getElementById('s-nl-departureEn').value.trim(),
     departureIcon:  document.getElementById('s-nl-departureIcon').value.trim() || '🧳'
   };
 
   // Section Titles
   d.sectionTitles = {
     stayEyebrowIt:      document.getElementById('s-st-stayEyebrowIt').value.trim() || 'Il Tuo Appartamento',
+    stayEyebrowEn:      document.getElementById('s-st-stayEyebrowEn').value.trim(),
     stayTitleIt:        document.getElementById('s-st-stayTitleIt').value.trim() || 'Soggiorno',
+    stayTitleEn:        document.getElementById('s-st-stayTitleEn').value.trim(),
     placesEyebrowIt:    document.getElementById('s-st-placesEyebrowIt').value.trim() || 'Scopri la Città',
+    placesEyebrowEn:    document.getElementById('s-st-placesEyebrowEn').value.trim(),
     placesTitleIt:      document.getElementById('s-st-placesTitleIt').value.trim() || 'Luoghi',
+    placesTitleEn:      document.getElementById('s-st-placesTitleEn').value.trim(),
     foodEyebrowIt:      document.getElementById('s-st-foodEyebrowIt').value.trim() || 'Dove Mangiare',
+    foodEyebrowEn:      document.getElementById('s-st-foodEyebrowEn').value.trim(),
     foodTitleIt:        document.getElementById('s-st-foodTitleIt').value.trim() || 'Mangiare',
+    foodTitleEn:        document.getElementById('s-st-foodTitleEn').value.trim(),
     transportEyebrowIt: document.getElementById('s-st-transportEyebrowIt').value.trim() || 'In Città',
+    transportEyebrowEn: document.getElementById('s-st-transportEyebrowEn').value.trim(),
     transportTitleIt:   document.getElementById('s-st-transportTitleIt').value.trim() || 'Muoversi',
+    transportTitleEn:   document.getElementById('s-st-transportTitleEn').value.trim(),
     departureEyebrowIt: document.getElementById('s-st-departureEyebrowIt').value.trim() || 'È Ora di Partire',
-    departureTitleIt:   document.getElementById('s-st-departureTitleIt').value.trim() || 'Partenza'
+    departureEyebrowEn: document.getElementById('s-st-departureEyebrowEn').value.trim(),
+    departureTitleIt:   document.getElementById('s-st-departureTitleIt').value.trim() || 'Partenza',
+    departureTitleEn:   document.getElementById('s-st-departureTitleEn').value.trim()
   };
 
   return d;
