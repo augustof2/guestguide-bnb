@@ -3468,6 +3468,34 @@ function removeSettingsApt(idx) {
 }
 
 // ════════════════════════════════════════════
+//  AUTO-TRANSLATE (Italian → English via MyMemory)
+// ════════════════════════════════════════════
+async function autoTranslateField(itElId, enElId) {
+  const itEl = document.getElementById(itElId);
+  const enEl = document.getElementById(enElId);
+  if (!itEl || !enEl) return;
+  const text = itEl.value.trim();
+  if (!text || enEl.value.trim()) return;
+  const prev = enEl.placeholder;
+  enEl.placeholder = '⏳ Traducendo…';
+  enEl.disabled = true;
+  try {
+    const params = new URLSearchParams({ q: text, langpair: 'it|en' });
+    const res = await fetch('https://api.mymemory.translated.net/get?' + params.toString());
+    const json = await res.json();
+    const translated = json && json.responseData && json.responseData.translatedText;
+    if (translated && String(json.responseStatus) === '200') {
+      enEl.value = translated;
+    }
+  } catch (e) {
+    // silent fail — user can fill manually
+  } finally {
+    enEl.disabled = false;
+    enEl.placeholder = prev;
+  }
+}
+
+// ════════════════════════════════════════════
 //  SETTINGS: APT HOUSE RULES (dynamic)
 // ════════════════════════════════════════════
 function renderAptHouseRules(aptIndex, rules) {
@@ -3482,9 +3510,9 @@ function renderAptHouseRules(aptIndex, rules) {
         <button class="s-remove-btn" onclick="removeAptHouseRule(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
       <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-r${j}-icon" value="${escAttr(r.icon || '')}" placeholder="🔇"></div>
-      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escAttr(r.titleIt || '')}"></div>
+      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escAttr(r.titleIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-r${j}-titleIt','s-a${aptIndex}-r${j}-titleEn')"></div>
       <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-r${j}-titleEn" value="${escAttr(r.titleEn || '')}"></div>
-      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-r${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-r${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-r${j}-descIt','s-a${aptIndex}-r${j}-descEn')">${escHtml(r.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-r${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>`;
   });
   container.innerHTML = html;
@@ -3534,9 +3562,9 @@ function renderAptExtraServices(aptIndex, services) {
         <button class="s-remove-btn" onclick="removeAptExtraService(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
       <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-svc${j}-icon" value="${escAttr(svc.icon || '')}" placeholder="✨"></div>
-      <div class="s-field"><label>Nome 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-nameIt" value="${escAttr(svc.nameIt || '')}"></div>
+      <div class="s-field"><label>Nome 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-nameIt" value="${escAttr(svc.nameIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-svc${j}-nameIt','s-a${aptIndex}-svc${j}-nameEn')"></div>
       <div class="s-field"><label>Nome 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-nameEn" value="${escAttr(svc.nameEn || '')}"></div>
-      <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-descIt" value="${escAttr(svc.descIt || '')}"></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-descIt" value="${escAttr(svc.descIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-svc${j}-descIt','s-a${aptIndex}-svc${j}-descEn')"></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-descEn" value="${escAttr(svc.descEn || '')}"></div>
 `;
   });
@@ -3588,9 +3616,9 @@ function renderAptPlaces(aptIndex, places) {
       </div>
       <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-pl${j}-emoji" value="${escAttr(p.emoji || '📍')}" placeholder="📍" style="max-width:80px"></div>
       <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-pl${j}-name" value="${escAttr(p.name || '')}"></div>
-      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-descIt">${escHtml(p.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-pl${j}-descIt','s-a${aptIndex}-pl${j}-descEn')">${escHtml(p.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-pl${j}-descEn">${escHtml(p.descEn || '')}</textarea></div>
-      <div class="s-field"><label>Come arrivarci 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-howIt">${escHtml(p.howIt || '')}</textarea></div>
+      <div class="s-field"><label>Come arrivarci 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-howIt" onblur="autoTranslateField('s-a${aptIndex}-pl${j}-howIt','s-a${aptIndex}-pl${j}-howEn')">${escHtml(p.howIt || '')}</textarea></div>
       <div class="s-field"><label>Come arrivarci 🇬🇧</label><textarea id="s-a${aptIndex}-pl${j}-howEn">${escHtml(p.howEn || '')}</textarea></div>
       <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-pl${j}-maps" value="${escAttr(p.maps || '')}"></div>`;
   });
@@ -3644,7 +3672,7 @@ function renderAptRests(aptIndex, rests) {
       <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-rt${j}-emoji" value="${escAttr(r.emoji || '🍽️')}" placeholder="🍽️" style="max-width:80px"></div>
       <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-rt${j}-name" value="${escAttr(r.name || '')}"></div>
       <div class="s-field"><label>Tipo</label><input type="text" id="s-a${aptIndex}-rt${j}-tipo" value="${escAttr(r.tipo || '')}"></div>
-      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-rt${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-rt${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-rt${j}-descIt','s-a${aptIndex}-rt${j}-descEn')">${escHtml(r.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-rt${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>
       <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-a${aptIndex}-rt${j}-price" value="${escAttr(r.price || '')}" placeholder="€ / €€ / €€€"></div>
       <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-rt${j}-maps" value="${escAttr(r.maps || '')}"></div>`;
@@ -3723,8 +3751,10 @@ function renderAptCheckoutSteps(aptIndex, steps) {
         <span>Passo ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptCheckoutStep(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Titolo</label><input type="text" id="s-a${aptIndex}-cs${j}-titleIt" value="${escAttr(step.titleIt || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-a${aptIndex}-cs${j}-descIt">${escHtml(step.descIt || '')}</textarea></div>`;
+      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-cs${j}-titleIt" value="${escAttr(step.titleIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-cs${j}-titleIt','s-a${aptIndex}-cs${j}-titleEn')"></div>
+      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-cs${j}-titleEn" value="${escAttr(step.titleEn || '')}"></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-cs${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-cs${j}-descIt','s-a${aptIndex}-cs${j}-descEn')">${escHtml(step.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-cs${j}-descEn">${escHtml(step.descEn || '')}</textarea></div>`;
   });
   container.innerHTML = html;
 }
@@ -3736,7 +3766,7 @@ function collectAptCheckoutSteps(aptIndex) {
   const steps = [];
   for (let j = 0; j < count; j++) {
     const step = {};
-    ['titleIt', 'descIt'].forEach(k => {
+    ['titleIt', 'titleEn', 'descIt', 'descEn'].forEach(k => {
       const el = document.getElementById(`s-a${aptIndex}-cs${j}-${k}`);
       if (el) step[k] = el.value;
     });
