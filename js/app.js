@@ -144,6 +144,25 @@ function renderApp(aptIndex) {
   const sMaps = document.getElementById('s-maps');
   sMaps.href = apt.mapsLink || '#';
   sMaps.textContent = t('openMaps');
+  sMaps.className = 'stat-value maps-link google-maps-link';
+
+  // Waze button next to s-maps
+  let sWaze = document.getElementById('s-waze');
+  if (!sWaze) {
+    sWaze = document.createElement('a');
+    sWaze.id = 's-waze';
+    sWaze.target = '_blank';
+    sWaze.rel = 'noopener noreferrer';
+    sWaze.className = 'stat-value maps-link waze-link';
+    sMaps.parentNode.insertBefore(sWaze, sMaps.nextSibling);
+  }
+  if (apt.mapsLink && apt.mapsLink !== '#') {
+    sWaze.href = `https://waze.com/ul?q=${encodeURIComponent(apt.addressShort || apt.address || '')}`;
+    sWaze.textContent = 'Waze';
+    sWaze.style.display = '';
+  } else {
+    sWaze.style.display = 'none';
+  }
 
   document.getElementById('w-title').textContent = t('welcome');
   const wItEl = document.getElementById('w-text-it');
@@ -415,8 +434,14 @@ function renderFood(restaurants, apt) {
   // Supermercato
   const supermarkets = (apt && apt.supermarkets) || [];
   const mapsLabelSuper = t('viewOnMaps');
+  const wazeLabelSuper = t('wazeBtn');
   supermarkets.forEach(s => {
     const desc = langField(s, 'desc');
+    const hasValidMapsSuper = s.maps && s.maps !== '#';
+    const mapsHrefSuper = hasValidMapsSuper ? s.maps : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(s.name || '')}`;
+    const wazeBtnSuper = hasValidMapsSuper
+      ? `<a class="maps-btn waze-btn" href="https://waze.com/ul?q=${encodeURIComponent(s.name || '')}" target="_blank" rel="noopener noreferrer">🗺️ ${wazeLabelSuper}</a>`
+      : '';
     const card = document.createElement('div');
     card.className = 'restaurant-card';
     card.innerHTML = `
@@ -429,7 +454,10 @@ function renderFood(restaurants, apt) {
         <span class="rest-price">${escHtml(s.price || '')}</span>
       </div>
       <p class="rest-desc">${renderRichText(desc)}</p>
-      ${s.maps ? `<a class="maps-btn" href="${escAttr(s.maps)}" target="_blank" rel="noopener noreferrer">${mapsLabelSuper}</a>` : ''}
+      <div class="maps-btn-group">
+        <a class="maps-btn google-maps-btn" href="${escAttr(mapsHrefSuper)}" target="_blank" rel="noopener noreferrer">${mapsLabelSuper}</a>
+        ${wazeBtnSuper}
+      </div>
     `;
     container.appendChild(card);
   });
@@ -445,18 +473,26 @@ function renderTransport(transport) {
     { key: 'bus',     icon: transport.busIcon     || '🚌', label: t('bus'),         text: langField(transport, 'bus'),     maps: transport.busMaps,     enabled: transport.busEnabled     !== false }
   ];
   const mapsLabel = t('viewOnMaps');
+  const wazeLabel = t('wazeBtn');
   items.forEach(item => {
     if (!item.enabled) return;
     const card = document.createElement('div');
     card.className = 'transport-card';
-    const mapsBtn = item.maps ? `<a class="maps-btn" href="${escAttr(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
+    const showWaze = (item.key === 'airport' || item.key === 'station') && item.maps;
+    const wazeBtn = showWaze
+      ? `<a class="maps-btn waze-btn" href="https://waze.com/ul?q=${encodeURIComponent(item.label)}&navigate=yes" target="_blank" rel="noopener noreferrer">🗺️ ${wazeLabel}</a>`
+      : '';
+    const mapsBtn = item.maps ? `<a class="maps-btn google-maps-btn" href="${escAttr(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
     card.innerHTML = `
       <div class="transport-header">
         <span class="transport-icon">${item.icon}</span>
         <span class="transport-title">${escHtml(item.label)}</span>
       </div>
       <p class="transport-desc">${renderRichText(item.text)}</p>
-      ${mapsBtn}
+      <div class="maps-btn-group">
+        ${mapsBtn}
+        ${wazeBtn}
+      </div>
     `;
     container.appendChild(card);
   });

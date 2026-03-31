@@ -21,7 +21,7 @@ const UI_STRINGS = {
     statWifi:       'WiFi',
     statMap:        'Mappa',
     openMaps:       'Apri Maps',
-    openInMaps:     '🧭 Apri su Maps',
+    openInMaps:     '🗺️ Google Maps',
     welcome:        'Benvenuti! 👋',
     exploreGuide:   'Esplora la guida',
     stayDesc:       'WiFi, regole, spazi, servizi',
@@ -93,7 +93,7 @@ const UI_STRINGS = {
     statWifi:       'WiFi',
     statMap:        'Map',
     openMaps:       'Open Maps',
-    openInMaps:     '🧭 Open in Maps',
+    openInMaps:     '🗺️ Google Maps',
     welcome:        'Welcome! 👋',
     exploreGuide:   'Explore the guide',
     stayDesc:       'WiFi, rules, spaces, services',
@@ -489,22 +489,18 @@ const PUBLISHED_DATA = {
         {
           "icon": "🧹",
           "nameIt": "Pulizie Aggiuntive",
-          "nameEn": "Linen Change",
-          "descIt": "Disponibile su richiesta (50€)",
-          "descEn": "Available on request"
+          "nameEn": "Additional Cleaning",
         },
         {
           "icon": "🚗",
           "nameIt": "Transfer Aeroporto",
-          "nameEn": "Linen Change",
-          "descIt": "Prenotabile in anticipo (50€)",
+          "nameEn": "Airport Transfer",
           "descEn": "Bookable in advance (€50)"
         },
         {
           "icon": "🛁",
           "nameIt": "Jacuzzi Pacchetto",
-          "nameEn": "Linen Change",
-          "descIt": "Disponibile su richiesta: prosecco, fiori, palloncini, cibo (da 30 a 60€)",
+          "nameEn": "Jacuzzi Package",
           "descEn": "Available on request: prosecco, flowers, balloons, food (from 30 to 60€)"
         }
       ],

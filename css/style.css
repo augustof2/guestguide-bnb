@@ -246,9 +246,7 @@ html.theme-minimal {
       #c9a84c 100%
     );
     background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--gold);
     animation: superhostShimmer 2.4s linear infinite;
   }
 
@@ -1402,7 +1400,7 @@ html.theme-minimal {
     flex-shrink: 0;
     align-self: flex-start;
     white-space: nowrap;
-    animation: superhost-shimmer 3s linear infinite;
+    animation: superhostShimmer 3s linear infinite;
   }
   .apt-card-addr {
     font-size: 13px;
@@ -1600,6 +1598,14 @@ html.theme-minimal {
 .maps-btn-group .maps-btn {
   margin-top: 0;
 }
+.maps-link {
+  display: inline-block;
+  color: var(--teal2);
+  text-decoration: none;
+  font-size: 13px;
+  margin-right: 8px;
+}
+.maps-link:last-child { margin-right: 0; }
 
 /* ── REVIEWS ──────────────────────────────────── */
 .reviews-section { padding: 20px 16px 8px; }
