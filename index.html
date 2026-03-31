@@ -26,6 +26,22 @@
     --accent: #e76f51;
   }
 
+:root.light-theme {
+  --bg: #f5f0eb;
+  --bg2: #ede5dc;
+  --card: #ffffff;
+  --card2: #f8f4ef;
+  --border: #d4c8b8;
+  --gold: #b8922e;
+  --gold2: #a07d20;
+  --text: #2a1f14;
+  --text2: #6b5d50;
+  --teal: #1a7a6e;
+  --teal2: #158a7c;
+  --accent: #d4572e;
+}
+* { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
@@ -1375,6 +1391,99 @@
     line-height: 1.4;
   }
   .lang-toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── TOAST ────────────────────────────────────── */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  width: 90%;
+  max-width: 400px;
+}
+.toast {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  border-left: 4px solid var(--teal);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: auto;
+  width: 100%;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.toast-success { border-color: var(--teal); }
+.toast.toast-error { border-color: var(--accent); }
+.toast.toast-info { border-color: var(--gold); }
+
+/* ── WIZARD ────────────────────────────────────── */
+#wizard-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9000;
+  overflow-y: auto;
+  padding: 20px;
+  font-family: 'Jost', sans-serif;
+}
+#wizard-overlay.open { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 40px; }
+.wizard-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 24px;
+  max-width: 390px;
+  width: 100%;
+  position: relative;
+}
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
+.wizard-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); margin-bottom: 8px; }
+.wizard-desc { font-size: 14px; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
+.wizard-field { margin-bottom: 14px; }
+.wizard-field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; }
+.wizard-field input { width: 100%; background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-family: 'Jost', sans-serif; font-size: 14px; outline: none; }
+.wizard-nav { display: flex; gap: 10px; margin-top: 20px; }
+.wizard-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+.wizard-btn.primary { background: var(--gold); color: var(--bg); }
+.wizard-btn.secondary { background: var(--card2); color: var(--text2); border: 1px solid var(--border); }
+.wizard-btn:hover { opacity: 0.85; }
+.wizard-dots { display: flex; gap: 8px; justify-content: center; margin-top: 20px; }
+.wizard-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+.wizard-dot.active { background: var(--gold); }
+.wizard-skip { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text2); font-size: 12px; cursor: pointer; font-family: 'Jost', sans-serif; }
+.wizard-summary { font-size: 13px; color: var(--text); line-height: 1.8; background: var(--card2); border-radius: 10px; padding: 14px; }
+
+/* ── PREVIEW BANNER ────────────────────────────────────── */
+#preview-banner {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 10px 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+#preview-banner.show { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.preview-banner-btn { background: var(--bg); color: var(--gold); border: none; border-radius: 6px; padding: 5px 12px; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -1797,6 +1906,7 @@
   <div class="settings-actions">
     <button class="s-btn primary" onclick="saveAndApply()">💾 Salva e Applica</button>
     <button class="s-btn danger" onclick="resetData()">🗑️ Reset</button>
+    <button class="s-btn" onclick="previewMode()">👁️ Anteprima</button>
     <button class="s-btn" id="publish-btn" onclick="publishOnline()" style="grid-column:1/-1;background:var(--teal);border-color:var(--teal);color:#fff">🚀 Pubblica Online</button>
   </div>
 
@@ -1815,6 +1925,16 @@
         <div class="s-sub-title">💬 Messaggio di Benvenuto</div>
         <div class="s-field"><label>Testo di Benvenuto 🇮🇹</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..." onblur="autoTranslateField('s-welcomeIt','s-welcomeEn')"></textarea></div>
         <div class="s-field"><label>Testo di Benvenuto 🇬🇧</label><textarea id="s-welcomeEn" placeholder="We are delighted to have you as our guests..."></textarea></div>
+      </div>
+    </details>
+
+    <!-- Aspetto / Tema -->
+    <details class="s-section">
+      <summary class="s-section-title">🎨 Aspetto</summary>
+      <div class="s-fields">
+        <div class="s-sub-title">Tema Colori</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Scegli tra tema scuro (predefinito) e tema chiaro.</p>
+        <button class="s-btn" onclick="toggleTheme()" style="margin-top:4px">🌙 / ☀️ Cambia Tema</button>
       </div>
     </details>
 
@@ -1942,9 +2062,17 @@
         <div id="s-cred-msg" style="font-size:12px;min-height:18px;margin-top:4px"></div>
         <button class="s-btn" onclick="changeCredentials()" style="margin-top:8px">🔑 Cambia Credenziali</button>
         <div class="s-divider"></div>
+        <div class="s-sub-title">🔑 Parola Segreta di Recovery</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">La parola segreta permette di resettare il PIN in caso di smarrimento. Il valore predefinito è <strong style="color:var(--gold)">recovery2025</strong>.</p>
+        <div class="s-field"><label>Parola attuale</label><input type="password" id="s-recovery-current" placeholder="••••••••" autocomplete="off"></div>
+        <div class="s-field"><label>Nuova parola segreta</label><input type="password" id="s-recovery-new" placeholder="••••••••" autocomplete="off"></div>
+        <div id="s-recovery-msg" style="font-size:12px;min-height:18px;margin-top:4px"></div>
+        <button class="s-btn" onclick="changeRecoveryWord()" style="margin-top:8px">🔑 Cambia Parola di Recovery</button>
+        <div class="s-divider"></div>
         <div class="s-sub-title">🚀 Pubblica Online</div>
-        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Inserisci un GitHub Personal Access Token (classic) con permesso <strong style="color:var(--gold)">repo</strong> per pubblicare le modifiche su <strong>ffeliteapartments.github.io/guide</strong>. Il token è salvato solo su questo dispositivo.</p>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">⚠️ Usa un fine-grained token con accesso solo a questo repository. Il token verrà rimosso alla chiusura del browser.</p>
         <div class="s-field"><label>GitHub Token</label><input type="password" id="s-github-token" placeholder="ghp_..." autocomplete="off"></div>
+        <button class="s-btn danger" onclick="removeGithubToken()" style="margin-top:4px;font-size:12px">🗑️ Rimuovi Token</button>
         <div id="s-publish-msg" style="font-size:12px;min-height:18px;margin-top:4px"></div>
       </div>
     </details>
@@ -1965,6 +2093,80 @@
 </div><!-- /settings-panel -->
 
 </div><!-- /app-shell -->
+<!-- ════════════════════════════════════════════
+     FIRST-RUN WIZARD
+════════════════════════════════════════════ -->
+<div id="wizard-overlay">
+  <div class="wizard-card">
+    <button class="wizard-skip" onclick="skipWizard()">Salta ✕</button>
+
+    <!-- Step 1: Welcome -->
+    <div class="wizard-step active" data-step="1">
+      <div class="wizard-title">🏨 Benvenuto!</div>
+      <div class="wizard-desc">Configuriamo la tua guida digitale in pochi passi. Inizia con le informazioni base del tuo B&amp;B.</div>
+      <div class="wizard-field"><label>Nome del B&amp;B</label><input type="text" id="wz-bbName" placeholder="Es. Villa Rossi"></div>
+      <div class="wizard-field"><label>Città</label><input type="text" id="wz-city" placeholder="Es. Roma, Milano..."></div>
+      <div class="wizard-nav">
+        <button class="wizard-btn primary" onclick="wizardNext()">Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Apartment -->
+    <div class="wizard-step" data-step="2">
+      <div class="wizard-title">🏠 Il tuo Appartamento</div>
+      <div class="wizard-desc">Inserisci i dettagli del primo appartamento che gli ospiti vedranno.</div>
+      <div class="wizard-field"><label>Nome appartamento</label><input type="text" id="wz-aptName" placeholder="Es. Appartamento Azzurro"></div>
+      <div class="wizard-field"><label>Indirizzo</label><input type="text" id="wz-address" placeholder="Es. Via Roma 12, Roma"></div>
+      <div class="wizard-field"><label>Nome WiFi</label><input type="text" id="wz-wifiName" placeholder="Es. Casa_WiFi"></div>
+      <div class="wizard-field"><label>Password WiFi</label><input type="text" id="wz-wifiPass" placeholder="Es. password123"></div>
+      <div class="wizard-nav">
+        <button class="wizard-btn secondary" onclick="wizardPrev()">← Indietro</button>
+        <button class="wizard-btn primary" onclick="wizardNext()">Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Contacts -->
+    <div class="wizard-step" data-step="3">
+      <div class="wizard-title">📞 Contatti</div>
+      <div class="wizard-desc">Come possono contattarti gli ospiti in caso di necessità?</div>
+      <div class="wizard-field"><label>Il tuo nome (host)</label><input type="text" id="wz-hostName" placeholder="Es. Marco Rossi"></div>
+      <div class="wizard-field"><label>Telefono host</label><input type="tel" id="wz-hostPhone" placeholder="Es. +39 333 1234567"></div>
+      <div class="wizard-nav">
+        <button class="wizard-btn secondary" onclick="wizardPrev()">← Indietro</button>
+        <button class="wizard-btn primary" onclick="wizardNext()">Avanti →</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Done -->
+    <div class="wizard-step" data-step="4">
+      <div class="wizard-title">🎉 Tutto Pronto!</div>
+      <div class="wizard-desc">La tua guida è pronta! Puoi sempre modificare tutto dal pannello ⚙️</div>
+      <div class="wizard-summary" id="wz-summary"></div>
+      <div class="wizard-nav">
+        <button class="wizard-btn secondary" onclick="wizardPrev()">← Indietro</button>
+        <button class="wizard-btn primary" onclick="finishWizard()">✅ Inizia!</button>
+      </div>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="wizard-dots">
+      <div class="wizard-dot active" data-dot="1"></div>
+      <div class="wizard-dot" data-dot="2"></div>
+      <div class="wizard-dot" data-dot="3"></div>
+      <div class="wizard-dot" data-dot="4"></div>
+    </div>
+  </div>
+</div>
+
+<div id="preview-banner">
+  <span>👁️ Modalità Anteprima — Le modifiche NON sono ancora salvate</span>
+  <button class="preview-banner-btn" onclick="previewSave()">💾 Salva</button>
+  <button class="preview-banner-btn" onclick="previewCancel()">↩️ Annulla</button>
+</div>
+
+<div id="toast-container"></div>
+
+
 
 <!-- ════════════════════════════════════════════
      PIN MODAL
@@ -2738,6 +2940,15 @@ const DEFAULT_USER_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6
 const DEFAULT_PASS_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
 /* DEFAULT_PASS_HASH_END */
 
+const RECOVERY_KEY = 'bnb_recovery_hash';
+/* DEFAULT_RECOVERY_HASH_START */
+const DEFAULT_RECOVERY_HASH = 'e6c3da5b206634d7f3f3586d747ffdb36b5c675b2b8a4edd16bbe61c2ed50c4';
+/* DEFAULT_RECOVERY_HASH_END */
+
+function getStoredRecoveryHash() {
+  return localStorage.getItem(RECOVERY_KEY) || DEFAULT_RECOVERY_HASH;
+}
+
 async function hashPin(pin) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pin));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
@@ -3320,6 +3531,7 @@ function copyWifi() {
     navigator.clipboard.writeText(pass).then(() => {
       btn.textContent = '✅';
       btn.classList.add('copied');
+      showToast('Copiato!', 'info');
       setTimeout(() => { btn.textContent = '📋'; btn.classList.remove('copied'); }, 2000);
     }).catch(() => fallbackCopy(pass, btn));
   } else {
@@ -3402,7 +3614,8 @@ function checkPin() {
 async function forgotPin() {
   const word = prompt('Inserisci la parola segreta per resettare il PIN:');
   if (word === null) return;
-  if (word !== 'Gigimoto10!') {
+  const wordHash = await hashPin(word);
+  if (wordHash !== getStoredRecoveryHash()) {
     const err = document.getElementById('pin-error');
     err.style.color = 'var(--accent)';
     err.textContent = '❌ Parola segreta errata.';
@@ -3448,6 +3661,7 @@ async function changePin() {
   document.getElementById('s-pin-new').value = '';
   document.getElementById('s-pin-confirm').value = '';
   showOk('PIN aggiornato con successo!');
+  showToast('PIN aggiornato', 'success');
   setTimeout(() => { msg.textContent = ''; }, 3000);
 }
 
@@ -3516,6 +3730,7 @@ async function changeCredentials() {
   document.getElementById('s-pass-new').value = '';
   document.getElementById('s-pass-confirm').value = '';
   showOk('Credenziali aggiornate con successo!');
+  showToast('Credenziali aggiornate!', 'success');
   setTimeout(() => { msg.textContent = ''; }, 3000);
 }
 
@@ -3535,7 +3750,7 @@ async function migratePinIfNeeded() {
 // ════════════════════════════════════════════
 async function publishOnline() {
   const tokenInput = document.getElementById('s-github-token');
-  const token = (tokenInput && tokenInput.value.trim()) || localStorage.getItem('bnb_github_token') || '';
+  const token = (tokenInput && tokenInput.value.trim()) || sessionStorage.getItem('bnb_github_token') || '';
   const msg = document.getElementById('s-publish-msg');
   const showErr = text => { if (msg) { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + text; } else alert('❌ ' + text); };
   const showOk  = text => { if (msg) { msg.style.color = 'var(--teal)';   msg.textContent = '✅ ' + text; } else alert('✅ ' + text); };
@@ -3545,7 +3760,7 @@ async function publishOnline() {
     return;
   }
   // Save token for convenience
-  localStorage.setItem('bnb_github_token', token);
+  sessionStorage.setItem('bnb_github_token', token);
 
   const btn = document.getElementById('publish-btn');
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Pubblicazione…'; }
@@ -3597,6 +3812,13 @@ async function publishOnline() {
       `/* DEFAULT_PASS_HASH_START */\nconst DEFAULT_PASS_HASH = '${passHash}';\n/* DEFAULT_PASS_HASH_END */`
     );
 
+    // 4d. Patch DEFAULT_RECOVERY_HASH
+    const recoveryHash = getStoredRecoveryHash();
+    newContent = newContent.replace(
+      /\/\* DEFAULT_RECOVERY_HASH_START \*\/[\s\S]*?\/\* DEFAULT_RECOVERY_HASH_END \*\//,
+      `/* DEFAULT_RECOVERY_HASH_START */\nconst DEFAULT_RECOVERY_HASH = '${recoveryHash}';\n/* DEFAULT_RECOVERY_HASH_END */`
+    );
+
     // 5. Patch PUBLISHED_DATA
     newContent = newContent.replace(
       /\/\* PUBLISHED_DATA_START \*\/[\s\S]*?\/\* PUBLISHED_DATA_END \*\//,
@@ -3628,9 +3850,11 @@ async function publishOnline() {
     }
 
     showOk('Pubblicato! Le modifiche saranno live su ffeliteapartments.github.io/guide tra qualche secondo.');
+    showToast('Pubblicato online!', 'success');
     setTimeout(() => { if (msg) msg.textContent = ''; }, 8000);
   } catch (err) {
     showErr(err.message || 'Errore sconosciuto.');
+    showToast(err.message || 'Errore di pubblicazione', 'error');
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '🚀 Pubblica Online'; }
   }
@@ -3836,7 +4060,96 @@ function removeSettingsApt(idx) {
 }
 
 // ════════════════════════════════════════════
-//  AUTO-TRANSLATE (Italian → English via MyMemory)
+//  TRANSLATION DICTIONARY (IT→EN fallback)
+// ════════════════════════════════════════════
+const TRANSLATION_DICT = {
+  "Check-in": "Check-in",
+  "Check-out": "Check-out",
+  "Benvenuti": "Welcome",
+  "Benvenuto": "Welcome",
+  "Siamo felici di avervi come ospiti": "We are delighted to have you as our guests",
+  "Le chiavi sono nella cassetta di sicurezza": "The keys are in the lockbox",
+  "La password del WiFi è": "The WiFi password is",
+  "In caso di emergenza chiamare": "In case of emergency call",
+  "Raccolta differenziata": "Waste sorting",
+  "Non fumare": "No smoking",
+  "Vietato fumare": "No smoking",
+  "Orario di silenzio": "Quiet hours",
+  "Riscaldamento": "Heating",
+  "Aria condizionata": "Air conditioning",
+  "Cucina": "Kitchen",
+  "Bagno": "Bathroom",
+  "Camera": "Bedroom",
+  "Soggiorno": "Living room",
+  "Terrazzo": "Terrace",
+  "Balcone": "Balcony",
+  "Parcheggio": "Parking",
+  "Ascensore": "Elevator",
+  "Wifi": "WiFi",
+  "WiFi": "WiFi",
+  "Asciugamani": "Towels",
+  "Lenzuola": "Bedsheets",
+  "Biancheria": "Linen",
+  "Lavatrice": "Washing machine",
+  "Lavastoviglie": "Dishwasher",
+  "Frigorifero": "Refrigerator",
+  "Forno": "Oven",
+  "Microonde": "Microwave",
+  "Piano cottura": "Hob",
+  "Caffettiera": "Coffee maker",
+  "Ferro da stiro": "Iron",
+  "Phon": "Hair dryer",
+  "Asciugacapelli": "Hair dryer",
+  "Televisione": "Television",
+  "Armadio": "Wardrobe",
+  "Cassaforte": "Safe",
+  "Grazie per aver scelto il nostro B&B": "Thank you for choosing our B&B",
+  "È stato un piacere avervi come ospiti": "It has been a pleasure having you as guests",
+  "Per ulteriori informazioni": "For further information",
+  "Non esitate a contattarci": "Do not hesitate to contact us",
+  "Buon soggiorno": "Enjoy your stay",
+  "Buona permanenza": "Enjoy your stay",
+  "Stazione": "Train station",
+  "Aeroporto": "Airport",
+  "Metropolitana": "Metro",
+  "Autobus": "Bus",
+  "Taxi": "Taxi",
+  "Farmacia": "Pharmacy",
+  "Ospedale": "Hospital",
+  "Supermercato": "Supermarket",
+  "Ristorante": "Restaurant",
+  "Bar": "Bar",
+  "Pizzeria": "Pizzeria",
+  "Emergenza": "Emergency",
+  "Orario": "Schedule",
+  "Prezzo": "Price",
+  "Biglietto": "Ticket",
+  "Ingresso": "Entrance",
+  "Uscita": "Exit",
+  "Aperto": "Open",
+  "Chiuso": "Closed",
+  "Gratuito": "Free",
+  "Letto matrimoniale": "Double bed",
+  "Letto singolo": "Single bed",
+  "Doccia": "Shower",
+  "Vasca da bagno": "Bathtub"
+};
+
+function translateWithDict(text) {
+  const lower = text.trim().toLowerCase();
+  for (const [it, en] of Object.entries(TRANSLATION_DICT)) {
+    if (it.toLowerCase() === lower) return en;
+  }
+  for (const [it, en] of Object.entries(TRANSLATION_DICT)) {
+    if (lower.includes(it.toLowerCase())) {
+      return text.replace(new RegExp(it, 'gi'), en);
+    }
+  }
+  return null;
+}
+
+// ════════════════════════════════════════════
+//  AUTO-TRANSLATE (Italian → English via MyMemory + dictionary fallback)
 // ════════════════════════════════════════════
 async function autoTranslateField(itElId, enElId) {
   const itEl = document.getElementById(itElId);
@@ -3844,6 +4157,7 @@ async function autoTranslateField(itElId, enElId) {
   if (!itEl || !enEl) return;
   const text = itEl.value.trim();
   if (!text) return;
+  if (enEl.value.trim()) return;
   const prev = enEl.placeholder;
   enEl.placeholder = '⏳ Traducendo…';
   enEl.disabled = true;
@@ -3854,13 +4168,17 @@ async function autoTranslateField(itElId, enElId) {
     const translated = json && json.responseData && json.responseData.translatedText;
     if (translated && String(json.responseStatus) === '200') {
       enEl.value = translated;
+      enEl.disabled = false;
+      enEl.placeholder = prev;
+      return;
     }
   } catch (e) {
-    // silent fail — user can fill manually
-  } finally {
-    enEl.disabled = false;
-    enEl.placeholder = prev;
+    // fall through to dictionary
   }
+  const dictResult = translateWithDict(text);
+  if (dictResult) enEl.value = dictResult;
+  enEl.disabled = false;
+  enEl.placeholder = prev;
 }
 
 // ════════════════════════════════════════════
@@ -4342,7 +4660,7 @@ function populateSettingsForms() {
   document.getElementById('s-st-departureTitleEn').value = st.departureTitleEn || '';
 
   // GitHub token (stored separately)
-  const ghToken = localStorage.getItem('bnb_github_token') || '';
+  const ghToken = sessionStorage.getItem('bnb_github_token') || '';
   const ghField = document.getElementById('s-github-token');
   if (ghField) ghField.value = ghToken;
 
@@ -4427,6 +4745,7 @@ function saveAndApply() {
   saveData(d);
   renderLanding();
   closeSettings();
+  showToast('Salvato con successo!', 'success');
 }
 
 function resetData() {
@@ -4435,6 +4754,7 @@ function resetData() {
   saveData(currentData);
   renderLanding();
   closeSettings();
+  showToast('Dati resettati', 'info');
 }
 
 function exportJSON() {
@@ -4612,10 +4932,191 @@ function printAllQr() {
 }
 
 // ════════════════════════════════════════════
+//  RECOVERY WORD
+// ════════════════════════════════════════════
+async function changeRecoveryWord() {
+  const currentWord = document.getElementById('s-recovery-current').value;
+  const newWord = document.getElementById('s-recovery-new').value;
+  const msg = document.getElementById('s-recovery-msg');
+  const showErr = text => { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + text; };
+  const showOk = text => { msg.style.color = 'var(--teal)'; msg.textContent = '✅ ' + text; };
+  if (!currentWord) { showErr('Inserisci la parola attuale.'); return; }
+  const currentHash = await hashPin(currentWord);
+  if (currentHash !== getStoredRecoveryHash()) { showErr('Parola attuale non corretta.'); return; }
+  if (!newWord) { showErr('La nuova parola non può essere vuota.'); return; }
+  const newHash = await hashPin(newWord);
+  localStorage.setItem(RECOVERY_KEY, newHash);
+  document.getElementById('s-recovery-current').value = '';
+  document.getElementById('s-recovery-new').value = '';
+  showOk('Parola di recovery aggiornata!');
+  setTimeout(() => { msg.textContent = ''; }, 3000);
+}
+
+// ════════════════════════════════════════════
+//  GITHUB TOKEN REMOVAL
+// ════════════════════════════════════════════
+function removeGithubToken() {
+  sessionStorage.removeItem('bnb_github_token');
+  const field = document.getElementById('s-github-token');
+  if (field) field.value = '';
+  const msg = document.getElementById('s-publish-msg');
+  if (msg) { msg.style.color = 'var(--teal)'; msg.textContent = '✅ Token rimosso.'; setTimeout(() => { msg.textContent = ''; }, 2000); }
+}
+
+// ════════════════════════════════════════════
+//  TOAST NOTIFICATIONS
+// ════════════════════════════════════════════
+function showToast(message, type = 'success', duration = 2500) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  toast.textContent = (icons[type] || '') + ' ' + message;
+  container.appendChild(toast);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { toast.classList.add('show'); });
+  });
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 350);
+  }, duration);
+}
+
+// ════════════════════════════════════════════
+//  FIRST-RUN WIZARD
+// ════════════════════════════════════════════
+let wizardCurrentStep = 1;
+const WIZARD_TOTAL_STEPS = 4;
+
+function showWizard() {
+  document.getElementById('wizard-overlay').classList.add('open');
+}
+
+function skipWizard() {
+  document.getElementById('wizard-overlay').classList.remove('open');
+  localStorage.setItem('bnb_onboarding_done', '1');
+}
+
+function wizardGoTo(step) {
+  if (step < 1 || step > WIZARD_TOTAL_STEPS) return;
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.wizard-dot').forEach(d => {
+    d.classList.toggle('active', parseInt(d.dataset.dot) === step);
+  });
+  const target = document.querySelector(`.wizard-step[data-step="${step}"]`);
+  if (target) target.classList.add('active');
+  if (step === WIZARD_TOTAL_STEPS) {
+    const bbName = document.getElementById('wz-bbName').value.trim() || 'Il tuo B&B';
+    const city = document.getElementById('wz-city').value.trim() || '';
+    const aptName = document.getElementById('wz-aptName').value.trim() || 'Appartamento';
+    const hostName = document.getElementById('wz-hostName').value.trim() || '';
+    const hostPhone = document.getElementById('wz-hostPhone').value.trim() || '';
+    const summary = document.getElementById('wz-summary');
+    if (summary) summary.innerHTML = `
+      <strong>B&amp;B:</strong> ${escHtml(bbName)}${city ? ' — ' + escHtml(city) : ''}<br>
+      <strong>Appartamento:</strong> ${escHtml(aptName)}<br>
+      ${hostName ? '<strong>Host:</strong> ' + escHtml(hostName) + '<br>' : ''}
+      ${hostPhone ? '<strong>Telefono:</strong> ' + escHtml(hostPhone) + '<br>' : ''}
+    `;
+  }
+  wizardCurrentStep = step;
+}
+
+function wizardNext() {
+  wizardGoTo(wizardCurrentStep + 1);
+}
+
+function wizardPrev() {
+  wizardGoTo(wizardCurrentStep - 1);
+}
+
+function finishWizard() {
+  const bbName = document.getElementById('wz-bbName').value.trim();
+  const city = document.getElementById('wz-city').value.trim();
+  const aptName = document.getElementById('wz-aptName').value.trim();
+  const address = document.getElementById('wz-address').value.trim();
+  const wifiName = document.getElementById('wz-wifiName').value.trim();
+  const wifiPass = document.getElementById('wz-wifiPass').value.trim();
+  const hostName = document.getElementById('wz-hostName').value.trim();
+  const hostPhone = document.getElementById('wz-hostPhone').value.trim();
+
+  if (bbName) currentData.bbName = bbName;
+  if (city) currentData.cityZone = city;
+  if (hostName) currentData.hostName = hostName;
+  if (hostPhone) currentData.hostPhone = hostPhone;
+  if (currentData.apts && currentData.apts[0]) {
+    if (aptName) currentData.apts[0].nameIt = aptName;
+    if (address) currentData.apts[0].addressIt = address;
+    if (wifiName) currentData.apts[0].wifiName = wifiName;
+    if (wifiPass) currentData.apts[0].wifiPass = wifiPass;
+  }
+
+  localStorage.setItem('bnb_onboarding_done', '1');
+  saveData(currentData);
+  document.getElementById('wizard-overlay').classList.remove('open');
+  renderLanding();
+}
+
+// ════════════════════════════════════════════
+//  PREVIEW MODE
+// ════════════════════════════════════════════
+let _previewPreviousData = null;
+
+function previewMode() {
+  const d = collectFormData();
+  _previewPreviousData = deepClone(currentData);
+  currentData = d;
+  closeSettings();
+  renderLanding();
+  document.getElementById('preview-banner').classList.add('show');
+}
+
+function previewSave() {
+  saveData(currentData);
+  _previewPreviousData = null;
+  document.getElementById('preview-banner').classList.remove('show');
+  showToast('Salvato con successo!', 'success');
+}
+
+function previewCancel() {
+  if (_previewPreviousData) {
+    currentData = _previewPreviousData;
+    _previewPreviousData = null;
+    renderLanding();
+  }
+  document.getElementById('preview-banner').classList.remove('show');
+}
+
+// ════════════════════════════════════════════
+//  THEME (Dark/Light)
+// ════════════════════════════════════════════
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.classList.add('light-theme');
+  } else {
+    document.documentElement.classList.remove('light-theme');
+  }
+  localStorage.setItem('bnb_theme', theme);
+}
+
+function toggleTheme() {
+  const current = localStorage.getItem('bnb_theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+  document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+    btn.textContent = (localStorage.getItem('bnb_theme') === 'dark') ? '☀️' : '🌙';
+  });
+}
+
+// ════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════
 (function init() {
   currentData = loadData();
+
+  // Apply saved theme
+  const savedTheme = localStorage.getItem('bnb_theme') || 'dark';
+  applyTheme(savedTheme);
 
   // Migrate legacy plain-text PIN to SHA-256 hash
   migratePinIfNeeded();
@@ -4636,6 +5137,11 @@ function printAllQr() {
     renderLanding();
   })();
 
+  // First-run wizard
+  if (!localStorage.getItem('bnb_onboarding_done')) {
+    showWizard();
+  }
+
   // Global keydown for PIN modal — intentional: single-page app, listener persists for the app lifetime
   document.addEventListener('keydown', function(e) {
     if (!document.getElementById('pin-modal').classList.contains('open')) return;
@@ -4644,16 +5150,6 @@ function printAllQr() {
     else if (e.key === 'Escape') closePinModal();
   });
 
-  // ── Disable right-click and common devtools shortcuts ──
-  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-  document.addEventListener('keydown', function(e) {
-    // F12
-    if (e.key === 'F12') { e.preventDefault(); return; }
-    // Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+Shift+C (DevTools)
-    if ((e.ctrlKey || e.metaKey) && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) { e.preventDefault(); return; }
-    // Ctrl+U (view source)
-    if ((e.ctrlKey || e.metaKey) && e.key.toUpperCase() === 'U') { e.preventDefault(); return; }
-  });
 })();
 </script>
 </body>
