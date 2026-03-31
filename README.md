@@ -62,9 +62,11 @@ git push
 - 📋 **Esporta/Importa JSON** — per backup e condivisione delle impostazioni
 - 📞 **Bottoni di chiamata** per emergenze e host
 - 🧭 **Link Google Maps** per ogni luogo e ristorante
-- 🔑 **Login con username/password** — alternativa al PIN per accedere al pannello admin
-- 📱 **QR Code per ogni appartamento** — generati automaticamente, scaricabili e stampabili
-- 🔐 **Sicurezza avanzata** — PIN e credenziali hashati con SHA-256, salvati in `localStorage`
+- 🔐 **Pannello Host (PIN)** — accesso semplificato per il proprietario B&B (solo sezioni operative)
+- 🛡️ **Pannello Admin (Login)** — accesso completo per l'amministratore tecnico
+- 📧 **Invia Modifiche** — l'host può notificare l'admin via email o download JSON
+- 📱 **QR Code per ogni appartamento** — generati automaticamente, scaricabili e stampabili (solo Admin)
+- 🔑 **Autenticazione doppia** — PIN e credenziali hashati con SHA-256
 
 ---
 
@@ -86,22 +88,32 @@ Il repository include un workflow GitHub Actions che pubblica automaticamente il
 
 ## ⚙️ Come Personalizzare
 
-### Metodo 1: Pannello Integrato (consigliato)
-
+### Pannello HOST (PIN) — Per l'host del B&B
 1. Apri il sito nel browser
 2. Clicca il pulsante **⚙️** in basso a destra nella landing page
-3. Modifica tutti i campi nei pannelli collassabili:
+3. Inserisci il **PIN a 4 cifre** (default: `1234`)
+4. Modifica i campi nel pannello semplificato:
    - 🏡 **Info B&B** — nome, sottotitolo, città, host, telefono
-   - 🏠 **Appartamento 1 & 2** — indirizzo, WiFi, check-in/out, Maps
-   - 🗺️ **Luoghi da Visitare** — 5 slot con descrizioni IT/EN e link Maps
+   - 🏠 **Appartamenti** — indirizzo, WiFi, check-in/out, Maps, regole
+   - 🧳 **Partenza** — messaggi di chiusura IT/EN, link recensione Google
+   - 🗺️ **Luoghi da Visitare** — 5 slot con descrizioni e link Maps
    - 🍽️ **Ristoranti** — 4 slot con tipo, descrizioni, fascia prezzi
-   - 🚇 **Trasporti** — aeroporto, stazione, metro, bus (IT/EN)
-   - 📞 **Contatti Extra** — secondo contatto di emergenza
-4. Clicca **💾 Salva e Applica** — le modifiche vengono salvate e applicate immediatamente
-5. Usa **📋 Esporta JSON** per fare un backup delle impostazioni
-6. Usa **🗑️ Reset** per tornare ai valori predefiniti
+   - 🚇 **Trasporti** — aeroporto, stazione, metro, bus
+   - 📞 **Contatti Extra** — numeri utili aggiuntivi
+   - 🔐 **Sicurezza** — cambio PIN
+5. Clicca **💾 Salva e Applica** (viene chiesta conferma)
+6. Clicca **📧 Invia Modifiche** per notificare l'amministratore
 
-### Metodo 2: Modifica Diretta del File HTML
+### Pannello ADMIN (Login) — Per l'amministratore tecnico
+1. Apri il sito nel browser
+2. Clicca il pulsante **⚙️**, poi **🛡️ Accesso Admin**
+3. Inserisci username e password (default: `admin` / `admin`)
+4. Hai accesso a **tutte** le sezioni, incluse:
+   - 🎨 **Aspetto** — cambio tema chiaro/scuro
+   - 🏷️ **Etichette Navigazione** — personalizza tutte le label
+   - 🔐 **Sicurezza completa** — PIN + credenziali admin + recovery + GitHub Token
+   - 📱 **QR Code** — visualizza, scarica e stampa QR per ogni appartamento
+5. Usa **🚀 Pubblica Online** per aggiornare il sito su GitHub Pages
 
 Apri `index.html` in un editor di testo e modifica l'oggetto `DEFAULT_DATA` all'inizio del tag `<script>`:
 
@@ -130,14 +142,41 @@ guide/
 
 ---
 
-## 🔑 Autenticazione Host
+## 🔑 Autenticazione: Due Ruoli Separati
 
-Il pannello ⚙️ è protetto da **due metodi di accesso**:
+Il pannello ⚙️ è protetto da **due metodi di accesso** che aprono **pannelli diversi**:
 
-1. **PIN a 4 cifre** (default: `1234`) — accesso rapido via tastierino numerico
-2. **Login con username/password** (default: `admin` / `admin`) — clicca "🔑 Login con Password" nel modal PIN
+### 🏡 Ruolo HOST — Accesso con PIN
+- **Come accedere:** Inserisci il PIN a 4 cifre (default: `1234`)
+- **Cosa vede:** Pannello semplificato ⚙️ con solo le sezioni utili:
+  - 🏡 Info B&B, 🏠 Appartamenti, 🧳 Partenza, 🗺️ Luoghi, 🍽️ Ristoranti, 🚇 Trasporti, 📞 Contatti Extra, 🔐 Cambio PIN
+- **Azioni disponibili:** 💾 Salva e Applica, 📧 Invia Modifiche, 👁️ Anteprima
+- **NON vede:** Reset, Pubblica Online, GitHub Token, cambio credenziali admin, QR Code, etichette navigazione
 
-Entrambe le credenziali sono hashate con SHA-256 e salvate in `localStorage`. Puoi cambiarle dal pannello ⚙️ → sezione **🔐 Sicurezza PIN**.
+### 🛡️ Ruolo ADMIN — Accesso con Login
+- **Come accedere:** Clicca "🛡️ Accesso Admin" nel modal PIN, poi inserisci username e password (default: `admin` / `admin`)
+- **Cosa vede:** Pannello completo con **tutte** le sezioni e funzionalità
+- **Azioni disponibili:** 💾 Salva e Applica, 🗑️ Reset, 👁️ Anteprima, 🚀 Pubblica Online
+
+Entrambe le credenziali sono hashate con SHA-256 e salvate in `localStorage`. Puoi cambiarle dal pannello Admin → sezione **🔐 Sicurezza**.
+
+---
+
+## 📧 "Invia Modifiche" — Flusso Host → Admin
+
+L'host (persona non tecnica) può comunicare le sue modifiche all'amministratore tramite il pulsante **📧 Invia Modifiche**:
+
+1. L'host salva le modifiche con 💾 Salva e Applica
+2. L'host clicca **📧 Invia Modifiche**:
+   - Se l'admin ha configurato la propria email (campo "📧 Email Admin" nel pannello Admin → Info B&B): si apre il client email con un messaggio precompilato contenente tutti i dati in JSON
+   - Se l'email non è configurata: viene scaricato un file `guestguide-backup-YYYY-MM-DD.json` da inviare manualmente
+3. L'admin riceve i dati, accede al pannello con il proprio login e usa **🚀 Pubblica Online** per aggiornare il sito
+
+### Come configurare l'email Admin
+1. Accedi al pannello con il login Admin (🛡️ Accesso Admin)
+2. Apri la sezione **🏡 Info B&B**
+3. Compila il campo **📧 Email Admin** (es. `ffeliteapartments@gmail.com`)
+4. Clicca **💾 Salva e Applica** (e poi **🚀 Pubblica Online** per rendere la configurazione permanente)
 
 ---
 
