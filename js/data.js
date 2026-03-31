@@ -417,6 +417,8 @@ const PUBLISHED_DATA = {
   "hostName": "Nicolò",
   "hostPhone": "+393342177311",
   "googleReviewUrl": "https://g.page/r/CZvIjdaReVG_EBM/review",
+  "qrBaseUrl": "",
+  "supportPhone": "+393450307922",
   "welcomeIt": "Siamo felici di avervi come ospiti e rimaniamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
   "welcomeEn": "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — do not hesitate to contact us.",
   "closingTitleIt": "Grazie per aver scelto il nostro B&B!",
@@ -436,6 +438,8 @@ const PUBLISHED_DATA = {
       "wifiPass": "XQKAPQ4LDG",
       "checkin": "15:00",
       "checkout": "10:00",
+      "lat": "",
+      "lon": "",
       "howToReachIt": "",
       "howToReachEn": "",
       "howToAccessIt": "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
@@ -490,17 +494,21 @@ const PUBLISHED_DATA = {
           "icon": "🧹",
           "nameIt": "Pulizie Aggiuntive",
           "nameEn": "Additional Cleaning",
+          "descIt": "Ogni 4 giorni su richiesta",
+          "descEn": "Every 4 days on request"
         },
         {
           "icon": "🚗",
           "nameIt": "Transfer Aeroporto",
           "nameEn": "Airport Transfer",
+          "descIt": "Ogni 4 giorni su richiesta",
           "descEn": "Bookable in advance (€50)"
         },
         {
           "icon": "🛁",
           "nameIt": "Jacuzzi Pacchetto",
           "nameEn": "Jacuzzi Package",
+          "descIt": "Ogni 4 giorni su richiesta",
           "descEn": "Available on request: prosecco, flowers, balloons, food (from 30 to 60€)"
         }
       ],
@@ -706,9 +714,24 @@ const PUBLISHED_DATA = {
     "departureTitleEn": ""
   },
   "reviews": [
-    { "author": "Maria R.", "stars": 5, "textIt": "Appartamento bellissimo, pulito e in posizione perfetta! L'host è stato molto disponibile.", "textEn": "Beautiful apartment, clean and perfectly located! The host was very helpful." },
-    { "author": "John S.", "stars": 5, "textIt": "Esperienza fantastica! Torneremo sicuramente.", "textEn": "Fantastic experience! We will definitely come back." },
-    { "author": "Sophie L.", "stars": 5, "textIt": "Tutto perfetto, dalla pulizia all'accoglienza. Consigliatissimo!", "textEn": "Everything was perfect, from cleanliness to hospitality. Highly recommended!" }
+    {
+      "author": "Maria R.",
+      "stars": 5,
+      "textIt": "Appartamento bellissimo, pulito e in posizione perfetta! L'host è stato molto disponibile.",
+      "textEn": "Beautiful apartment, clean and perfectly located! The host was very helpful."
+    },
+    {
+      "author": "John S.",
+      "stars": 5,
+      "textIt": "Esperienza fantastica! Torneremo sicuramente.",
+      "textEn": "Fantastic experience! We will definitely come back."
+    },
+    {
+      "author": "Sophie L.",
+      "stars": 5,
+      "textIt": "Tutto perfetto, dalla pulizia all'accoglienza. Consigliatissimo!",
+      "textEn": "Everything was perfect, from cleanliness to hospitality. Highly recommended!"
+    }
   ]
 };
 /* PUBLISHED_DATA_END */
