@@ -2589,9 +2589,7 @@ function renderLanding() {
     document.getElementById('l-bbname-em').innerHTML = '';
   }
   document.getElementById('l-subtitle').textContent = d.subtitle;
-  document.getElementById('l-intro').textContent = currentLang === 'en'
-    ? 'Welcome! Select your apartment to access the complete guide.'
-    : 'Benvenuti! Selezionate il vostro appartamento per accedere alla guida completa.';
+  document.getElementById('l-intro').textContent = t('landingIntro');
 
   // Apt cards — each shows IT + EN language selection buttons
   const container = document.getElementById('apt-cards-container');
@@ -2644,7 +2642,6 @@ function openGuide(aptIndex, lang) {
   const guide = document.getElementById('guide');
   guide.classList.add('active');
   renderApp(aptIndex);
-  guide.scrollTop = 0;
   switchTab('home');
 }
 
@@ -2877,7 +2874,7 @@ function renderPlaces(places) {
         <div class="place-how-label">${escHtml(howLabel)}</div>
         ${renderRichText(how)}
       </div>
-      <a class="maps-btn" href="${escAttr(p.maps || '#')}" target="_blank">${mapsLabel}</a>
+      <a class="maps-btn" href="${escAttr(p.maps || '#')}" target="_blank" rel="noopener noreferrer">${mapsLabel}</a>
     `;
     container.appendChild(card);
   });
@@ -2896,12 +2893,12 @@ function renderFood(restaurants, apt) {
         <span class="rest-icon">${r.emoji || '🍽️'}</span>
         <div class="rest-body">
           <div class="rest-name">${escHtml(r.name)}</div>
-          <div class="rest-tipo">${escHtml(r.tipo)}</div>
+          <div class="rest-tipo">${escHtml(r.tipo || '')}</div>
         </div>
-        <span class="rest-price">${escHtml(r.price)}</span>
+        <span class="rest-price">${escHtml(r.price || '')}</span>
       </div>
       <p class="rest-desc">${renderRichText(desc)}</p>
-      <a class="maps-btn" href="${escAttr(r.maps || '#')}" target="_blank">${mapsLabel}</a>
+      <a class="maps-btn" href="${escAttr(r.maps || '#')}" target="_blank" rel="noopener noreferrer">${mapsLabel}</a>
     `;
     container.appendChild(card);
   });
@@ -3032,11 +3029,11 @@ function requestService(svc) {
 const TAB_IDS = ['home', 'stay', 'places', 'food', 'transport', 'departure'];
 
 function switchTab(tabId) {
-  TAB_IDS.forEach(t => {
-    const section = document.getElementById('tab-' + t);
-    const btn = document.querySelector(`.nav-item[data-tab="${t}"]`);
-    if (section) section.classList.toggle('active', t === tabId);
-    if (btn) btn.classList.toggle('active', t === tabId);
+  TAB_IDS.forEach(tab => {
+    const section = document.getElementById('tab-' + tab);
+    const btn = document.querySelector(`.nav-item[data-tab="${tab}"]`);
+    if (section) section.classList.toggle('active', tab === tabId);
+    if (btn) btn.classList.toggle('active', tab === tabId);
   });
   const content = document.getElementById('guide-content');
   if (content) content.scrollTop = 0;
@@ -3166,8 +3163,8 @@ async function changePin() {
   const newPin = document.getElementById('s-pin-new').value;
   const confirm2 = document.getElementById('s-pin-confirm').value;
   const msg = document.getElementById('s-pin-msg');
-  const showErr = t => { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + t; };
-  const showOk = t => { msg.style.color = 'var(--teal)'; msg.textContent = '✅ ' + t; };
+  const showErr = text => { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + text; };
+  const showOk = text => { msg.style.color = 'var(--teal)'; msg.textContent = '✅ ' + text; };
   const currentHash = await hashPin(current);
   if (currentHash !== getStoredPinHash()) { showErr('PIN attuale non corretto.'); return; }
   if (!/^\d{4}$/.test(newPin)) { showErr('Il nuovo PIN deve essere di esattamente 4 cifre numeriche.'); return; }
@@ -3199,8 +3196,8 @@ async function publishOnline() {
   const tokenInput = document.getElementById('s-github-token');
   const token = (tokenInput && tokenInput.value.trim()) || localStorage.getItem('bnb_github_token') || '';
   const msg = document.getElementById('s-publish-msg');
-  const showErr = t => { if (msg) { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + t; } else alert('❌ ' + t); };
-  const showOk  = t => { if (msg) { msg.style.color = 'var(--teal)';   msg.textContent = '✅ ' + t; } else alert('✅ ' + t); };
+  const showErr = text => { if (msg) { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + text; } else alert('❌ ' + text); };
+  const showOk  = text => { if (msg) { msg.style.color = 'var(--teal)';   msg.textContent = '✅ ' + text; } else alert('✅ ' + text); };
 
   if (!token) {
     showErr('Inserisci il GitHub Token nella sezione Sicurezza PIN prima di pubblicare.');
@@ -3682,25 +3679,26 @@ function removeAptRest(aptIndex, restIdx) {
 //  SETTINGS: APT TRANSPORT (per-apt)
 // ════════════════════════════════════════════
 function collectAptTransport(aptIndex) {
+  const g = id => document.getElementById(`s-a${aptIndex}-tr-${id}`);
   return {
-    airportEnabled: document.getElementById(`s-a${aptIndex}-tr-airportEnabled`) ? document.getElementById(`s-a${aptIndex}-tr-airportEnabled`).checked : true,
-    airportIcon: (document.getElementById(`s-a${aptIndex}-tr-airportIcon`) || {}).value || '✈️',
-    airportIt: (document.getElementById(`s-a${aptIndex}-tr-airportIt`) || {}).value || '',
-    airportMaps: (document.getElementById(`s-a${aptIndex}-tr-airportMaps`) || {}).value || '',
-    stationEnabled: document.getElementById(`s-a${aptIndex}-tr-stationEnabled`) ? document.getElementById(`s-a${aptIndex}-tr-stationEnabled`).checked : true,
-    stationIcon: (document.getElementById(`s-a${aptIndex}-tr-stationIcon`) || {}).value || '🚉',
-    stationIt: (document.getElementById(`s-a${aptIndex}-tr-stationIt`) || {}).value || '',
-    stationMaps: (document.getElementById(`s-a${aptIndex}-tr-stationMaps`) || {}).value || '',
-    metroEnabled: document.getElementById(`s-a${aptIndex}-tr-metroEnabled`) ? document.getElementById(`s-a${aptIndex}-tr-metroEnabled`).checked : true,
-    metroIcon: (document.getElementById(`s-a${aptIndex}-tr-metroIcon`) || {}).value || '🚇',
-    metroIt: (document.getElementById(`s-a${aptIndex}-tr-metroIt`) || {}).value || '',
-    metroMaps: (document.getElementById(`s-a${aptIndex}-tr-metroMaps`) || {}).value || '',
-    busEnabled: document.getElementById(`s-a${aptIndex}-tr-busEnabled`) ? document.getElementById(`s-a${aptIndex}-tr-busEnabled`).checked : true,
-    busIcon: (document.getElementById(`s-a${aptIndex}-tr-busIcon`) || {}).value || '🚌',
-    busIt: (document.getElementById(`s-a${aptIndex}-tr-busIt`) || {}).value || '',
-    busMaps: (document.getElementById(`s-a${aptIndex}-tr-busMaps`) || {}).value || '',
-    ticketsIt: (document.getElementById(`s-a${aptIndex}-tr-ticketsIt`) || {}).value || '',
-    taxiIt: (document.getElementById(`s-a${aptIndex}-tr-taxiIt`) || {}).value || ''
+    airportEnabled: g('airportEnabled') ? g('airportEnabled').checked : true,
+    airportIcon:  (g('airportIcon')  || {}).value || '✈️',
+    airportIt:    (g('airportIt')    || {}).value || '',
+    airportMaps:  (g('airportMaps')  || {}).value || '',
+    stationEnabled: g('stationEnabled') ? g('stationEnabled').checked : true,
+    stationIcon:  (g('stationIcon')  || {}).value || '🚉',
+    stationIt:    (g('stationIt')    || {}).value || '',
+    stationMaps:  (g('stationMaps')  || {}).value || '',
+    metroEnabled: g('metroEnabled') ? g('metroEnabled').checked : true,
+    metroIcon:    (g('metroIcon')    || {}).value || '🚇',
+    metroIt:      (g('metroIt')      || {}).value || '',
+    metroMaps:    (g('metroMaps')    || {}).value || '',
+    busEnabled:   g('busEnabled') ? g('busEnabled').checked : true,
+    busIcon:      (g('busIcon')      || {}).value || '🚌',
+    busIt:        (g('busIt')        || {}).value || '',
+    busMaps:      (g('busMaps')      || {}).value || '',
+    ticketsIt:    (g('ticketsIt')    || {}).value || '',
+    taxiIt:       (g('taxiIt')       || {}).value || ''
   };
 }
 
@@ -3754,162 +3752,6 @@ function removeAptCheckoutStep(aptIndex, stepIdx) {
 }
 
 // ════════════════════════════════════════════
-//  SETTINGS: CHECKOUT STEPS (dynamic)
-// ════════════════════════════════════════════
-function renderSettingsCheckoutSteps(steps) {
-  const container = document.getElementById('s-checkout-steps');
-  if (!container) return;
-  container.dataset.count = steps.length;
-  let html = '';
-  steps.forEach((step, j) => {
-    html += `
-      <div class="s-sub-title s-sub-title-row" style="margin-top:12px">
-        <span>Passo ${j + 1}</span>
-        <button class="s-remove-btn" onclick="removeSettingsCheckoutStep(${j})">🗑️ Rimuovi</button>
-      </div>
-      <div class="s-field"><label>Titolo</label><input type="text" id="s-cs${j}-titleIt" value="${escAttr(step.titleIt || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-cs${j}-descIt">${escHtml(step.descIt || '')}</textarea></div>
-`;
-  });
-  container.innerHTML = html;
-}
-
-function collectSettingsCheckoutSteps() {
-  const container = document.getElementById('s-checkout-steps');
-  if (!container) return [];
-  const count = parseInt(container.dataset.count || '0');
-  const steps = [];
-  for (let j = 0; j < count; j++) {
-    const step = {};
-    ['titleIt', 'descIt'].forEach(k => {
-      const el = document.getElementById(`s-cs${j}-${k}`);
-      if (el) step[k] = el.value;
-    });
-    steps.push(step);
-  }
-  return steps;
-}
-
-function addSettingsCheckoutStep() {
-  const current = collectSettingsCheckoutSteps();
-  current.push({ titleIt: '', descIt: '' });
-  renderSettingsCheckoutSteps(current);
-}
-
-function removeSettingsCheckoutStep(idx) {
-  if (!confirm(`Rimuovere il passo ${idx + 1}?`)) return;
-  const current = collectSettingsCheckoutSteps();
-  current.splice(idx, 1);
-  renderSettingsCheckoutSteps(current);
-}
-
-// ════════════════════════════════════════════
-//  SETTINGS: DYNAMIC PLACES
-// ════════════════════════════════════════════
-function renderSettingsPlaces(places) {
-  const container = document.getElementById('s-places-fields');
-  container.dataset.count = places.length;
-  container.innerHTML = '';
-  places.forEach((p, i) => {
-    container.innerHTML += `
-      <div class="s-sub-title s-sub-title-row">
-        <span>Luogo ${i + 1}</span>
-        <button class="s-remove-btn" onclick="removeSettingsPlace(${i})">🗑️ Rimuovi</button>
-      </div>
-      <div class="s-field"><label>Emoji</label><input type="text" id="s-p${i}-emoji" value="${escAttr(p.emoji || '📍')}" placeholder="📍" style="max-width:80px"></div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-p${i}-name" value="${escAttr(p.name || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-p${i}-descIt">${escHtml(p.descIt || '')}</textarea></div>
-      <div class="s-field"><label>Come arrivarci</label><textarea id="s-p${i}-howIt">${escHtml(p.howIt || '')}</textarea></div>
-      <div class="s-field"><label>Link Maps</label><input type="url" id="s-p${i}-maps" value="${escAttr(p.maps || '')}"></div>
-      ${i < places.length - 1 ? '<div class="s-divider"></div>' : ''}`;
-  });
-}
-
-function collectSettingsPlaces() {
-  const container = document.getElementById('s-places-fields');
-  const count = parseInt(container.dataset.count || '0');
-  const places = [];
-  for (let i = 0; i < count; i++) {
-    const emojiEl = document.getElementById(`s-p${i}-emoji`);
-    const p = { emoji: emojiEl ? emojiEl.value : '📍' };
-    ['name','descIt','howIt','maps'].forEach(k => {
-      const el = document.getElementById(`s-p${i}-${k}`);
-      if (el) p[k] = el.value.trim();
-    });
-    places.push(p);
-  }
-  return places;
-}
-
-function addSettingsPlace() {
-  const current = collectSettingsPlaces();
-  current.push({ name: '', emoji: '📍', descIt: '', howIt: '', maps: '#' });
-  renderSettingsPlaces(current);
-  const container = document.getElementById('s-places-fields');
-  container.scrollIntoView({ behavior: 'smooth', block: 'end' });
-}
-
-function removeSettingsPlace(idx) {
-  const current = collectSettingsPlaces();
-  if (!confirm(`Rimuovere "${current[idx].name || ('Luogo ' + (idx + 1))}"?`)) return;
-  current.splice(idx, 1);
-  renderSettingsPlaces(current);
-}
-
-// ════════════════════════════════════════════
-//  SETTINGS: DYNAMIC RESTAURANTS
-// ════════════════════════════════════════════
-function renderSettingsRests(rests) {
-  const container = document.getElementById('s-restaurants-fields');
-  container.dataset.count = rests.length;
-  container.innerHTML = '';
-  rests.forEach((r, i) => {
-    container.innerHTML += `
-      <div class="s-sub-title s-sub-title-row">
-        <span>Ristorante ${i + 1}</span>
-        <button class="s-remove-btn" onclick="removeSettingsRest(${i})">🗑️ Rimuovi</button>
-      </div>
-      <div class="s-field"><label>Emoji</label><input type="text" id="s-r${i}-emoji" value="${escAttr(r.emoji || '🍽️')}" placeholder="🍽️" style="max-width:80px"></div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-r${i}-name" value="${escAttr(r.name || '')}"></div>
-      <div class="s-field"><label>Tipo</label><input type="text" id="s-r${i}-tipo" value="${escAttr(r.tipo || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-r${i}-descIt">${escHtml(r.descIt || '')}</textarea></div>
-      <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-r${i}-price" value="${escAttr(r.price || '')}" placeholder="€ / €€ / €€€"></div>
-      <div class="s-field"><label>Link Maps</label><input type="url" id="s-r${i}-maps" value="${escAttr(r.maps || '')}"></div>
-      ${i < rests.length - 1 ? '<div class="s-divider"></div>' : ''}`;
-  });
-}
-
-function collectSettingsRests() {
-  const container = document.getElementById('s-restaurants-fields');
-  const count = parseInt(container.dataset.count || '0');
-  const rests = [];
-  for (let i = 0; i < count; i++) {
-    const emojiEl = document.getElementById(`s-r${i}-emoji`);
-    const r = { emoji: emojiEl ? emojiEl.value : '🍽️' };
-    ['name','tipo','descIt','price','maps'].forEach(k => {
-      const el = document.getElementById(`s-r${i}-${k}`);
-      if (el) r[k] = el.value.trim();
-    });
-    rests.push(r);
-  }
-  return rests;
-}
-
-function addSettingsRest() {
-  const current = collectSettingsRests();
-  current.push({ name: '', emoji: '��️', tipo: '', descIt: '', price: '€€', maps: '#' });
-  renderSettingsRests(current);
-  const container = document.getElementById('s-restaurants-fields');
-  container.scrollIntoView({ behavior: 'smooth', block: 'end' });
-}
-
-function removeSettingsRest(idx) {
-  const current = collectSettingsRests();
-  if (!confirm(`Rimuovere "${current[idx].name || ('Ristorante ' + (idx + 1))}"?`)) return;
-  current.splice(idx, 1);
-  renderSettingsRests(current);
-}
-
 // ════════════════════════════════════════════
 //  SETTINGS: DYNAMIC CONTACTS
 // ════════════════════════════════════════════
