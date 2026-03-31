@@ -55,13 +55,16 @@ git push
 
 - 📱 **Design mobile-first** (max 430px, stile app nativa)
 - 🌐 **Bilingue IT/EN** — cambio lingua istantaneo
-- 🏠 **Multi-appartamento** — supporto per 2 appartamenti
+- 🏠 **Multi-appartamento** — supporto per più appartamenti
 - 🗺️ **5 sezioni** — Home, Soggiorno, Luoghi, Mangiare, Muoversi
 - ⚙️ **Pannello di personalizzazione** — modifica tutto dal browser senza toccare il codice
 - 💾 **Salvataggio automatico** in `localStorage`
 - 📋 **Esporta/Importa JSON** — per backup e condivisione delle impostazioni
 - 📞 **Bottoni di chiamata** per emergenze e host
 - 🧭 **Link Google Maps** per ogni luogo e ristorante
+- 🔑 **Login con username/password** — alternativa al PIN per accedere al pannello admin
+- 📱 **QR Code per ogni appartamento** — generati automaticamente, scaricabili e stampabili
+- 🔐 **Sicurezza avanzata** — PIN e credenziali hashati con SHA-256, salvati in `localStorage`
 
 ---
 
@@ -118,11 +121,35 @@ const DEFAULT_DATA = {
 ## 📂 Struttura del Progetto
 
 ```
-guestguide-bnb/
+guide/
 ├── index.html                    ← tutto il codice (HTML + CSS + JS inline)
+├── LICENSE                       ← licenza MIT
 ├── .nojekyll                     ← disabilita Jekyll su GitHub Pages
 └── .github/workflows/deploy.yml ← auto-deploy su GitHub Pages
 ```
+
+---
+
+## 🔑 Autenticazione Host
+
+Il pannello ⚙️ è protetto da **due metodi di accesso**:
+
+1. **PIN a 4 cifre** (default: `1234`) — accesso rapido via tastierino numerico
+2. **Login con username/password** (default: `admin` / `admin`) — clicca "🔑 Login con Password" nel modal PIN
+
+Entrambe le credenziali sono hashate con SHA-256 e salvate in `localStorage`. Puoi cambiarle dal pannello ⚙️ → sezione **🔐 Sicurezza PIN**.
+
+---
+
+## 📱 QR Code per Appartamenti
+
+Ogni appartamento ha un **QR Code univoco** che punta direttamente alla sua guida (`?apt=0`, `?apt=1`, ecc.). Dal pannello ⚙️ → sezione **📱 QR Code** puoi:
+
+- Visualizzare il QR di ogni appartamento
+- Scaricare il QR come PNG con "📥 Scarica QR"
+- Stampare tutti i QR con "🖨️ Stampa Tutti i QR"
+
+Gli ospiti scansionano il QR e accedono direttamente alla guida dell'appartamento corretto, saltando la landing page.
 
 ---
 
