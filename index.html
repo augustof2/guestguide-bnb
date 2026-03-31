@@ -1158,6 +1158,96 @@
     .restaurant-card { margin-bottom: 20px; }
     .supermercato-card { margin-bottom: 20px; }
   }
+
+  /* ── LANGUAGE SELECTION CARDS (landing) ─────────── */
+  .apt-card {
+    flex-direction: column;
+    align-items: stretch;
+    cursor: default;
+    gap: 16px;
+  }
+  .apt-card:hover, .apt-card:active {
+    transform: none;
+    border-color: var(--border);
+    box-shadow: none;
+  }
+  .apt-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .apt-card-meta { flex: 1; min-width: 0; }
+  .apt-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .apt-card-superhost {
+    background: var(--gold);
+    color: var(--bg);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    white-space: nowrap;
+  }
+  .apt-card-addr {
+    font-size: 13px;
+    color: var(--text2);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .lang-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .lang-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: border-color .2s, transform .15s, box-shadow .15s;
+  }
+  .lang-card:hover, .lang-card:active {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(201,168,76,.12);
+  }
+  .lang-card-flag { font-size: 22px; flex-shrink: 0; }
+  .lang-card-body { flex: 1; min-width: 0; }
+  .lang-card-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .lang-card-sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+  .lang-card-arrow { font-size: 18px; color: var(--gold); flex-shrink: 0; }
+
+  /* ── LANGUAGE TOGGLE (guide header) ─────────────── */
+  .lang-toggle-btn {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color .15s, color .15s;
+    font-family: 'Jost', sans-serif;
+    line-height: 1.4;
+  }
+  .lang-toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
 </style>
 </head>
 <body>
@@ -1199,6 +1289,7 @@
   <div class="guide-header">
     <button class="back-btn" onclick="goBack()" aria-label="Torna indietro">←</button>
     <div class="guide-apt-name" id="guide-apt-name">Appartamento 1</div>
+    <button class="lang-toggle-btn" id="lang-toggle-btn" onclick="switchLang()">🇬🇧 EN</button>
   </div>
 
   <div class="guide-content" id="guide-content">
@@ -1215,23 +1306,23 @@
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon">🔑</div>
-          <div class="stat-label">Check-in</div>
+          <div class="stat-label" data-i18n="statCheckin">Check-in</div>
           <div class="stat-value" id="s-checkin">15:00</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">🚪</div>
-          <div class="stat-label">Check-out</div>
+          <div class="stat-label" data-i18n="statCheckout">Check-out</div>
           <div class="stat-value" id="s-checkout">10:00</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">📶</div>
-          <div class="stat-label">WiFi</div>
+          <div class="stat-label" data-i18n="statWifi">WiFi</div>
           <div class="stat-value" id="s-wifi">NomeRete</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">🧭</div>
-          <div class="stat-label">Mappa</div>
-          <div class="stat-value"><a id="s-maps" href="#" target="_blank">Apri Maps</a></div>
+          <div class="stat-label" data-i18n="statMap">Mappa</div>
+          <div class="stat-value"><a id="s-maps" href="#" target="_blank" data-i18n="openMaps">Apri Maps</a></div>
         </div>
       </div>
 
@@ -1244,12 +1335,12 @@
       </div>
 
       <div class="quick-nav">
-        <div class="quick-nav-title">Esplora la guida</div>
+        <div class="quick-nav-title" data-i18n="exploreGuide">Esplora la guida</div>
         <div class="quick-nav-card" onclick="switchTab('stay')">
           <div class="quick-nav-icon">🛋️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Soggiorno</div>
-            <div class="quick-nav-desc">WiFi, regole, spazi, servizi</div>
+            <div class="quick-nav-desc" data-i18n="stayDesc">WiFi, regole, spazi, servizi</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1257,7 +1348,7 @@
           <div class="quick-nav-icon">🗺️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Luoghi</div>
-            <div class="quick-nav-desc">Attrazioni e punti di interesse</div>
+            <div class="quick-nav-desc" data-i18n="placesDesc">Attrazioni e punti di interesse</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1265,7 +1356,7 @@
           <div class="quick-nav-icon">🍽️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Mangiare</div>
-            <div class="quick-nav-desc">Ristoranti, bar, supermercati</div>
+            <div class="quick-nav-desc" data-i18n="foodDesc">Ristoranti, bar, supermercati</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1273,7 +1364,7 @@
           <div class="quick-nav-icon">🚇</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Muoversi</div>
-            <div class="quick-nav-desc">Metro, bus, taxi, emergenze</div>
+            <div class="quick-nav-desc" data-i18n="transportDesc">Metro, bus, taxi, emergenze</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
@@ -1281,14 +1372,14 @@
           <div class="quick-nav-icon">🧳</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Partenza</div>
-            <div class="quick-nav-desc">Check-out e recensione</div>
+            <div class="quick-nav-desc" data-i18n="departureDesc">Check-out e recensione</div>
           </div>
           <div class="quick-nav-arrow">›</div>
         </div>
       </div>
 
       <div id="home-review-section" style="display:none;padding:0 0 4px">
-        <a id="home-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn" style="display:flex"><span>⭐ Lascia una Recensione su Google</span></a>
+        <a id="home-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn" style="display:flex"><span data-i18n="leaveReview">⭐ Lascia una Recensione su Google</span></a>
       </div>
 
     </div><!-- /tab-home -->
@@ -1320,17 +1411,17 @@
         <div class="info-card">
           <div class="info-card-header">
             <span class="info-card-icon">📍</span>
-            <span class="info-card-title">Come raggiungerci</span>
+            <span class="info-card-title" data-i18n="howToReach">Come raggiungerci</span>
           </div>
           <p class="info-card-body" id="st-how-reach"></p>
-          <a class="maps-btn" id="st-maps" href="#" target="_blank">🧭 <span>Apri su Maps</span></a>
+          <a class="maps-btn" id="st-maps" href="#" target="_blank">🧭 <span data-i18n="openInMaps">Apri su Maps</span></a>
         </div>
 
         <!-- Come accedere -->
         <div class="info-card">
           <div class="info-card-header">
             <span class="info-card-icon">🗝️</span>
-            <span class="info-card-title">Come accedere</span>
+            <span class="info-card-title" data-i18n="howToAccess">Come accedere</span>
           </div>
           <p class="info-card-body" id="st-how-access"></p>
         </div>
@@ -1339,7 +1430,7 @@
         <div class="info-card">
           <div class="info-card-header">
             <span class="info-card-icon">🚗</span>
-            <span class="info-card-title">Parcheggio</span>
+            <span class="info-card-title" data-i18n="parking">Parcheggio</span>
           </div>
           <p class="info-card-body" id="st-parking"></p>
         </div>
@@ -1356,19 +1447,19 @@
 
         <!-- House Rules -->
         <div class="card" style="margin-bottom:14px">
-          <div class="card-title">🏠 Regole della casa</div>
+          <div class="card-title" data-i18n="houseRules">🏠 Regole della casa</div>
           <ul class="rules-list" id="st-rules-list">
             <!-- populated by JS -->
           </ul>
         </div>
 
         <!-- Spaces -->
-        <div class="card-title" style="margin-bottom:10px">🏡 Gli Spazi</div>
+        <div class="card-title" style="margin-bottom:10px" data-i18n="spaces">🏡 Gli Spazi</div>
 
         <div class="space-card">
           <div class="space-header">
             <span class="space-icon">🛌</span>
-            <span class="space-name">Camera da Letto</span>
+            <span class="space-name" data-i18n="bedroom">Camera da Letto</span>
           </div>
           <div class="amenity-tags" id="st-bedroom-tags">
             <!-- populated by JS -->
@@ -1378,7 +1469,7 @@
         <div class="space-card">
           <div class="space-header">
             <span class="space-icon">🍳</span>
-            <span class="space-name">Cucina</span>
+            <span class="space-name" data-i18n="kitchen">Cucina</span>
           </div>
           <div class="amenity-tags" id="st-kitchen-tags">
             <!-- populated by JS -->
@@ -1388,7 +1479,7 @@
         <div class="space-card" style="margin-bottom:20px">
           <div class="space-header">
             <span class="space-icon">🚿</span>
-            <span class="space-name">Bagno</span>
+            <span class="space-name" data-i18n="bathroom">Bagno</span>
           </div>
           <div class="amenity-tags" id="st-bathroom-tags">
             <!-- populated by JS -->
@@ -1396,7 +1487,7 @@
         </div>
 
         <!-- Extra Services -->
-        <div class="card-title" style="margin-bottom:10px">✨ Servizi Extra</div>
+        <div class="card-title" style="margin-bottom:10px" data-i18n="extraServices">✨ Servizi Extra</div>
         <div class="service-grid" id="st-extra-services" style="margin-bottom:20px">
           <!-- populated by JS -->
         </div>
@@ -1409,7 +1500,7 @@
       <div class="tab-header">
         <div class="section-eyebrow">Scopri la Città</div>
         <div class="section-title">Luoghi</div>
-        <div class="section-sub">Le attrazioni più belle nei dintorni</div>
+        <div class="section-sub" data-i18n="placesSubtitle">Le attrazioni più belle nei dintorni</div>
       </div>
       <div class="section-pad" style="padding-top:0" id="places-container">
         <!-- populated by JS -->
@@ -1421,7 +1512,7 @@
       <div class="tab-header">
         <div class="section-eyebrow">Dove Mangiare</div>
         <div class="section-title">Mangiare</div>
-        <div class="section-sub">I migliori locali consigliati dall'host</div>
+        <div class="section-sub" data-i18n="foodSubtitle">I migliori locali consigliati dall'host</div>
       </div>
       <div class="section-pad" style="padding-top:0" id="food-container">
         <!-- populated by JS -->
@@ -1433,7 +1524,7 @@
       <div class="tab-header">
         <div class="section-eyebrow">In Città</div>
         <div class="section-title">Muoversi</div>
-        <div class="section-sub">Come spostarsi in città</div>
+        <div class="section-sub" data-i18n="transportSubtitle">Come spostarsi in città</div>
       </div>
       <div class="section-pad" style="padding-top:0">
 
@@ -1443,7 +1534,7 @@
         <div class="transport-card">
           <div class="transport-header">
             <span class="transport-icon">🎫</span>
-            <span class="transport-title">Biglietti</span>
+            <span class="transport-title" data-i18n="tickets">Biglietti</span>
           </div>
           <p class="transport-desc" id="tr-tickets-desc">
             Biglietto singolo: ~€1,50 (valido 90 minuti). Abbonamento giornaliero: ~€5,00.
@@ -1454,7 +1545,7 @@
         <div class="transport-card">
           <div class="transport-header">
             <span class="transport-icon">🚖</span>
-            <span class="transport-title">Taxi &amp; App</span>
+            <span class="transport-title" data-i18n="taxiApp">Taxi &amp; App</span>
           </div>
           <p class="transport-desc" id="tr-taxi-desc">
             Taxi ufficiali disponibili in piazza e in stazione. App: Uber, FREE NOW, Bolt.
@@ -1463,12 +1554,12 @@
 
         <!-- Emergencies -->
         <div class="sos-section" style="margin-top:24px">
-          <div class="sos-title">🆘 <span>Emergenze</span></div>
+          <div class="sos-title">🆘 <span data-i18n="emergencies">Emergenze</span></div>
 
           <div class="sos-card">
             <div class="sos-icon">🏥</div>
             <div class="sos-body">
-              <div class="sos-name">Pronto Soccorso</div>
+              <div class="sos-name" data-i18n="hospital">Pronto Soccorso</div>
               <div class="sos-number">📞 118</div>
             </div>
             <a class="call-btn" href="tel:118">📞 118</a>
@@ -1477,7 +1568,7 @@
           <div class="sos-card">
             <div class="sos-icon">👮</div>
             <div class="sos-body">
-              <div class="sos-name">Carabinieri</div>
+              <div class="sos-name" data-i18n="police">Carabinieri</div>
               <div class="sos-number">📞 112</div>
             </div>
             <a class="call-btn" href="tel:112">📞 112</a>
@@ -1486,7 +1577,7 @@
           <div class="sos-card">
             <div class="sos-icon">🔥</div>
             <div class="sos-body">
-              <div class="sos-name">Vigili del Fuoco</div>
+              <div class="sos-name" data-i18n="firefighters">Vigili del Fuoco</div>
               <div class="sos-number">📞 115</div>
             </div>
             <a class="call-btn" href="tel:115">📞 115</a>
@@ -1495,10 +1586,10 @@
           <div class="sos-card">
             <div class="sos-icon">👤</div>
             <div class="sos-body">
-              <div class="sos-name">Host: <span id="sos-host-name">Nome Host</span></div>
+              <div class="sos-name"><span data-i18n="host">Host</span>: <span id="sos-host-name">Nome Host</span></div>
               <div class="sos-number" id="sos-host-phone">📞 +39 000 000 0000</div>
             </div>
-            <a class="call-btn host" id="sos-host-call" href="tel:+390000000000">📞 <span>Chiama</span></a>
+            <a class="call-btn host" id="sos-host-call" href="tel:+390000000000">📞 <span data-i18n="call">Chiama</span></a>
           </div>
 
           <div id="sos-extra-contacts"><!-- populated by JS --></div>
@@ -1512,18 +1603,18 @@
       <div class="tab-header">
         <div class="section-eyebrow">È Ora di Partire</div>
         <div class="section-title">Partenza</div>
-        <div class="section-sub">Tutto quello che c'è da sapere prima di andare</div>
+        <div class="section-sub" data-i18n="departureSubtitle">Tutto quello che c'è da sapere prima di andare</div>
       </div>
       <div class="section-pad" style="padding-top:0">
 
         <!-- Checkout steps -->
         <div class="checkout-steps">
-          <div class="checkout-title">🏁 <span>Al Check-out</span></div>
+          <div class="checkout-title">🏁 <span data-i18n="atCheckout">Al Check-out</span></div>
           <div id="departure-steps-list">
             <!-- populated by JS -->
           </div>
           <div id="google-review-btn-container" style="display:none;margin-top:12px;padding:0 4px">
-            <a id="google-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn"><span>⭐ Lascia una Recensione su Google</span></a>
+            <a id="google-review-btn" href="#" target="_blank" rel="noopener" class="maps-btn review-btn"><span data-i18n="leaveReview">⭐ Lascia una Recensione su Google</span></a>
           </div>
         </div>
 
@@ -1745,6 +1836,185 @@
 
 <script>
 // ════════════════════════════════════════════
+//  I18N — LANGUAGE SYSTEM
+// ════════════════════════════════════════════
+let currentLang = localStorage.getItem('bnb_lang') || 'it';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('bnb_lang', lang);
+}
+
+const UI_STRINGS = {
+  it: {
+    landingIntro: 'Benvenuti! Selezionate il vostro appartamento per accedere alla guida completa.',
+    langBtnItTitle: 'Italiano',
+    langBtnItSub:   'Guida Ospiti',
+    langBtnEnTitle: 'English',
+    langBtnEnSub:   'Guest Guide',
+    superhost:      '★ Superhost',
+    statCheckin:    'Check-in',
+    statCheckout:   'Check-out',
+    statWifi:       'WiFi',
+    statMap:        'Mappa',
+    openMaps:       'Apri Maps',
+    openInMaps:     '🧭 Apri su Maps',
+    welcome:        'Benvenuti! 👋',
+    exploreGuide:   'Esplora la guida',
+    stayDesc:       'WiFi, regole, spazi, servizi',
+    placesDesc:     'Attrazioni e punti di interesse',
+    foodDesc:       'Ristoranti, bar, supermercati',
+    transportDesc:  'Metro, bus, taxi, emergenze',
+    departureDesc:  'Check-out e recensione',
+    leaveReview:    '⭐ Lascia una Recensione su Google',
+    howToReach:     'Come raggiungerci',
+    howToAccess:    'Come accedere',
+    parking:        'Parcheggio',
+    houseRules:     '🏠 Regole della casa',
+    spaces:         '🏡 Gli Spazi',
+    bedroom:        'Camera da Letto',
+    kitchen:        'Cucina',
+    bathroom:       'Bagno',
+    extraServices:  '✨ Servizi Extra',
+    waHint:         '💬 Richiedi su WhatsApp',
+    waRequest:      'Ciao! Vorrei richiedere il servizio: ',
+    placesSubtitle: 'Le attrazioni più belle nei dintorni',
+    foodSubtitle:   "I migliori locali consigliati dall'host",
+    howToArrive:    'Come arrivarci',
+    guideHere:      '🧭 Guidami qui',
+    viewOnMaps:     '🧭 Vedi su Maps',
+    supermarket:    'Supermercato',
+    transportSubtitle: 'Come spostarsi in città',
+    fromAirport:    "Dall'Aeroporto",
+    fromStation:    'Dalla Stazione',
+    metro:          'Metro',
+    bus:            'Bus',
+    tickets:        'Biglietti',
+    taxiApp:        'Taxi & App',
+    emergencies:    'Emergenze',
+    hospital:       'Pronto Soccorso',
+    police:         'Carabinieri',
+    firefighters:   'Vigili del Fuoco',
+    host:           'Host',
+    call:           'Chiama',
+    departureSubtitle: "Tutto quello che c'è da sapere prima di andare",
+    atCheckout:     'Al Check-out',
+    navHome:        'Home',
+    navStay:        'Soggiorno',
+    navPlaces:      'Luoghi',
+    navFood:        'Mangiare',
+    navTransport:   'Muoversi',
+    navDeparture:   'Partenza',
+    stayEyebrow:    'Il Tuo Appartamento',
+    stayTitle:      'Soggiorno',
+    placesEyebrow:  'Scopri la Città',
+    placesTitle:    'Luoghi',
+    foodEyebrow:    'Dove Mangiare',
+    foodTitle:      'Mangiare',
+    transportEyebrow: 'In Città',
+    transportTitle: 'Muoversi',
+    departureEyebrow: 'È Ora di Partire',
+    departureTitle: 'Partenza',
+    langToggle:     '🇬🇧 EN'
+  },
+  en: {
+    landingIntro:   'Welcome! Select your apartment to access the complete guide.',
+    langBtnItTitle: 'Italiano',
+    langBtnItSub:   'Guida Ospiti',
+    langBtnEnTitle: 'English',
+    langBtnEnSub:   'Guest Guide',
+    superhost:      '★ Superhost',
+    statCheckin:    'Check-in',
+    statCheckout:   'Check-out',
+    statWifi:       'WiFi',
+    statMap:        'Map',
+    openMaps:       'Open Maps',
+    openInMaps:     '🧭 Open in Maps',
+    welcome:        'Welcome! 👋',
+    exploreGuide:   'Explore the guide',
+    stayDesc:       'WiFi, rules, spaces, services',
+    placesDesc:     'Attractions and points of interest',
+    foodDesc:       'Restaurants, bars, supermarkets',
+    transportDesc:  'Metro, bus, taxi, emergencies',
+    departureDesc:  'Check-out and review',
+    leaveReview:    '⭐ Leave a Review on Google',
+    howToReach:     'How to reach us',
+    howToAccess:    'How to access',
+    parking:        'Parking',
+    houseRules:     '🏠 House rules',
+    spaces:         '🏡 Spaces',
+    bedroom:        'Bedroom',
+    kitchen:        'Kitchen',
+    bathroom:       'Bathroom',
+    extraServices:  '✨ Extra Services',
+    waHint:         '💬 Request on WhatsApp',
+    waRequest:      'Hello! I would like to request the service: ',
+    placesSubtitle: 'Best attractions in the area',
+    foodSubtitle:   'Best restaurants recommended by the host',
+    howToArrive:    'How to get there',
+    guideHere:      '🧭 Navigate here',
+    viewOnMaps:     '🧭 View on Maps',
+    supermarket:    'Supermarket',
+    transportSubtitle: 'How to get around the city',
+    fromAirport:    'From the Airport',
+    fromStation:    'From the Station',
+    metro:          'Metro',
+    bus:            'Bus',
+    tickets:        'Tickets',
+    taxiApp:        'Taxi & Apps',
+    emergencies:    'Emergencies',
+    hospital:       'Emergency Room (118)',
+    police:         'Carabinieri / Police (112)',
+    firefighters:   'Fire Brigade (115)',
+    host:           'Host',
+    call:           'Call',
+    departureSubtitle: 'Everything you need to know before you go',
+    atCheckout:     'At Check-out',
+    navHome:        'Home',
+    navStay:        'Stay',
+    navPlaces:      'Places',
+    navFood:        'Food',
+    navTransport:   'Getting around',
+    navDeparture:   'Departure',
+    stayEyebrow:    'Your Apartment',
+    stayTitle:      'Your Stay',
+    placesEyebrow:  'Discover the City',
+    placesTitle:    'Places',
+    foodEyebrow:    'Where to Eat',
+    foodTitle:      'Food',
+    transportEyebrow: 'Around the City',
+    transportTitle: 'Getting Around',
+    departureEyebrow: 'Time to Leave',
+    departureTitle: 'Departure',
+    langToggle:     '🇮🇹 IT'
+  }
+};
+
+function t(key) {
+  const strings = UI_STRINGS[currentLang] || UI_STRINGS.it;
+  return strings[key] !== undefined ? strings[key] : (UI_STRINGS.it[key] !== undefined ? UI_STRINGS.it[key] : key);
+}
+
+// Returns obj[field+'En'] (if lang=en and present) → obj[field+'It'] → obj[field] → ''
+function langField(obj, field) {
+  if (!obj) return '';
+  if (currentLang === 'en') {
+    const v = obj[field + 'En'];
+    if (v !== undefined && v !== null && v !== '') return v;
+  }
+  const vIt = obj[field + 'It'];
+  if (vIt !== undefined && vIt !== null) return vIt;
+  const vBase = obj[field];
+  return (vBase !== undefined && vBase !== null) ? vBase : '';
+}
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+}
+
+// ════════════════════════════════════════════
 //  DEFAULT DATA
 // ════════════════════════════════════════════
 const DEFAULT_DATA = {
@@ -1755,8 +2025,11 @@ const DEFAULT_DATA = {
   hostPhone: "+39 000 000 0000",
   googleReviewUrl: "",
   welcomeIt: "Siamo felici di avervi come ospiti! Questo appartamento è stato preparato con cura per rendere il vostro soggiorno indimenticabile. Siamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
+  welcomeEn: "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — do not hesitate to contact us.",
   closingTitleIt: "Grazie per aver scelto il nostro B&B!",
+  closingTitleEn: "Thank you for choosing our B&B!",
   closingTextIt: "È stato un piacere avervi come ospiti. Speriamo di rivedervi presto! Buon viaggio! ✈️",
+  closingTextEn: "It was a pleasure having you as our guests. We hope to see you again soon! Have a great trip! ✈️",
   extraContacts: [
     { name: "Secondo Contatto", phone: "+39 000 000 0001" }
   ],
@@ -1768,68 +2041,81 @@ const DEFAULT_DATA = {
       mapsLink: "#",
       maxGuests: "4 persone",
       bedroomTagsIt: "Letto matrimoniale,Armadio,Biancheria inclusa,Cuscini extra",
+      bedroomTagsEn: "Double bed,Wardrobe,Linen included,Extra pillows",
       wifi: "NomeRete",
       wifiPass: "password123",
       checkin: "15:00",
       checkout: "10:00",
       howToReachIt: "Dalla stazione centrale: prendete la metro linea A fino alla fermata Centrale, poi 10 minuti a piedi. In taxi dal centro ~10€. Consigliamo di salvare l'indirizzo su Google Maps prima di partire.",
+      howToReachEn: "From the central station: take metro line A to the Centrale stop, then 10 minutes on foot. Taxi from the centre ~€10. We recommend saving the address on Google Maps before you set off.",
       howToAccessIt: "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
+      howToAccessEn: "Keys will be handed to you directly by the host upon your arrival. In case of self check-in, you will find detailed instructions via message before your arrival.",
       parkingIt: "Parcheggio pubblico disponibile nelle vicinanze (~200 metri). Strisce blu a pagamento nei giorni feriali 8:00–20:00 (~€1,50/h). Parcheggio gratuito nelle strisce bianche.",
+      parkingEn: "Public parking available nearby (~200 metres). Blue lines (paid) on weekdays 8:00–20:00 (~€1.50/h). Free parking on white lines.",
       houseRules: [
-        { icon: "🔇", titleIt: "Silenzio Notturno", descIt: "Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini." },
-        { icon: "🚭", titleIt: "Niente Fumo", descIt: "Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone." },
-        { icon: "🐾", titleIt: "Animali Domestici", descIt: "Gli animali domestici non sono ammessi senza previo accordo con l'host." },
-        { icon: "👥", titleIt: "Ospiti Esterni", descIt: "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata." },
-        { icon: "♻️", titleIt: "Raccolta Rifiuti", descIt: "Si prega di rispettare la raccolta differenziata. Istruzioni in cucina." }
+        { icon: "🔇", titleIt: "Silenzio Notturno", titleEn: "Quiet Hours", descIt: "Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini.", descEn: "From 22:00 to 08:00 please keep noise to a minimum out of respect for the neighbours." },
+        { icon: "🚭", titleIt: "Niente Fumo", titleEn: "No Smoking", descIt: "Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone.", descEn: "Smoking inside the apartment is strictly prohibited. It is allowed on the balcony." },
+        { icon: "🐾", titleIt: "Animali Domestici", titleEn: "Pets", descIt: "Gli animali domestici non sono ammessi senza previo accordo con l'host.", descEn: "Pets are not allowed without prior agreement with the host." },
+        { icon: "👥", titleIt: "Ospiti Esterni", titleEn: "Outside Guests", descIt: "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata.", descEn: "No parties allowed. The number of guests must not exceed the maximum capacity indicated." },
+        { icon: "♻️", titleIt: "Raccolta Rifiuti", titleEn: "Waste Sorting", descIt: "Si prega di rispettare la raccolta differenziata. Istruzioni in cucina.", descEn: "Please follow the recycling rules. Instructions are in the kitchen." }
       ],
       kitchenTagsIt: "Piano cottura,Forno,Frigorifero,Lavastoviglie,Caffettiera,Microonde",
+      kitchenTagsEn: "Hob,Oven,Refrigerator,Dishwasher,Coffee machine,Microwave",
       bathroomTagsIt: "Doccia,Asciugamani,Phon,Prodotti igiene",
+      bathroomTagsEn: "Shower,Towels,Hair dryer,Toiletries",
       extraServices: [
-        { icon: "🧺", nameIt: "Cambio Biancheria", descIt: "Ogni 4 giorni su richiesta" },
-        { icon: "🧹", nameIt: "Pulizie Aggiuntive", descIt: "Disponibile su richiesta" },
-        { icon: "🚗", nameIt: "Transfer Aeroporto", descIt: "Prenotabile in anticipo" },
-        { icon: "☕", nameIt: "Colazione", descIt: "Disponibile su richiesta" }
+        { icon: "🧺", nameIt: "Cambio Biancheria", nameEn: "Linen Change", descIt: "Ogni 4 giorni su richiesta", descEn: "Every 4 days on request" },
+        { icon: "🧹", nameIt: "Pulizie Aggiuntive", nameEn: "Additional Cleaning", descIt: "Disponibile su richiesta", descEn: "Available on request" },
+        { icon: "🚗", nameIt: "Transfer Aeroporto", nameEn: "Airport Transfer", descIt: "Prenotabile in anticipo", descEn: "Bookable in advance" },
+        { icon: "☕", nameIt: "Colazione", nameEn: "Breakfast", descIt: "Disponibile su richiesta", descEn: "Available on request" }
       ],
       places: [
-        { name: "Monumento Principale", emoji: "🏛", descIt: "Il monumento più famoso della città. Perfetto per chi ama la storia.", howIt: "🚇 Metro linea A → fermata Centrale → 10 min a piedi.", maps: "#" },
-        { name: "Piazza Centrale", emoji: "⛲", descIt: "La piazza principale della città, cuore della vita sociale.", howIt: "🚌 Bus 10 o 20 → fermata Piazza Centrale.", maps: "#" },
-        { name: "Chiesa Storica", emoji: "🎭", descIt: "Un'importante chiesa storica con architettura medievale.", howIt: "🚶 A piedi ~15 minuti dal centro.", maps: "#" },
-        { name: "Parco Panoramico", emoji: "🍊", descIt: "Parco con vista panoramica sulla città. Accesso libero.", howIt: "🚌 Bus 5 → fermata Parco.", maps: "#" },
-        { name: "Museo Locale", emoji: "🏺", descIt: "Il museo principale della zona con collezioni locali.", howIt: "🚇 Metro → fermata Museo.", maps: "#" }
+        { name: "Monumento Principale", emoji: "🏛", descIt: "Il monumento più famoso della città. Perfetto per chi ama la storia.", descEn: "The most famous monument in the city. Perfect for history lovers.", howIt: "🚇 Metro linea A → fermata Centrale → 10 min a piedi.", howEn: "🚇 Metro line A → Centrale stop → 10 min on foot.", maps: "#" },
+        { name: "Piazza Centrale", emoji: "⛲", descIt: "La piazza principale della città, cuore della vita sociale.", descEn: "The main square of the city, heart of social life.", howIt: "🚌 Bus 10 o 20 → fermata Piazza Centrale.", howEn: "🚌 Bus 10 or 20 → Piazza Centrale stop.", maps: "#" },
+        { name: "Chiesa Storica", emoji: "🎭", descIt: "Un'importante chiesa storica con architettura medievale.", descEn: "An important historic church with medieval architecture.", howIt: "🚶 A piedi ~15 minuti dal centro.", howEn: "🚶 On foot ~15 minutes from the centre.", maps: "#" },
+        { name: "Parco Panoramico", emoji: "🍊", descIt: "Parco con vista panoramica sulla città. Accesso libero.", descEn: "Park with a panoramic view over the city. Free admission.", howIt: "🚌 Bus 5 → fermata Parco.", howEn: "🚌 Bus 5 → Parco stop.", maps: "#" },
+        { name: "Museo Locale", emoji: "🏺", descIt: "Il museo principale della zona con collezioni locali.", descEn: "The main local museum with regional collections.", howIt: "🚇 Metro → fermata Museo.", howEn: "🚇 Metro → Museo stop.", maps: "#" }
       ],
       restaurants: [
-        { name: "Ristorante Da Mario", emoji: "🍝", tipo: "Trattoria · Vicino a casa", descIt: "Cucina tipica italiana. Ottimi primi piatti. Prenotazione consigliata.", price: "€€", maps: "#" },
-        { name: "Pizzeria Il Forno", emoji: "🍕", tipo: "Pizzeria · Zona centro", descIt: "Ottima pizza napoletana cotta in forno a legna.", price: "€", maps: "#" },
-        { name: "Bar Centrale", emoji: "☕", tipo: "Bar · Colazione", descIt: "Il bar perfetto per la colazione: cappuccino e cornetto.", price: "€", maps: "#" },
-        { name: "Osteria del Porto", emoji: "🍷", tipo: "Osteria · Cucina di pesce", descIt: "Specialità di pesce fresco. Atmosfera accogliente.", price: "€€€", maps: "#" }
+        { name: "Ristorante Da Mario", emoji: "🍝", tipo: "Trattoria · Vicino a casa", descIt: "Cucina tipica italiana. Ottimi primi piatti. Prenotazione consigliata.", descEn: "Typical Italian cuisine. Excellent pasta dishes. Booking recommended.", price: "€€", maps: "#" },
+        { name: "Pizzeria Il Forno", emoji: "🍕", tipo: "Pizzeria · Zona centro", descIt: "Ottima pizza napoletana cotta in forno a legna.", descEn: "Excellent Neapolitan pizza cooked in a wood-fired oven.", price: "€", maps: "#" },
+        { name: "Bar Centrale", emoji: "☕", tipo: "Bar · Colazione", descIt: "Il bar perfetto per la colazione: cappuccino e cornetto.", descEn: "The perfect bar for breakfast: cappuccino and croissant.", price: "€", maps: "#" },
+        { name: "Osteria del Porto", emoji: "🍷", tipo: "Osteria · Cucina di pesce", descIt: "Specialità di pesce fresco. Atmosfera accogliente.", descEn: "Fresh fish specialities. Welcoming atmosphere.", price: "€€€", maps: "#" }
       ],
       supermarketIt: "Supermercato più vicino a ~300 metri. Orari: Lun–Sab 8:00–20:00, Dom 9:00–13:00.",
+      supermarketEn: "Nearest supermarket ~300 metres away. Hours: Mon–Sat 8:00–20:00, Sun 9:00–13:00.",
       supermarketMaps: "",
       checkoutSteps: [
-        { titleIt: "Raccogliete i vostri effetti personali", descIt: "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla." },
-        { titleIt: "Lasciate le chiavi", descIt: "Depositate le chiavi nel luogo indicato dall'host al momento del check-in." },
-        { titleIt: "Rifiuti e raccolta differenziata", descIt: "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina." },
-        { titleIt: "Lasciate una recensione", descIt: "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!" }
+        { titleIt: "Raccogliete i vostri effetti personali", titleEn: "Collect your personal belongings", descIt: "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla.", descEn: "Check all drawers, wardrobes and the bathroom so you don't forget anything." },
+        { titleIt: "Lasciate le chiavi", titleEn: "Leave the keys", descIt: "Depositate le chiavi nel luogo indicato dall'host al momento del check-in.", descEn: "Leave the keys in the place indicated by the host at check-in." },
+        { titleIt: "Rifiuti e raccolta differenziata", titleEn: "Waste and recycling", descIt: "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina.", descEn: "Dispose of waste in the appropriate containers following the instructions in the kitchen." },
+        { titleIt: "Lasciate una recensione", titleEn: "Leave a review", descIt: "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!", descEn: "If you enjoyed your stay, your review is a huge help for us!" }
       ],
       transport: {
         airportEnabled: true,
         airportIcon: "✈️",
         airportIt: "All'uscita dell'aeroporto trovi i taxi ufficiali. Tariffa fissa ~50–60€ per il centro. In alternativa, treno diretto per la stazione centrale ogni 30 min (~14€).",
+        airportEn: "At the airport exit you will find official taxis. Fixed fare ~€50–60 to the city centre. Alternatively, direct train to the central station every 30 min (~€14).",
         airportMaps: "",
         stationEnabled: true,
         stationIcon: "🚉",
         stationIt: "Dalla stazione puoi prendere metro, autobus o taxi per raggiungere l'appartamento. La fermata metro è a 5 min a piedi.",
+        stationEn: "From the station you can take the metro, bus or taxi to reach the apartment. The metro stop is 5 min on foot.",
         stationMaps: "",
         metroEnabled: true,
         metroIcon: "🚇",
         metroIt: "Fermata più vicina: Centrale (Linea A) a 800 metri dall'appartamento.",
+        metroEn: "Nearest stop: Centrale (Line A), 800 metres from the apartment.",
         metroMaps: "",
         busEnabled: true,
         busIcon: "🚌",
         busIt: "Linee principali: Bus 10, 20, 30 verso il centro. Fermata a 200 metri dall'appartamento.",
+        busEn: "Main lines: Bus 10, 20, 30 towards the city centre. Stop 200 metres from the apartment.",
         busMaps: "",
         ticketsIt: "Biglietto singolo: ~€1,50 (valido 90 minuti). Abbonamento giornaliero: ~€5,00. Acquisto alle macchinette in stazione o tramite app.",
-        taxiIt: "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW, Bolt. Tariffa minima ~€5."
+        ticketsEn: "Single ticket: ~€1.50 (valid 90 minutes). Daily pass: ~€5.00. Purchase at station machines or via app.",
+        taxiIt: "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW, Bolt. Tariffa minima ~€5.",
+        taxiEn: "Official taxis: you'll find stands at the main square and at the station. Recommended apps: Uber, FREE NOW, Bolt. Minimum fare ~€5."
       }
     },
     {
@@ -1839,68 +2125,81 @@ const DEFAULT_DATA = {
       mapsLink: "#",
       maxGuests: "4 persone",
       bedroomTagsIt: "Letto matrimoniale,Armadio,Biancheria inclusa,Cuscini extra",
+      bedroomTagsEn: "Double bed,Wardrobe,Linen included,Extra pillows",
       wifi: "NomeRete2",
       wifiPass: "password456",
       checkin: "15:00",
       checkout: "10:00",
       howToReachIt: "Dalla stazione centrale: prendete la metro linea A fino alla fermata Centrale, poi 10 minuti a piedi. In taxi dal centro ~10€. Consigliamo di salvare l'indirizzo su Google Maps prima di partire.",
+      howToReachEn: "From the central station: take metro line A to the Centrale stop, then 10 minutes on foot. Taxi from the centre ~€10. We recommend saving the address on Google Maps before you set off.",
       howToAccessIt: "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
+      howToAccessEn: "Keys will be handed to you directly by the host upon your arrival. In case of self check-in, you will find detailed instructions via message before your arrival.",
       parkingIt: "Parcheggio pubblico disponibile nelle vicinanze (~200 metri). Strisce blu a pagamento nei giorni feriali 8:00–20:00 (~€1,50/h). Parcheggio gratuito nelle strisce bianche.",
+      parkingEn: "Public parking available nearby (~200 metres). Blue lines (paid) on weekdays 8:00–20:00 (~€1.50/h). Free parking on white lines.",
       houseRules: [
-        { icon: "🔇", titleIt: "Silenzio Notturno", descIt: "Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini." },
-        { icon: "🚭", titleIt: "Niente Fumo", descIt: "Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone." },
-        { icon: "🐾", titleIt: "Animali Domestici", descIt: "Gli animali domestici non sono ammessi senza previo accordo con l'host." },
-        { icon: "👥", titleIt: "Ospiti Esterni", descIt: "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata." },
-        { icon: "♻️", titleIt: "Raccolta Rifiuti", descIt: "Si prega di rispettare la raccolta differenziata. Istruzioni in cucina." }
+        { icon: "🔇", titleIt: "Silenzio Notturno", titleEn: "Quiet Hours", descIt: "Dalle 22:00 alle 8:00 si prega di mantenere il silenzio per rispetto dei vicini.", descEn: "From 22:00 to 08:00 please keep noise to a minimum out of respect for the neighbours." },
+        { icon: "🚭", titleIt: "Niente Fumo", titleEn: "No Smoking", descIt: "Vietato fumare all'interno dell'appartamento. È possibile farlo sul balcone.", descEn: "Smoking inside the apartment is strictly prohibited. It is allowed on the balcony." },
+        { icon: "🐾", titleIt: "Animali Domestici", titleEn: "Pets", descIt: "Gli animali domestici non sono ammessi senza previo accordo con l'host.", descEn: "Pets are not allowed without prior agreement with the host." },
+        { icon: "👥", titleIt: "Ospiti Esterni", titleEn: "Outside Guests", descIt: "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata.", descEn: "No parties allowed. The number of guests must not exceed the maximum capacity indicated." },
+        { icon: "♻️", titleIt: "Raccolta Rifiuti", titleEn: "Waste Sorting", descIt: "Si prega di rispettare la raccolta differenziata. Istruzioni in cucina.", descEn: "Please follow the recycling rules. Instructions are in the kitchen." }
       ],
       kitchenTagsIt: "Piano cottura,Forno,Frigorifero,Lavastoviglie,Caffettiera,Microonde",
+      kitchenTagsEn: "Hob,Oven,Refrigerator,Dishwasher,Coffee machine,Microwave",
       bathroomTagsIt: "Doccia,Asciugamani,Phon,Prodotti igiene",
+      bathroomTagsEn: "Shower,Towels,Hair dryer,Toiletries",
       extraServices: [
-        { icon: "🧺", nameIt: "Cambio Biancheria", descIt: "Ogni 4 giorni su richiesta" },
-        { icon: "🧹", nameIt: "Pulizie Aggiuntive", descIt: "Disponibile su richiesta" },
-        { icon: "🚗", nameIt: "Transfer Aeroporto", descIt: "Prenotabile in anticipo" },
-        { icon: "☕", nameIt: "Colazione", descIt: "Disponibile su richiesta" }
+        { icon: "🧺", nameIt: "Cambio Biancheria", nameEn: "Linen Change", descIt: "Ogni 4 giorni su richiesta", descEn: "Every 4 days on request" },
+        { icon: "🧹", nameIt: "Pulizie Aggiuntive", nameEn: "Additional Cleaning", descIt: "Disponibile su richiesta", descEn: "Available on request" },
+        { icon: "🚗", nameIt: "Transfer Aeroporto", nameEn: "Airport Transfer", descIt: "Prenotabile in anticipo", descEn: "Bookable in advance" },
+        { icon: "☕", nameIt: "Colazione", nameEn: "Breakfast", descIt: "Disponibile su richiesta", descEn: "Available on request" }
       ],
       places: [
-        { name: "Monumento Principale", emoji: "🏛", descIt: "Il monumento più famoso della città. Perfetto per chi ama la storia.", howIt: "🚇 Metro linea A → fermata Centrale → 10 min a piedi.", maps: "#" },
-        { name: "Piazza Centrale", emoji: "⛲", descIt: "La piazza principale della città, cuore della vita sociale.", howIt: "🚌 Bus 10 o 20 → fermata Piazza Centrale.", maps: "#" },
-        { name: "Chiesa Storica", emoji: "🎭", descIt: "Un'importante chiesa storica con architettura medievale.", howIt: "🚶 A piedi ~15 minuti dal centro.", maps: "#" },
-        { name: "Parco Panoramico", emoji: "🍊", descIt: "Parco con vista panoramica sulla città. Accesso libero.", howIt: "🚌 Bus 5 → fermata Parco.", maps: "#" },
-        { name: "Museo Locale", emoji: "🏺", descIt: "Il museo principale della zona con collezioni locali.", howIt: "🚇 Metro → fermata Museo.", maps: "#" }
+        { name: "Monumento Principale", emoji: "🏛", descIt: "Il monumento più famoso della città. Perfetto per chi ama la storia.", descEn: "The most famous monument in the city. Perfect for history lovers.", howIt: "🚇 Metro linea A → fermata Centrale → 10 min a piedi.", howEn: "🚇 Metro line A → Centrale stop → 10 min on foot.", maps: "#" },
+        { name: "Piazza Centrale", emoji: "⛲", descIt: "La piazza principale della città, cuore della vita sociale.", descEn: "The main square of the city, heart of social life.", howIt: "🚌 Bus 10 o 20 → fermata Piazza Centrale.", howEn: "🚌 Bus 10 or 20 → Piazza Centrale stop.", maps: "#" },
+        { name: "Chiesa Storica", emoji: "🎭", descIt: "Un'importante chiesa storica con architettura medievale.", descEn: "An important historic church with medieval architecture.", howIt: "🚶 A piedi ~15 minuti dal centro.", howEn: "🚶 On foot ~15 minutes from the centre.", maps: "#" },
+        { name: "Parco Panoramico", emoji: "🍊", descIt: "Parco con vista panoramica sulla città. Accesso libero.", descEn: "Park with a panoramic view over the city. Free admission.", howIt: "🚌 Bus 5 → fermata Parco.", howEn: "🚌 Bus 5 → Parco stop.", maps: "#" },
+        { name: "Museo Locale", emoji: "🏺", descIt: "Il museo principale della zona con collezioni locali.", descEn: "The main local museum with regional collections.", howIt: "🚇 Metro → fermata Museo.", howEn: "🚇 Metro → Museo stop.", maps: "#" }
       ],
       restaurants: [
-        { name: "Ristorante Da Mario", emoji: "🍝", tipo: "Trattoria · Vicino a casa", descIt: "Cucina tipica italiana. Ottimi primi piatti. Prenotazione consigliata.", price: "€€", maps: "#" },
-        { name: "Pizzeria Il Forno", emoji: "🍕", tipo: "Pizzeria · Zona centro", descIt: "Ottima pizza napoletana cotta in forno a legna.", price: "€", maps: "#" },
-        { name: "Bar Centrale", emoji: "☕", tipo: "Bar · Colazione", descIt: "Il bar perfetto per la colazione: cappuccino e cornetto.", price: "€", maps: "#" },
-        { name: "Osteria del Porto", emoji: "🍷", tipo: "Osteria · Cucina di pesce", descIt: "Specialità di pesce fresco. Atmosfera accogliente.", price: "€€€", maps: "#" }
+        { name: "Ristorante Da Mario", emoji: "🍝", tipo: "Trattoria · Vicino a casa", descIt: "Cucina tipica italiana. Ottimi primi piatti. Prenotazione consigliata.", descEn: "Typical Italian cuisine. Excellent pasta dishes. Booking recommended.", price: "€€", maps: "#" },
+        { name: "Pizzeria Il Forno", emoji: "🍕", tipo: "Pizzeria · Zona centro", descIt: "Ottima pizza napoletana cotta in forno a legna.", descEn: "Excellent Neapolitan pizza cooked in a wood-fired oven.", price: "€", maps: "#" },
+        { name: "Bar Centrale", emoji: "☕", tipo: "Bar · Colazione", descIt: "Il bar perfetto per la colazione: cappuccino e cornetto.", descEn: "The perfect bar for breakfast: cappuccino and croissant.", price: "€", maps: "#" },
+        { name: "Osteria del Porto", emoji: "🍷", tipo: "Osteria · Cucina di pesce", descIt: "Specialità di pesce fresco. Atmosfera accogliente.", descEn: "Fresh fish specialities. Welcoming atmosphere.", price: "€€€", maps: "#" }
       ],
       supermarketIt: "Supermercato più vicino a ~300 metri. Orari: Lun–Sab 8:00–20:00, Dom 9:00–13:00.",
+      supermarketEn: "Nearest supermarket ~300 metres away. Hours: Mon–Sat 8:00–20:00, Sun 9:00–13:00.",
       supermarketMaps: "",
       checkoutSteps: [
-        { titleIt: "Raccogliete i vostri effetti personali", descIt: "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla." },
-        { titleIt: "Lasciate le chiavi", descIt: "Depositate le chiavi nel luogo indicato dall'host al momento del check-in." },
-        { titleIt: "Rifiuti e raccolta differenziata", descIt: "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina." },
-        { titleIt: "Lasciate una recensione", descIt: "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!" }
+        { titleIt: "Raccogliete i vostri effetti personali", titleEn: "Collect your personal belongings", descIt: "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla.", descEn: "Check all drawers, wardrobes and the bathroom so you don't forget anything." },
+        { titleIt: "Lasciate le chiavi", titleEn: "Leave the keys", descIt: "Depositate le chiavi nel luogo indicato dall'host al momento del check-in.", descEn: "Leave the keys in the place indicated by the host at check-in." },
+        { titleIt: "Rifiuti e raccolta differenziata", titleEn: "Waste and recycling", descIt: "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina.", descEn: "Dispose of waste in the appropriate containers following the instructions in the kitchen." },
+        { titleIt: "Lasciate una recensione", titleEn: "Leave a review", descIt: "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!", descEn: "If you enjoyed your stay, your review is a huge help for us!" }
       ],
       transport: {
         airportEnabled: true,
         airportIcon: "✈️",
         airportIt: "All'uscita dell'aeroporto trovi i taxi ufficiali. Tariffa fissa ~50–60€ per il centro. In alternativa, treno diretto per la stazione centrale ogni 30 min (~14€).",
+        airportEn: "At the airport exit you will find official taxis. Fixed fare ~€50–60 to the city centre. Alternatively, direct train to the central station every 30 min (~€14).",
         airportMaps: "",
         stationEnabled: true,
         stationIcon: "🚉",
         stationIt: "Dalla stazione puoi prendere metro, autobus o taxi per raggiungere l'appartamento. La fermata metro è a 5 min a piedi.",
+        stationEn: "From the station you can take the metro, bus or taxi to reach the apartment. The metro stop is 5 min on foot.",
         stationMaps: "",
         metroEnabled: true,
         metroIcon: "🚇",
         metroIt: "Fermata più vicina: Centrale (Linea A) a 800 metri dall'appartamento.",
+        metroEn: "Nearest stop: Centrale (Line A), 800 metres from the apartment.",
         metroMaps: "",
         busEnabled: true,
         busIcon: "🚌",
         busIt: "Linee principali: Bus 10, 20, 30 verso il centro. Fermata a 200 metri dall'appartamento.",
+        busEn: "Main lines: Bus 10, 20, 30 towards the city centre. Stop 200 metres from the apartment.",
         busMaps: "",
         ticketsIt: "Biglietto singolo: ~€1,50 (valido 90 minuti). Abbonamento giornaliero: ~€5,00. Acquisto alle macchinette in stazione o tramite app.",
-        taxiIt: "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW, Bolt. Tariffa minima ~€5."
+        ticketsEn: "Single ticket: ~€1.50 (valid 90 minutes). Daily pass: ~€5.00. Purchase at station machines or via app.",
+        taxiIt: "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW, Bolt. Tariffa minima ~€5.",
+        taxiEn: "Official taxis: you'll find stands at the main square and at the station. Recommended apps: Uber, FREE NOW, Bolt. Minimum fare ~€5."
       }
     }
   ],
@@ -1941,8 +2240,11 @@ const PUBLISHED_DATA = {
   "hostPhone": "+393342177311",
   "googleReviewUrl": "https://g.page/r/CZvIjdaReVG_EBM/review",
   "welcomeIt": "Siamo felici di avervi come ospiti e rimaniamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
+  "welcomeEn": "We are delighted to have you as our guests and we remain at your disposal for any need — do not hesitate to contact us.",
   "closingTitleIt": "Grazie per aver scelto il nostro B&B!",
+  "closingTitleEn": "Thank you for choosing our B&B!",
   "closingTextIt": "È stato un piacere avervi come ospiti. Speriamo di rivedervi presto! Buon viaggio! ✈️",
+  "closingTextEn": "It was a pleasure having you as our guests. We hope to see you again soon! Have a great trip! ✈️",
   "extraContacts": [],
   "apts": [
     {
@@ -1956,53 +2258,75 @@ const PUBLISHED_DATA = {
       "checkin": "15:00",
       "checkout": "10:00",
       "howToReachIt": "",
+      "howToReachEn": "",
       "howToAccessIt": "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
+      "howToAccessEn": "Keys will be handed to you directly by the host upon your arrival. In case of self check-in, you will find detailed instructions via message before your arrival.",
       "parkingIt": "Parcheggi pubblici gratuiti sono disponibili nelle vicinanze (strisce bianche). A 500mt si trova GARAGE CERVIALTO a pagamento.",
+      "parkingEn": "Free public parking is available nearby (white lines). 500m away there is GARAGE CERVIALTO (paid parking).",
       "bedroomTagsIt": "Letto matrimoniale,Jacuzzi,Bagno in Camera,Cabina Armadio,Biancheria,Cuscini extra",
+      "bedroomTagsEn": "Double bed,Jacuzzi,En-suite bathroom,Walk-in wardrobe,Linen,Extra pillows",
       "kitchenTagsIt": "Piano cottura,Forno,Frigorifero,Lavastoviglie,Caffettiera,Microonde",
+      "kitchenTagsEn": "Hob,Oven,Refrigerator,Dishwasher,Coffee machine,Microwave",
       "bathroomTagsIt": "Doccia,Asciugamani,Phon,Prodotti igiene",
+      "bathroomTagsEn": "Shower,Towels,Hair dryer,Toiletries",
       "houseRules": [
         {
           "icon": "🔇",
           "titleIt": "Silenzio Notturno",
-          "descIt": "Dalle 23:00 alle 7:00 si prega di mantenere il silenzio per rispetto dei vicini."
+          "titleEn": "Quiet Hours",
+          "descIt": "Dalle 23:00 alle 7:00 si prega di mantenere il silenzio per rispetto dei vicini.",
+          "descEn": "From 23:00 to 07:00 please keep noise to a minimum out of respect for the neighbours."
         },
         {
           "icon": "🚭",
           "titleIt": "Vietato Fumare",
-          "descIt": "Vietato fumare all'interno dell'appartamento."
+          "titleEn": "No Smoking",
+          "descIt": "Vietato fumare all'interno dell'appartamento.",
+          "descEn": "Smoking inside the apartment is strictly prohibited."
         },
         {
           "icon": "🐾",
           "titleIt": "Animali Domestici",
-          "descIt": "Gli animali domestici non sono ammessi senza previo accordo con l'host."
+          "titleEn": "Pets",
+          "descIt": "Gli animali domestici non sono ammessi senza previo accordo con l'host.",
+          "descEn": "Pets are not allowed without prior agreement with the host."
         },
         {
           "icon": "👥",
           "titleIt": "Ospiti Esterni",
-          "descIt": "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata."
+          "titleEn": "Outside Guests",
+          "descIt": "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata.",
+          "descEn": "No parties allowed. The number of guests must not exceed the maximum capacity indicated."
         }
       ],
       "extraServices": [
         {
           "icon": "🧺",
           "nameIt": "Cambio Biancheria",
-          "descIt": "Ogni 4 giorni su richiesta (50€)"
+          "nameEn": "Linen Change",
+          "descIt": "Ogni 4 giorni su richiesta (50€)",
+          "descEn": "Every 4 days on request (€50)"
         },
         {
           "icon": "🧹",
           "nameIt": "Pulizie Aggiuntive",
-          "descIt": "Disponibile su richiesta (50€)"
+          "nameEn": "Additional Cleaning",
+          "descIt": "Disponibile su richiesta (50€)",
+          "descEn": "Available on request (€50)"
         },
         {
           "icon": "🚗",
           "nameIt": "Transfer Aeroporto",
-          "descIt": "Prenotabile in anticipo (50€)"
+          "nameEn": "Airport Transfer",
+          "descIt": "Prenotabile in anticipo (50€)",
+          "descEn": "Bookable in advance (€50)"
         },
         {
           "icon": "🛁",
           "nameIt": "Jacuzzi Pacchetto",
-          "descIt": "Disponibile su richiesta: prosecco, fiori, palloncini, cibo (da 30 a 60€)"
+          "nameEn": "Jacuzzi Package",
+          "descIt": "Disponibile su richiesta: prosecco, fiori, palloncini, cibo (da 30 a 60€)",
+          "descEn": "Available on request: prosecco, flowers, balloons, food (€30–€60)"
         }
       ],
       "places": [
@@ -2018,6 +2342,7 @@ const PUBLISHED_DATA = {
           "name": "San Pietro",
           "descIt": "",
           "howIt": "autobus 80 (14 fermate) da Vimercati fino a Barberini oppure autobus 90 (14 fermate) fino a Termini + Metro A fino a Ottaviano (6 fermate)",
+          "howEn": "bus 80 (14 stops) from Vimercati to Barberini or bus 90 (14 stops) to Termini + Metro A to Ottaviano (6 stops)",
           "maps": "https://maps.app.goo.gl/YvfySVmPFX7XZHhB7?g_st=ic"
         },
         {
@@ -2025,6 +2350,7 @@ const PUBLISHED_DATA = {
           "name": "Phanteon",
           "descIt": "",
           "howIt": "autobus 80 da Vimercati (15 fermate)",
+          "howEn": "bus 80 from Vimercati (15 stops)",
           "maps": "https://maps.app.goo.gl/iCwfNkeNLb5BuB7z7?g_st=ic"
         },
         {
@@ -2032,6 +2358,7 @@ const PUBLISHED_DATA = {
           "name": "Piazza Venezia",
           "descIt": "",
           "howIt": "autobus 80 da Vimercati (16 fermate)",
+          "howEn": "bus 80 from Vimercati (16 stops)",
           "maps": "https://maps.app.goo.gl/n1p2aHj9ifofQNWa7?g_st=ic"
         },
         {
@@ -2039,6 +2366,7 @@ const PUBLISHED_DATA = {
           "name": "Fontana di Trevi",
           "descIt": "",
           "howIt": "autobus 80 da Vimercati (15 fermate)",
+          "howEn": "bus 80 from Vimercati (15 stops)",
           "maps": "https://maps.app.goo.gl/2rY5e4CFBBy9ANXV7?g_st=ic"
         }
       ],
@@ -2077,6 +2405,7 @@ const PUBLISHED_DATA = {
         }
       ],
       "supermarketIt": "Conad",
+      "supermarketEn": "Conad",
       "supermarketMaps": "https://maps.app.goo.gl/zsLP9HziFEhAcCKE6?g_st=ic",
       "transport": {
         "airportEnabled": true,
@@ -2086,6 +2415,7 @@ const PUBLISHED_DATA = {
         "stationEnabled": true,
         "stationIcon": "🚉",
         "stationIt": "**Opzione 1: Taxi (più comoda, diretta)**  \nI taxi ufficiali bianchi sono disponibili fuori dalla stazione Termini. Il costo per la nostra zona è intorno ai 25-35€.\n\n**Opzione 2: Metro + bus**  \nDa Termini, prendete la metro B verso Rebibbia fino a Jonio. Poi bus 80, 344 o 350 fino alla fermata Suvereto/Calcinaia.\n\n**Opzione 3: Treno regionale FL1/FL3 + bus/a piedi**  \nPrendete il treno FL1 o FL3 da Termini a Nuovo Salario. Dalla stazione Nuovo Salario, 10 minuti a piedi oppure bus 69 o 349.\n\nFonti",
+        "stationEn": "**Option 1: Taxi (most comfortable, direct)**\nOfficial white taxis available outside Roma Termini. Fare to our area ~€25–35.\n\n**Option 2: Metro + bus**\nFrom Termini, metro B to Jonio. Then bus 80, 344 or 350 to Suvereto/Calcinaia.\n\n**Option 3: Regional train FL1/FL3 + bus/walk**\nFL1 or FL3 from Termini to Nuovo Salario. 10 min walk or bus 69/349.",
         "stationMaps": "https://maps.app.goo.gl/YNQo7Vnp4HCVqFEB8?g_st=ic",
         "metroEnabled": false,
         "metroIcon": "🚇",
@@ -2096,24 +2426,34 @@ const PUBLISHED_DATA = {
         "busIt": "Linee principali: Bus 10, 20, 30 verso il centro. Fermata a 200 metri dall'appartamento.",
         "busMaps": "https://maps.app.goo.gl/Hs8CX6wZe4ifcZ8t6?g_st=ic",
         "ticketsIt": "Biglietto singolo: €1,50 (valido 90 minuti). Biglietto giornaliero: €8,50. Si possono acquistare presso le biglietterie, rivenditori autorizzati o via Tap & Go.",
-        "taxiIt": "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW."
+        "ticketsEn": "Single ticket: €1.50 (valid 90 min). Daily ticket: €8.50. Buy at ticket offices, authorised retailers or via Tap & Go.",
+        "taxiIt": "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW.",
+        "taxiEn": "Official taxis at the main square and station. Recommended apps: Uber, FREE NOW."
       },
       "checkoutSteps": [
         {
           "titleIt": "Raccogliete i vostri effetti personali",
-          "descIt": "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla."
+          "titleEn": "Collect your personal belongings",
+          "descIt": "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla.",
+          "descEn": "Check all drawers, wardrobes and the bathroom so you don't forget anything."
         },
         {
           "titleIt": "Lasciate le chiavi",
-          "descIt": "Depositate le chiavi nel luogo indicato dall'host al momento del check-in."
+          "titleEn": "Leave the keys",
+          "descIt": "Depositate le chiavi nel luogo indicato dall'host al momento del check-in.",
+          "descEn": "Leave the keys in the place indicated by the host at check-in."
         },
         {
           "titleIt": "Rifiuti e raccolta differenziata",
-          "descIt": "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina."
+          "titleEn": "Waste and recycling",
+          "descIt": "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina.",
+          "descEn": "Dispose of waste in the appropriate containers following the instructions in the kitchen."
         },
         {
           "titleIt": "Lasciate una recensione",
-          "descIt": "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!"
+          "titleEn": "Leave a review",
+          "descIt": "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!",
+          "descEn": "If you enjoyed your stay, your review is a huge help for us!"
         }
       ]
     }
@@ -2249,25 +2589,43 @@ function renderLanding() {
     document.getElementById('l-bbname-em').innerHTML = '';
   }
   document.getElementById('l-subtitle').textContent = d.subtitle;
+  document.getElementById('l-intro').textContent = currentLang === 'en'
+    ? 'Welcome! Select your apartment to access the complete guide.'
+    : 'Benvenuti! Selezionate il vostro appartamento per accedere alla guida completa.';
 
-  document.getElementById('l-intro').textContent = 'Benvenuti! Selezionate il vostro appartamento per accedere alla guida completa.';
-
-  // Apt cards
+  // Apt cards — each shows IT + EN language selection buttons
   const container = document.getElementById('apt-cards-container');
   container.innerHTML = '';
   d.apts.forEach((apt, i) => {
     const card = document.createElement('div');
     card.className = 'apt-card';
-    card.onclick = () => openGuide(i);
     const aptName = apt.name;
     card.innerHTML = `
-      <div class="apt-card-icon">🏠</div>
-      <div class="apt-card-body">
-        <div class="apt-card-name">${escHtml(aptName)}</div>
-        <div class="apt-card-superhost">★ Superhost</div>
-        <div class="apt-card-addr">${escHtml(apt.addressShort || apt.address)} · ${escHtml(d.cityZone)}</div>
+      <div class="apt-card-top">
+        <div class="apt-card-meta">
+          <div class="apt-card-name">${escHtml(aptName)}</div>
+          <div class="apt-card-addr">${escHtml(apt.addressShort || apt.address)} · ${escHtml(d.cityZone)}</div>
+        </div>
+        <div class="apt-card-superhost">${escHtml(t('superhost'))}</div>
       </div>
-      <div class="apt-card-arrow">›</div>
+      <div class="lang-cards">
+        <div class="lang-card" onclick="openGuide(${i},'it')">
+          <span class="lang-card-flag">🇮🇹</span>
+          <div class="lang-card-body">
+            <div class="lang-card-title">${escHtml(t('langBtnItTitle'))}</div>
+            <div class="lang-card-sub">${escHtml(t('langBtnItSub'))}</div>
+          </div>
+          <span class="lang-card-arrow">›</span>
+        </div>
+        <div class="lang-card" onclick="openGuide(${i},'en')">
+          <span class="lang-card-flag">🇬🇧</span>
+          <div class="lang-card-body">
+            <div class="lang-card-title">${escHtml(t('langBtnEnTitle'))}</div>
+            <div class="lang-card-sub">${escHtml(t('langBtnEnSub'))}</div>
+          </div>
+          <span class="lang-card-arrow">›</span>
+        </div>
+      </div>
     `;
     container.appendChild(card);
   });
@@ -2278,7 +2636,8 @@ function renderLanding() {
 // ════════════════════════════════════════════
 //  OPEN / CLOSE GUIDE
 // ════════════════════════════════════════════
-function openGuide(aptIndex) {
+function openGuide(aptIndex, lang) {
+  if (lang) setLang(lang);
   currentAptIndex = aptIndex;
   document.getElementById('landing').style.display = 'none';
   document.getElementById('gear-btn').classList.add('hidden');
@@ -2287,6 +2646,11 @@ function openGuide(aptIndex) {
   renderApp(aptIndex);
   guide.scrollTop = 0;
   switchTab('home');
+}
+
+function switchLang() {
+  setLang(currentLang === 'it' ? 'en' : 'it');
+  renderApp(currentAptIndex);
 }
 
 function goBack() {
@@ -2302,6 +2666,13 @@ function renderApp(aptIndex) {
   const d = currentData;
   const apt = d.apts[aptIndex] || d.apts[0];
 
+  // Apply static i18n strings to data-i18n elements
+  applyI18n();
+
+  // Update lang toggle button
+  const langBtn = document.getElementById('lang-toggle-btn');
+  if (langBtn) langBtn.textContent = t('langToggle');
+
   // Header
   document.getElementById('guide-apt-name').textContent = apt.name;
 
@@ -2314,11 +2685,11 @@ function renderApp(aptIndex) {
   document.getElementById('s-wifi').textContent = apt.wifi;
   const sMaps = document.getElementById('s-maps');
   sMaps.href = apt.mapsLink || '#';
-  sMaps.textContent = 'Apri Maps';
+  sMaps.textContent = t('openMaps');
 
-  document.getElementById('w-title').textContent = 'Benvenuti! 👋';
+  document.getElementById('w-title').textContent = t('welcome');
   const wItEl = document.getElementById('w-text-it');
-  wItEl.innerHTML = renderRichText(d.welcomeIt || '');
+  wItEl.innerHTML = renderRichText(langField(d, 'welcome') || '');
   document.getElementById('w-sign').textContent = '★ ' + d.hostName;
 
   // Stay tab
@@ -2331,10 +2702,10 @@ function renderApp(aptIndex) {
   const stMaps = document.getElementById('st-maps');
   stMaps.href = apt.mapsLink || '#';
 
-  // Stay tab - soggiorno extended fields
-  document.getElementById('st-how-reach').innerHTML = renderRichText(apt.howToReachIt || '');
-  document.getElementById('st-how-access').innerHTML = renderRichText(apt.howToAccessIt || '');
-  document.getElementById('st-parking').innerHTML = renderRichText(apt.parkingIt || '');
+  // Stay tab - extended fields (language-aware)
+  document.getElementById('st-how-reach').innerHTML = renderRichText(langField(apt, 'howToReach') || '');
+  document.getElementById('st-how-access').innerHTML = renderRichText(langField(apt, 'howToAccess') || '');
+  document.getElementById('st-parking').innerHTML = renderRichText(langField(apt, 'parking') || '');
 
   // House Rules
   const rulesList = document.getElementById('st-rules-list');
@@ -2342,8 +2713,8 @@ function renderApp(aptIndex) {
   (apt.houseRules || []).forEach(r => {
     const li = document.createElement('li');
     li.className = 'rule-item';
-    const title = r.titleIt;
-    const desc = r.descIt;
+    const title = langField(r, 'title');
+    const desc = langField(r, 'desc');
     li.innerHTML = `<span class="rule-icon">${escHtml(r.icon || '')}</span><div><div class="rule-title">${escHtml(title || '')}</div><div class="rule-desc">${renderRichText(desc || '')}</div></div>`;
     rulesList.appendChild(li);
   });
@@ -2351,27 +2722,27 @@ function renderApp(aptIndex) {
   // Bedroom tags
   const bedroomTagsEl = document.getElementById('st-bedroom-tags');
   if (bedroomTagsEl) {
-    const bedroomRaw = apt.bedroomTagsIt || '';
+    const bedroomRaw = langField(apt, 'bedroomTags') || '';
     bedroomTagsEl.innerHTML = bedroomRaw
-      ? bedroomRaw.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')
+      ? bedroomRaw.split(',').map(tt => tt.trim()).filter(Boolean).map(tt => `<span class="tag">${escHtml(tt)}</span>`).join('')
       : '';
   }
 
   // Kitchen tags
   const kitchenTagsEl = document.getElementById('st-kitchen-tags');
   if (kitchenTagsEl) {
-    const kitchenRaw = apt.kitchenTagsIt || '';
+    const kitchenRaw = langField(apt, 'kitchenTags') || '';
     kitchenTagsEl.innerHTML = kitchenRaw
-      ? kitchenRaw.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')
+      ? kitchenRaw.split(',').map(tt => tt.trim()).filter(Boolean).map(tt => `<span class="tag">${escHtml(tt)}</span>`).join('')
       : '';
   }
 
   // Bathroom tags
   const bathroomTagsEl = document.getElementById('st-bathroom-tags');
   if (bathroomTagsEl) {
-    const bathroomRaw = apt.bathroomTagsIt || '';
+    const bathroomRaw = langField(apt, 'bathroomTags') || '';
     bathroomTagsEl.innerHTML = bathroomRaw
-      ? bathroomRaw.split(',').map(t => t.trim()).filter(Boolean).map(t => `<span class="tag">${escHtml(t)}</span>`).join('')
+      ? bathroomRaw.split(',').map(tt => tt.trim()).filter(Boolean).map(tt => `<span class="tag">${escHtml(tt)}</span>`).join('')
       : '';
   }
 
@@ -2379,22 +2750,21 @@ function renderApp(aptIndex) {
   const servicesEl = document.getElementById('st-extra-services');
   if (servicesEl) {
     servicesEl.innerHTML = '';
-    const waHint = '💬 Richiedi su WhatsApp';
     (apt.extraServices || []).forEach(svc => {
-      const name = svc.nameIt || '';
-      const desc = svc.descIt || '';
+      const name = langField(svc, 'name') || '';
+      const desc = langField(svc, 'desc') || '';
       const a = document.createElement('a');
       a.className = 'service-item';
       a.href = '#';
       a.addEventListener('click', function(e) {
         e.preventDefault();
-        requestService(svc.nameIt || '');
+        requestService(svc);
       });
       a.innerHTML = `
         <div class="service-icon">${escHtml(svc.icon || '✨')}</div>
         <div class="service-name">${escHtml(name)}</div>
         <div class="service-desc">${escHtml(desc)}</div>
-        <div class="service-wa-hint">${waHint}</div>`;
+        <div class="service-wa-hint">${escHtml(t('waHint'))}</div>`;
       servicesEl.appendChild(a);
     });
   }
@@ -2403,7 +2773,7 @@ function renderApp(aptIndex) {
   renderPlaces(apt.places || []);
 
   // Food
-  renderFood(apt.restaurants || [], apt.supermarketIt, apt.supermarketMaps);
+  renderFood(apt.restaurants || [], apt);
 
   // Transport
   renderTransport(apt.transport || {});
@@ -2431,21 +2801,21 @@ function renderApp(aptIndex) {
     homeReviewSection.style.display = 'none';
   }
 
-  // Update nav labels from data
+  // Update nav labels (language-aware: EN from t(), IT from data)
   const nl = d.navLabels || DEFAULT_DATA.navLabels;
   const navLabelMap = {
-    home: nl.homeIt,
-    stay: nl.stayIt,
-    places: nl.placesIt,
-    food: nl.foodIt,
-    transport: nl.transportIt,
-    departure: nl.departureIt
+    home:      currentLang === 'en' ? t('navHome')      : (nl.homeIt      || t('navHome')),
+    stay:      currentLang === 'en' ? t('navStay')      : (nl.stayIt      || t('navStay')),
+    places:    currentLang === 'en' ? t('navPlaces')    : (nl.placesIt    || t('navPlaces')),
+    food:      currentLang === 'en' ? t('navFood')      : (nl.foodIt      || t('navFood')),
+    transport: currentLang === 'en' ? t('navTransport') : (nl.transportIt || t('navTransport')),
+    departure: currentLang === 'en' ? t('navDeparture') : (nl.departureIt || t('navDeparture'))
   };
   const navIconMap = {
-    home: nl.homeIcon || DEFAULT_DATA.navLabels.homeIcon,
-    stay: nl.stayIcon || DEFAULT_DATA.navLabels.stayIcon,
-    places: nl.placesIcon || DEFAULT_DATA.navLabels.placesIcon,
-    food: nl.foodIcon || DEFAULT_DATA.navLabels.foodIcon,
+    home:      nl.homeIcon      || DEFAULT_DATA.navLabels.homeIcon,
+    stay:      nl.stayIcon      || DEFAULT_DATA.navLabels.stayIcon,
+    places:    nl.placesIcon    || DEFAULT_DATA.navLabels.placesIcon,
+    food:      nl.foodIcon      || DEFAULT_DATA.navLabels.foodIcon,
     transport: nl.transportIcon || DEFAULT_DATA.navLabels.transportIcon,
     departure: nl.departureIcon || DEFAULT_DATA.navLabels.departureIcon
   };
@@ -2468,14 +2838,14 @@ function renderApp(aptIndex) {
     }
   });
 
-  // Update section headers from data
+  // Update section headers (language-aware)
   const st = d.sectionTitles || DEFAULT_DATA.sectionTitles;
   const sectionHeaderMap = [
-    { tab: 'stay',      eyebrow: st.stayEyebrowIt,      title: st.stayTitleIt },
-    { tab: 'places',    eyebrow: st.placesEyebrowIt,    title: st.placesTitleIt },
-    { tab: 'food',      eyebrow: st.foodEyebrowIt,      title: st.foodTitleIt },
-    { tab: 'transport', eyebrow: st.transportEyebrowIt, title: st.transportTitleIt },
-    { tab: 'departure', eyebrow: st.departureEyebrowIt, title: st.departureTitleIt }
+    { tab: 'stay',      eyebrow: currentLang === 'en' ? t('stayEyebrow')      : (st.stayEyebrowIt      || t('stayEyebrow')),      title: currentLang === 'en' ? t('stayTitle')      : (st.stayTitleIt      || t('stayTitle')) },
+    { tab: 'places',    eyebrow: currentLang === 'en' ? t('placesEyebrow')    : (st.placesEyebrowIt    || t('placesEyebrow')),    title: currentLang === 'en' ? t('placesTitle')    : (st.placesTitleIt    || t('placesTitle')) },
+    { tab: 'food',      eyebrow: currentLang === 'en' ? t('foodEyebrow')      : (st.foodEyebrowIt      || t('foodEyebrow')),      title: currentLang === 'en' ? t('foodTitle')      : (st.foodTitleIt      || t('foodTitle')) },
+    { tab: 'transport', eyebrow: currentLang === 'en' ? t('transportEyebrow') : (st.transportEyebrowIt || t('transportEyebrow')), title: currentLang === 'en' ? t('transportTitle') : (st.transportTitleIt || t('transportTitle')) },
+    { tab: 'departure', eyebrow: currentLang === 'en' ? t('departureEyebrow') : (st.departureEyebrowIt || t('departureEyebrow')), title: currentLang === 'en' ? t('departureTitle') : (st.departureTitleIt || t('departureTitle')) }
   ];
   sectionHeaderMap.forEach(({ tab, eyebrow, title }) => {
     const tabEl = document.getElementById('tab-' + tab);
@@ -2491,10 +2861,10 @@ function renderPlaces(places) {
   const container = document.getElementById('places-container');
   container.innerHTML = '';
   places.forEach(p => {
-    const desc = p.descIt;
-    const how = p.howIt;
-    const howLabel = 'Come arrivarci';
-    const mapsLabel = '🧭 Guidami qui';
+    const desc = langField(p, 'desc');
+    const how  = langField(p, 'how');
+    const howLabel  = t('howToArrive');
+    const mapsLabel = t('guideHere');
     const card = document.createElement('div');
     card.className = 'place-card';
     card.innerHTML = `
@@ -2513,12 +2883,12 @@ function renderPlaces(places) {
   });
 }
 
-function renderFood(restaurants, supermarketIt, supermarketMaps) {
+function renderFood(restaurants, apt) {
   const container = document.getElementById('food-container');
   container.innerHTML = '';
   restaurants.forEach(r => {
-    const desc = r.descIt;
-    const mapsLabel = '🧭 Vedi su Maps';
+    const desc = langField(r, 'desc');
+    const mapsLabel = t('viewOnMaps');
     const card = document.createElement('div');
     card.className = 'restaurant-card';
     card.innerHTML = `
@@ -2537,10 +2907,10 @@ function renderFood(restaurants, supermarketIt, supermarketMaps) {
   });
 
   // Supermercato
-  const superLabel = 'Supermercato';
-  const superDesc = supermarketIt || 'Supermercato più vicino a ~300 metri. Orari: Lun–Sab 8:00–20:00, Dom 9:00–13:00.';
-  const superMaps = supermarketMaps || '';
-  const superMapsLabel = '🧭 Vedi su Maps';
+  const superLabel = t('supermarket');
+  const superDesc  = langField(apt, 'supermarket') || (currentLang === 'en' ? 'Nearest supermarket ~300 metres. Hours: Mon–Sat 8:00–20:00, Sun 9:00–13:00.' : 'Supermercato più vicino a ~300 metri. Orari: Lun–Sab 8:00–20:00, Dom 9:00–13:00.');
+  const superMaps  = (apt && apt.supermarketMaps) || '';
+  const superMapsLabel = t('viewOnMaps');
   const superMapsBtn = superMaps ? `<a class="maps-btn" href="${escAttr(superMaps)}" target="_blank" rel="noopener">${superMapsLabel}</a>` : '';
   const superCard = document.createElement('div');
   superCard.className = 'supermercato-card';
@@ -2561,25 +2931,23 @@ function renderTransport(transport) {
   const container = document.getElementById('transport-container');
   container.innerHTML = '';
   const items = [
-    { key: 'airport', icon: transport.airportIcon || '✈️', label: "Dall'Aeroporto", text: transport.airportIt, maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
-    { key: 'station', icon: transport.stationIcon || '🚉', label: 'Dalla Stazione', text: transport.stationIt, maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
-    { key: 'metro', icon: transport.metroIcon || '🚇', label: 'Metro', text: transport.metroIt, maps: transport.metroMaps, enabled: transport.metroEnabled !== false },
-    { key: 'bus', icon: transport.busIcon || '🚌', label: 'Bus', text: transport.busIt, maps: transport.busMaps, enabled: transport.busEnabled !== false }
+    { key: 'airport', icon: transport.airportIcon || '✈️', label: t('fromAirport'), text: langField(transport, 'airport'), maps: transport.airportMaps, enabled: transport.airportEnabled !== false },
+    { key: 'station', icon: transport.stationIcon || '🚉', label: t('fromStation'), text: langField(transport, 'station'), maps: transport.stationMaps, enabled: transport.stationEnabled !== false },
+    { key: 'metro',   icon: transport.metroIcon   || '🚇', label: t('metro'),       text: langField(transport, 'metro'),   maps: transport.metroMaps,   enabled: transport.metroEnabled   !== false },
+    { key: 'bus',     icon: transport.busIcon     || '🚌', label: t('bus'),         text: langField(transport, 'bus'),     maps: transport.busMaps,     enabled: transport.busEnabled     !== false }
   ];
-  const mapsLabel = '🧭 Vedi su Maps';
+  const mapsLabel = t('viewOnMaps');
   items.forEach(item => {
     if (!item.enabled) return;
-    const title = item.label;
-    const text = item.text;
     const card = document.createElement('div');
     card.className = 'transport-card';
     const mapsBtn = item.maps ? `<a class="maps-btn" href="${escAttr(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
     card.innerHTML = `
       <div class="transport-header">
         <span class="transport-icon">${item.icon}</span>
-        <span class="transport-title">${escHtml(title)}</span>
+        <span class="transport-title">${escHtml(item.label)}</span>
       </div>
-      <p class="transport-desc">${renderRichText(text)}</p>
+      <p class="transport-desc">${renderRichText(item.text)}</p>
       ${mapsBtn}
     `;
     container.appendChild(card);
@@ -2587,11 +2955,11 @@ function renderTransport(transport) {
 
   // Biglietti
   const ticketsEl = document.getElementById('tr-tickets-desc');
-  if (ticketsEl) ticketsEl.innerHTML = renderRichText(transport.ticketsIt || '');
+  if (ticketsEl) ticketsEl.innerHTML = renderRichText(langField(transport, 'tickets') || '');
 
   // Taxi & App
   const taxiEl = document.getElementById('tr-taxi-desc');
-  if (taxiEl) taxiEl.innerHTML = renderRichText(transport.taxiIt || '');
+  if (taxiEl) taxiEl.innerHTML = renderRichText(langField(transport, 'taxi') || '');
 }
 
 // ════════════════════════════════════════════
@@ -2600,7 +2968,6 @@ function renderTransport(transport) {
 function renderExtraContacts(contacts) {
   const container = document.getElementById('sos-extra-contacts');
   container.innerHTML = '';
-  const callLabel = 'Chiama';
   (contacts || []).forEach(c => {
     if (!c.name && !c.phone) return;
     const card = document.createElement('div');
@@ -2611,7 +2978,7 @@ function renderExtraContacts(contacts) {
         <div class="sos-name">${escHtml(c.name || '')}</div>
         <div class="sos-number">📞 ${escHtml(c.phone || '')}</div>
       </div>
-      <a class="call-btn host" href="tel:${escAttr((c.phone || '').replace(/\s/g, ''))}">📞 ${callLabel}</a>
+      <a class="call-btn host" href="tel:${escAttr((c.phone || '').replace(/\s/g, ''))}">📞 ${escHtml(t('call'))}</a>
     `;
     container.appendChild(card);
   });
@@ -2622,18 +2989,18 @@ function renderExtraContacts(contacts) {
 // ════════════════════════════════════════════
 function renderDeparture(d, checkoutSteps) {
   const titleEl = document.getElementById('closing-title');
-  const textEl = document.getElementById('closing-text');
-  if (titleEl) titleEl.textContent = d.closingTitleIt || '';
-  if (textEl) textEl.innerHTML = renderRichText(d.closingTextIt || '');
+  const textEl  = document.getElementById('closing-text');
+  if (titleEl) titleEl.textContent = langField(d, 'closingTitle') || '';
+  if (textEl)  textEl.innerHTML    = renderRichText(langField(d, 'closingText') || '');
 
   // Checkout steps
   const stepsContainer = document.getElementById('departure-steps-list');
   if (stepsContainer) {
     stepsContainer.innerHTML = '';
     (checkoutSteps || []).forEach((step, i) => {
-      const title = step.titleIt || '';
-      const desc = step.descIt || '';
-      const item = document.createElement('div');
+      const title = langField(step, 'title') || '';
+      const desc  = langField(step, 'desc')  || '';
+      const item  = document.createElement('div');
       item.className = 'step-item';
       item.innerHTML = `
         <div class="step-num">${i + 1}</div>
@@ -2649,10 +3016,11 @@ function renderDeparture(d, checkoutSteps) {
 // ════════════════════════════════════════════
 //  WHATSAPP SERVICE REQUEST
 // ════════════════════════════════════════════
-function requestService(nameIt) {
-  const phone = ((currentData && currentData.hostPhone) || '').replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
-  const msg = `Ciao! Vorrei richiedere il servizio: ${nameIt}`;
-  const url = phone
+function requestService(svc) {
+  const phone   = ((currentData && currentData.hostPhone) || '').replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
+  const svcName = langField(svc, 'name') || svc.nameIt || '';
+  const msg     = t('waRequest') + svcName;
+  const url     = phone
     ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`
     : `https://wa.me/?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank', 'noopener,noreferrer');
