@@ -3482,8 +3482,10 @@ function renderAptHouseRules(aptIndex, rules) {
         <button class="s-remove-btn" onclick="removeAptHouseRule(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
       <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-r${j}-icon" value="${escAttr(r.icon || '')}" placeholder="🔇"></div>
-      <div class="s-field"><label>Titolo</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escAttr(r.titleIt || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-a${aptIndex}-r${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>`;
+      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escAttr(r.titleIt || '')}"></div>
+      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-r${j}-titleEn" value="${escAttr(r.titleEn || '')}"></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-r${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-r${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>`;
   });
   container.innerHTML = html;
 }
@@ -3495,7 +3497,7 @@ function collectAptHouseRules(aptIndex) {
   const rules = [];
   for (let j = 0; j < count; j++) {
     const rule = {};
-    ['icon', 'titleIt', 'descIt'].forEach(k => {
+    ['icon', 'titleIt', 'titleEn', 'descIt', 'descEn'].forEach(k => {
       const el = document.getElementById(`s-a${aptIndex}-r${j}-${k}`);
       if (el) rule[k] = el.value;
     });
@@ -3532,8 +3534,10 @@ function renderAptExtraServices(aptIndex, services) {
         <button class="s-remove-btn" onclick="removeAptExtraService(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
       <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-svc${j}-icon" value="${escAttr(svc.icon || '')}" placeholder="✨"></div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-svc${j}-nameIt" value="${escAttr(svc.nameIt || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><input type="text" id="s-a${aptIndex}-svc${j}-descIt" value="${escAttr(svc.descIt || '')}"></div>
+      <div class="s-field"><label>Nome 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-nameIt" value="${escAttr(svc.nameIt || '')}"></div>
+      <div class="s-field"><label>Nome 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-nameEn" value="${escAttr(svc.nameEn || '')}"></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-descIt" value="${escAttr(svc.descIt || '')}"></div>
+      <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-descEn" value="${escAttr(svc.descEn || '')}"></div>
 `;
   });
   container.innerHTML = html;
@@ -3546,7 +3550,7 @@ function collectAptExtraServices(aptIndex) {
   const services = [];
   for (let j = 0; j < count; j++) {
     const svc = {};
-    ['icon', 'nameIt', 'descIt'].forEach(k => {
+    ['icon', 'nameIt', 'nameEn', 'descIt', 'descEn'].forEach(k => {
       const el = document.getElementById(`s-a${aptIndex}-svc${j}-${k}`);
       if (el) svc[k] = el.value;
     });
@@ -3584,8 +3588,10 @@ function renderAptPlaces(aptIndex, places) {
       </div>
       <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-pl${j}-emoji" value="${escAttr(p.emoji || '📍')}" placeholder="📍" style="max-width:80px"></div>
       <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-pl${j}-name" value="${escAttr(p.name || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-a${aptIndex}-pl${j}-descIt">${escHtml(p.descIt || '')}</textarea></div>
-      <div class="s-field"><label>Come arrivarci</label><textarea id="s-a${aptIndex}-pl${j}-howIt">${escHtml(p.howIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-descIt">${escHtml(p.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-pl${j}-descEn">${escHtml(p.descEn || '')}</textarea></div>
+      <div class="s-field"><label>Come arrivarci 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-howIt">${escHtml(p.howIt || '')}</textarea></div>
+      <div class="s-field"><label>Come arrivarci 🇬🇧</label><textarea id="s-a${aptIndex}-pl${j}-howEn">${escHtml(p.howEn || '')}</textarea></div>
       <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-pl${j}-maps" value="${escAttr(p.maps || '')}"></div>`;
   });
   container.innerHTML = html;
@@ -3599,7 +3605,7 @@ function collectAptPlaces(aptIndex) {
   for (let j = 0; j < count; j++) {
     const emojiEl = document.getElementById(`s-a${aptIndex}-pl${j}-emoji`);
     const p = { emoji: emojiEl ? emojiEl.value : '📍' };
-    ['name', 'descIt', 'howIt', 'maps'].forEach(k => {
+    ['name', 'descIt', 'descEn', 'howIt', 'howEn', 'maps'].forEach(k => {
       const el = document.getElementById(`s-a${aptIndex}-pl${j}-${k}`);
       if (el) p[k] = el.value.trim();
     });
@@ -3638,7 +3644,8 @@ function renderAptRests(aptIndex, rests) {
       <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-rt${j}-emoji" value="${escAttr(r.emoji || '🍽️')}" placeholder="🍽️" style="max-width:80px"></div>
       <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-rt${j}-name" value="${escAttr(r.name || '')}"></div>
       <div class="s-field"><label>Tipo</label><input type="text" id="s-a${aptIndex}-rt${j}-tipo" value="${escAttr(r.tipo || '')}"></div>
-      <div class="s-field"><label>Descrizione</label><textarea id="s-a${aptIndex}-rt${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-rt${j}-descIt">${escHtml(r.descIt || '')}</textarea></div>
+      <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-rt${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>
       <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-a${aptIndex}-rt${j}-price" value="${escAttr(r.price || '')}" placeholder="€ / €€ / €€€"></div>
       <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-rt${j}-maps" value="${escAttr(r.maps || '')}"></div>`;
   });
@@ -3653,7 +3660,7 @@ function collectAptRests(aptIndex) {
   for (let j = 0; j < count; j++) {
     const emojiEl = document.getElementById(`s-a${aptIndex}-rt${j}-emoji`);
     const r = { emoji: emojiEl ? emojiEl.value : '🍽️' };
-    ['name', 'tipo', 'descIt', 'price', 'maps'].forEach(k => {
+    ['name', 'tipo', 'descIt', 'descEn', 'price', 'maps'].forEach(k => {
       const el = document.getElementById(`s-a${aptIndex}-rt${j}-${k}`);
       if (el) r[k] = el.value.trim();
     });
