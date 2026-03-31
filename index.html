@@ -4694,38 +4694,8 @@ function saveAndApply() {
 }
 
 function sendChangesAsHost() {
-  const d = collectFormData();
-  const bbName = d.bbName || 'B&B';
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('it-IT');
-  const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-
-  const messageText =
-    'Ciao,\n\n' +
-    'l\'host ha salvato delle modifiche alla guida ' + bbName + ' il ' + dateStr + ' alle ' + timeStr + '.\n\n' +
-    'Di seguito i dati aggiornati in formato JSON:\n\n' +
-    JSON.stringify(d, null, 2);
-
-  const encoded = encodeURIComponent(messageText);
-  // WhatsApp URL limit is ~4096 chars for the text parameter; use 4000 as safety margin
-  if (encoded.length <= 4000) {
-    window.open('https://wa.me/393450307922?text=' + encoded, '_blank');
-    showToast('💬 WhatsApp aperto. Invia il messaggio per notificare l\'assistenza.', 'success');
-  } else {
-    // Fallback: download JSON backup
-    const json = JSON.stringify(d, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    const dateTag = now.toISOString().slice(0, 10);
-    a.download = 'guestguide-backup-' + dateTag + '.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('📥 File di backup scaricato. Invialo tramite WhatsApp all\'assistenza.', 'info');
-  }
+  window.open('https://wa.me/393450307922', '_blank');
+  showToast('💬 WhatsApp aperto.', 'success');
 }
 
 // ════════════════════════════════════════════
