@@ -1415,7 +1415,7 @@
             <span class="info-card-title" data-i18n="howToReach">Come raggiungerci</span>
           </div>
           <p class="info-card-body" id="st-how-reach"></p>
-          <a class="maps-btn" id="st-maps" href="#" target="_blank">🧭 <span data-i18n="openInMaps">Apri su Maps</span></a>
+          <a class="maps-btn" id="st-maps" href="#" target="_blank"><span data-i18n="openInMaps">Apri su Maps</span></a>
         </div>
 
         <!-- Come accedere -->
@@ -3578,7 +3578,7 @@ async function autoTranslateField(itElId, enElId) {
   const enEl = document.getElementById(enElId);
   if (!itEl || !enEl) return;
   const text = itEl.value.trim();
-  if (!text || enEl.value.trim()) return;
+  if (!text) return;
   const prev = enEl.placeholder;
   enEl.placeholder = '⏳ Traducendo…';
   enEl.disabled = true;
