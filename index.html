@@ -1884,8 +1884,12 @@
         <div class="s-field"><label>Città e Zona</label><input type="text" id="s-cityZone" placeholder="La Tua Città · Zona"></div>
         <div class="s-field"><label>Nome Host principale</label><input type="text" id="s-hostName" placeholder="Nome Host"></div>
         <div class="s-field"><label>Telefono Host</label><input type="tel" id="s-hostPhone" placeholder="+39 000 000 0000"></div>
-        <div class="s-field admin-only"><label>📧 Email Admin</label><input type="email" id="s-adminEmail" placeholder="admin@example.com" autocomplete="off"></div>
-        <p class="admin-only" style="font-size:11px;color:var(--text2);margin-top:-8px;margin-bottom:12px;line-height:1.5">L'host userà questa email per inviarti le modifiche tramite il pulsante "📧 Invia Modifiche".</p>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">💬 Assistenza</div>
+        <a href="https://wa.me/393450307922" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-family:'Jost',sans-serif;font-size:14px;font-weight:600;margin-top:4px">
+          💬 Contatta Assistenza su WhatsApp
+        </a>
+        <p style="font-size:11px;color:var(--text2);margin-top:6px;line-height:1.5">Per qualsiasi problema o richiesta di supporto tecnico.</p>
         <div class="s-divider"></div>
         <div class="s-sub-title">💬 Messaggio di Benvenuto</div>
         <div class="s-field"><label>Testo di Benvenuto 🇮🇹</label><textarea id="s-welcomeIt" placeholder="Siamo felici di avervi come ospiti..." onblur="autoTranslateField('s-welcomeIt','s-welcomeEn')"></textarea></div>
@@ -1894,7 +1898,7 @@
     </details>
 
     <!-- Aspetto / Tema -->
-    <details class="s-section admin-only">
+    <details class="s-section">
       <summary class="s-section-title">🎨 Aspetto</summary>
       <div class="s-fields">
         <div class="s-sub-title">Tema Colori</div>
@@ -1926,7 +1930,7 @@
     </details>
 
     <!-- Etichette Navigazione e Sezioni -->
-    <details class="s-section admin-only">
+    <details class="s-section">
       <summary class="s-section-title">🏷️ Etichette Navigazione e Sezioni</summary>
       <div class="s-fields">
         <div class="s-sub-title">🗂️ Navigazione inferiore</div>
@@ -2048,7 +2052,7 @@
     </details>
 
     <!-- QR Code -->
-    <details class="s-section admin-only">
+    <details class="s-section">
       <summary class="s-section-title">📱 QR Code</summary>
       <div class="s-fields">
         <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">QR Code univoci per ogni appartamento. Gli ospiti scansionano il codice e accedono direttamente alla guida dell'appartamento.</p>
@@ -2311,7 +2315,6 @@ const DEFAULT_DATA = {
   hostName: "Nome Host",
   hostPhone: "+39 000 000 0000",
   googleReviewUrl: "",
-  adminEmail: "",
   welcomeIt: "Siamo felici di avervi come ospiti! Questo appartamento è stato preparato con cura per rendere il vostro soggiorno indimenticabile. Siamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
   welcomeEn: "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — do not hesitate to contact us.",
   closingTitleIt: "Grazie per aver scelto il nostro B&B!",
@@ -2529,7 +2532,6 @@ const PUBLISHED_DATA = {
   "hostName": "Nicolò",
   "hostPhone": "+393342177311",
   "googleReviewUrl": "https://g.page/r/CZvIjdaReVG_EBM/review",
-  "adminEmail": "",
   "welcomeIt": "Siamo felici di avervi come ospiti e rimaniamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
   "welcomeEn": "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — do not hesitate to contact us.",
   "closingTitleIt": "Grazie per aver scelto il nostro B&B!",
@@ -4534,7 +4536,6 @@ function populateSettingsForms() {
   document.getElementById('s-cityZone').value = d.cityZone;
   document.getElementById('s-hostName').value = d.hostName;
   document.getElementById('s-hostPhone').value = d.hostPhone;
-  document.getElementById('s-adminEmail').value = d.adminEmail || '';
   document.getElementById('s-welcomeIt').value = d.welcomeIt || '';
   document.getElementById('s-welcomeEn').value = d.welcomeEn || '';
   document.getElementById('s-googleReviewUrl').value = d.googleReviewUrl || '';
@@ -4610,7 +4611,6 @@ function collectFormData() {
   d.cityZone = document.getElementById('s-cityZone').value.trim() || d.cityZone;
   d.hostName = document.getElementById('s-hostName').value.trim() || d.hostName;
   d.hostPhone = document.getElementById('s-hostPhone').value.trim() || d.hostPhone;
-  d.adminEmail = document.getElementById('s-adminEmail').value.trim();
   d.welcomeIt = document.getElementById('s-welcomeIt').value;
   d.welcomeEn = document.getElementById('s-welcomeEn').value;
   d.googleReviewUrl = document.getElementById('s-googleReviewUrl').value.trim();
@@ -4694,40 +4694,8 @@ function saveAndApply() {
 }
 
 function sendChangesAsHost() {
-  const d = collectFormData();
-  const adminEmail = (d.adminEmail || '').trim();
-  const bbName = d.bbName || 'B&B';
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('it-IT');
-  const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-
-  if (adminEmail) {
-    // Method A: mailto with JSON diff
-    const subject = encodeURIComponent('Aggiornamento GuestGuide ' + bbName);
-    const bodyText =
-      'Ciao,\n\n' +
-      'l\'host ha salvato delle modifiche alla guida il ' + dateStr + ' alle ' + timeStr + '.\n\n' +
-      'Di seguito i dati aggiornati in formato JSON:\n\n' +
-      JSON.stringify(d, null, 2) + '\n\n' +
-      'Per pubblicare online accedi al pannello Admin e usa il pulsante 🚀 Pubblica Online.';
-    const body = encodeURIComponent(bodyText);
-    window.location.href = 'mailto:' + adminEmail + '?subject=' + subject + '&body=' + body;
-    showToast('📧 Client email aperto. Invia il messaggio per notificare l\'amministratore.', 'success');
-  } else {
-    // Method B: download JSON backup
-    const json = JSON.stringify(d, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    const dateTag = now.toISOString().slice(0, 10);
-    a.download = 'guestguide-backup-' + dateTag + '.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast('📥 File di backup scaricato. Invialo all\'amministratore.', 'info');
-  }
+  window.open('https://wa.me/393450307922', '_blank');
+  showToast('💬 WhatsApp aperto.', 'success');
 }
 
 // ════════════════════════════════════════════
