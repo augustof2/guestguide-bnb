@@ -1908,7 +1908,7 @@
     <button class="s-btn danger admin-only" onclick="resetData()">🗑️ Reset</button>
     <button class="s-btn" onclick="previewMode()">👁️ Anteprima</button>
     <button class="s-btn admin-only" id="publish-btn" onclick="publishOnline()" style="grid-column:1/-1;background:var(--teal);border-color:var(--teal);color:#fff">🚀 Pubblica Online</button>
-    <button class="s-btn host-only" onclick="sendChangesAsHost()" style="grid-column:1/-1;background:var(--gold);border-color:var(--gold);color:var(--bg)">📧 Invia Modifiche</button>
+    <button class="s-btn host-only" id="host-publish-btn" onclick="hostPublishNow()" style="grid-column:1/-1;background:var(--teal);border-color:var(--teal);color:#fff">🚀 Pubblica Ora</button>
   </div>
 
   <div class="settings-body">
@@ -2079,6 +2079,8 @@
           <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">⚠️ Usa un fine-grained token con accesso solo a questo repository. Il token verrà rimosso alla chiusura del browser.</p>
           <div class="s-field"><label>GitHub Token</label><input type="password" id="s-github-token" placeholder="ghp_..." autocomplete="off"></div>
           <button class="s-btn danger" onclick="removeGithubToken()" style="margin-top:4px;font-size:12px">🗑️ Rimuovi Token</button>
+          <button class="s-btn" onclick="saveTokenForHost()" style="margin-top:4px;font-size:12px;background:var(--teal);border-color:var(--teal);color:#fff">💾 Salva Token per Host</button>
+          <p style="font-size:11px;color:var(--text2);margin-top:8px;line-height:1.5">💡 Cliccando "Salva Token per Host", l'host potrà pubblicare direttamente con il pulsante "🚀 Pubblica Ora" senza conoscere il token.</p>
           <div id="s-publish-msg" style="font-size:12px;min-height:18px;margin-top:4px"></div>
         </div>
       </div>
@@ -4783,7 +4785,7 @@ function saveAndApply() {
     saveData(d);
     renderLanding();
     closeSettings();
-    showToast("✅ Salvato! Ricorda di cliccare '📧 Invia Modifiche' per aggiornare il sito online.", 'success');
+    showToast("✅ Salvato! Ricorda di cliccare '🚀 Pubblica Ora' per aggiornare il sito online.", 'success');
   } else {
     const d = collectFormData();
     currentData = d;
@@ -4828,6 +4830,111 @@ function sendChangesAsHost() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     showToast('📥 File di backup scaricato. Invialo all\'amministratore.', 'info');
+  }
+}
+
+// ════════════════════════════════════════════
+//  HOST PUBLISH: TOKEN PRE-SALVATO DALL'ADMIN
+// ════════════════════════════════════════════
+
+function saveTokenForHost() {
+  const tokenInput = document.getElementById('s-github-token');
+  const token = (tokenInput && tokenInput.value.trim()) || '';
+  if (!token) {
+    showToast('⚠️ Inserisci prima il GitHub Token nel campo sopra.', 'error');
+    return;
+  }
+  try {
+    localStorage.setItem('bnb_host_publish_token', btoa(token));
+    showToast('✅ Token salvato per l\'host! Ora potrà usare "🚀 Pubblica Ora".', 'success');
+  } catch (e) {
+    showToast('❌ Errore nel salvataggio del token.', 'error');
+  }
+}
+
+async function hostPublishNow() {
+  const btn = document.getElementById('host-publish-btn');
+
+  // Prova a recuperare il token pre-salvato dall'admin
+  const storedToken = localStorage.getItem('bnb_host_publish_token');
+  let token = '';
+  try {
+    token = storedToken ? atob(storedToken) : '';
+  } catch (e) {
+    showToast('⚠️ Token salvato non valido. Contatta l\'amministratore per riconfigurarlo.', 'error');
+    localStorage.removeItem('bnb_host_publish_token');
+    return;
+  }
+
+  if (!token) {
+    // Fallback: nessun token configurato, usa il vecchio metodo di invio email/JSON
+    showToast('⚠️ L\'amministratore non ha ancora configurato la pubblicazione automatica. Invio modifiche via email...', 'info');
+    sendChangesAsHost();
+    return;
+  }
+
+  if (!confirm('Vuoi pubblicare le modifiche online? Saranno visibili a tutti gli ospiti in pochi secondi.')) return;
+
+  // 1. Salva localmente
+  const d = collectFormData();
+  currentData = d;
+  saveData(d);
+  renderLanding();
+
+  // 2. Pubblica usando il token pre-salvato
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Pubblicazione…'; }
+
+  try {
+    sessionStorage.setItem('bnb_github_token', token);
+
+    const OWNER = 'ffeliteapartments';
+    const REPO = 'guide';
+    const FILE = 'index.html';
+    const BRANCH = 'main';
+    const API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FILE}`;
+
+    // Get current file SHA
+    const getResp = await fetch(`${API}?ref=${BRANCH}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!getResp.ok) {
+      const e = await getResp.json().catch(() => ({}));
+      throw new Error(e.message || `HTTP ${getResp.status}`);
+    }
+    const fileData = await getResp.json();
+
+    // Build updated HTML
+    const rawHtml = atob(fileData.content.replace(/\n/g, ''));
+    const jsonStr = JSON.stringify(d, null, 2);
+    const updatedHtml = rawHtml.replace(
+      /\/\* PUBLISHED_DATA_START \*\/[\s\S]*?\/\* PUBLISHED_DATA_END \*\//,
+      '/* PUBLISHED_DATA_START */\nconst PUBLISHED_DATA = ' + jsonStr + ';\n/* PUBLISHED_DATA_END */'
+    );
+
+    // Push updated file
+    const putResp = await fetch(API, {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: '📱 Aggiornamento guida (host) — ' + new Date().toLocaleDateString('it-IT'),
+        content: btoa(unescape(encodeURIComponent(updatedHtml))),
+        sha: fileData.sha,
+        branch: BRANCH
+      })
+    });
+
+    if (!putResp.ok) {
+      const e = await putResp.json().catch(() => ({}));
+      throw new Error(e.message || `HTTP ${putResp.status}`);
+    }
+
+    showToast('✅ Pubblicato! Le modifiche saranno online tra qualche secondo.', 'success');
+    closeSettings();
+  } catch (err) {
+    showToast('❌ Errore: ' + (err.message || 'Errore sconosciuto.') + ' Prova a contattare l\'amministratore.', 'error');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '🚀 Pubblica Ora'; }
+    sessionStorage.removeItem('bnb_github_token');
   }
 }
 
@@ -5040,10 +5147,11 @@ async function changeRecoveryWord() {
 // ════════════════════════════════════════════
 function removeGithubToken() {
   sessionStorage.removeItem('bnb_github_token');
+  localStorage.removeItem('bnb_host_publish_token');
   const field = document.getElementById('s-github-token');
   if (field) field.value = '';
   const msg = document.getElementById('s-publish-msg');
-  if (msg) { msg.style.color = 'var(--teal)'; msg.textContent = '✅ Token rimosso.'; setTimeout(() => { msg.textContent = ''; }, 2000); }
+  if (msg) { msg.style.color = 'var(--teal)'; msg.textContent = '✅ Token rimosso (anche per l\'host).'; setTimeout(() => { msg.textContent = ''; }, 2000); }
 }
 
 // ════════════════════════════════════════════
