@@ -7,7 +7,6 @@ const CRYPTO_KEY_STORE    = 'bnb_enc_key';
 const CRYPTO_IDB_DB       = 'bnb_crypto';
 const CRYPTO_IDB_STORE    = 'keys';
 const CRYPTO_IDB_KEY_NAME = 'aes_gcm_key';
-const TOKEN_STORE      = 'bnb_github_token';
 const HOST_TOKEN_STORE = 'bnb_host_publish_token';
 
 // ── Key management ───────────────────────────
@@ -124,33 +123,42 @@ async function decryptToken(ciphertext) {
 //    XOR with a fixed key provides only minimal obfuscation — it prevents
 //    casual reading of the value in source/localStorage but offers no real
 //    security. Anyone who reads this source file can reverse it instantly.
-//    For sensitive data use encryptWifiPass() / decryptWifiPass() below,
-//    which use AES-GCM (the same algorithm used for GitHub tokens).
+//    For sensitive data use encryptToken() / decryptToken() which use AES-GCM
+//    (the same algorithm used for GitHub tokens).
 // Values prefixed with _OBF_ are obfuscated; plain-text values are returned
 // as-is to maintain backward compatibility with existing localStorage data.
 
 const _XOR_KEY = 0x5A;
 const _OBF_PREFIX = '_OBF_';
 
-function obfuscate(str) {
-  if (!str) return '';
+// Shared XOR helper: encodes/decodes a string to/from a Base64 XOR'd representation.
+function _xorBase64(str) {
   const bytes = [];
   for (let i = 0; i < str.length; i++) {
     bytes.push(str.charCodeAt(i) ^ _XOR_KEY);
   }
-  return _OBF_PREFIX + btoa(String.fromCharCode(...bytes));
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function _xorBase64Decode(b64) {
+  const raw = atob(b64);
+  let s = '';
+  for (let i = 0; i < raw.length; i++) {
+    s += String.fromCharCode(raw.charCodeAt(i) ^ _XOR_KEY);
+  }
+  return s;
+}
+
+function obfuscate(str) {
+  if (!str) return '';
+  return _OBF_PREFIX + _xorBase64(str);
 }
 
 function deobfuscate(str) {
   if (!str) return '';
   if (!str.startsWith(_OBF_PREFIX)) return str; // plain-text (legacy or user-typed)
   try {
-    const raw = atob(str.slice(_OBF_PREFIX.length));
-    let s = '';
-    for (let i = 0; i < raw.length; i++) {
-      s += String.fromCharCode(raw.charCodeAt(i) ^ _XOR_KEY);
-    }
-    return s;
+    return _xorBase64Decode(str.slice(_OBF_PREFIX.length));
   } catch (_) {
     return str;
   }
@@ -162,34 +170,11 @@ function deobfuscate(str) {
 
 function obfuscateHash(hexHash) {
   if (!hexHash) return '';
-  const bytes = [];
-  for (let i = 0; i < hexHash.length; i++) {
-    bytes.push(hexHash.charCodeAt(i) ^ _XOR_KEY);
-  }
-  return btoa(String.fromCharCode(...bytes));
+  return _xorBase64(hexHash);
 }
 
 function deobfuscateHash(b64) {
   try {
-    const raw = atob(b64);
-    let s = '';
-    for (let i = 0; i < raw.length; i++) {
-      s += String.fromCharCode(raw.charCodeAt(i) ^ _XOR_KEY);
-    }
-    return s;
+    return _xorBase64Decode(b64);
   } catch (_) { return b64; }
-}
-
-// ── AES-GCM WiFi password helpers ───────────
-// Use these instead of obfuscate/deobfuscate for proper encryption.
-// The admin panel can call encryptWifiPass() when saving a password and
-// decryptWifiPass() when displaying it. Encrypted values are Base64 strings
-// that are NOT backward-compatible with the _OBF_ prefix format.
-
-async function encryptWifiPass(pass) {
-  return encryptToken(pass);
-}
-
-async function decryptWifiPass(encrypted) {
-  return decryptToken(encrypted);
 }

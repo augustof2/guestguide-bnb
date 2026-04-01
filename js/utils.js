@@ -13,14 +13,6 @@ function escHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-function escAttr(str) {
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
 
 function renderRichText(text) {
   if (!text) return '';

@@ -16,8 +16,8 @@ function renderAptCheckoutSteps(aptIndex, steps) {
         <span>Passo ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptCheckoutStep(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-cs${j}-titleIt" value="${escAttr(step.titleIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-cs${j}-titleIt','s-a${aptIndex}-cs${j}-titleEn')"></div>
-      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-cs${j}-titleEn" value="${escAttr(step.titleEn || '')}"></div>
+      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-cs${j}-titleIt" value="${escHtml(step.titleIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-cs${j}-titleIt','s-a${aptIndex}-cs${j}-titleEn')"></div>
+      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-cs${j}-titleEn" value="${escHtml(step.titleEn || '')}"></div>
       <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-cs${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-cs${j}-descIt','s-a${aptIndex}-cs${j}-descEn')">${escHtml(step.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-cs${j}-descEn">${escHtml(step.descEn || '')}</textarea></div>`;
   });
@@ -67,9 +67,9 @@ function renderSettingsCheckinSteps(steps) {
         <span>Step ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeSettingsCheckinStep(${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Emoji</label><input type="text" id="s-ci${j}-icon" value="${escAttr(step.icon || '')}" style="max-width:80px"></div>
-      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-ci${j}-titleIt" value="${escAttr(step.titleIt || '')}" onblur="autoTranslateField('s-ci${j}-titleIt','s-ci${j}-titleEn')"></div>
-      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-ci${j}-titleEn" value="${escAttr(step.titleEn || '')}"></div>
+      <div class="s-field"><label>Emoji</label><input type="text" id="s-ci${j}-icon" value="${escHtml(step.icon || '')}" style="max-width:80px"></div>
+      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-ci${j}-titleIt" value="${escHtml(step.titleIt || '')}" onblur="autoTranslateField('s-ci${j}-titleIt','s-ci${j}-titleEn')"></div>
+      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-ci${j}-titleEn" value="${escHtml(step.titleEn || '')}"></div>
       <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-ci${j}-descIt" onblur="autoTranslateField('s-ci${j}-descIt','s-ci${j}-descEn')">${escHtml(step.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-ci${j}-descEn">${escHtml(step.descEn || '')}</textarea></div>`;
   });
@@ -110,7 +110,6 @@ function removeSettingsCheckinStep(idx) {
 }
 
 // ════════════════════════════════════════════
-// ════════════════════════════════════════════
 //  SETTINGS: DYNAMIC CONTACTS
 // ════════════════════════════════════════════
 function renderSettingsContacts(contacts) {
@@ -124,8 +123,8 @@ function renderSettingsContacts(contacts) {
         <span>Contatto ${i + 1}</span>
         <button class="s-remove-btn" onclick="removeSettingsContact(${i})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-c${i}-name" value="${escAttr(c.name || '')}" placeholder="Nome Contatto"></div>
-      <div class="s-field"><label>Telefono</label><input type="tel" id="s-c${i}-phone" value="${escAttr(c.phone || '')}" placeholder="+39 000 000 0000"></div>
+      <div class="s-field"><label>Nome</label><input type="text" id="s-c${i}-name" value="${escHtml(c.name || '')}" placeholder="Nome Contatto"></div>
+      <div class="s-field"><label>Telefono</label><input type="tel" id="s-c${i}-phone" value="${escHtml(c.phone || '')}" placeholder="+39 000 000 0000"></div>
       ${i < contacts.length - 1 ? '<div class="s-divider"></div>' : ''}`;
   });
   container.innerHTML = html;

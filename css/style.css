@@ -1,17 +1,17 @@
 :root {
-    --bg: #0d1b1e;
-    --bg2: #162226;
-    --card: #1c2e32;
-    --card2: #213439;
-    --border: #2a4048;
-    --gold: #c9a84c;
-    --gold2: #e2c97e;
-    --text: #e8e0d5;
-    --text2: #a0b4b8;
-    --teal: #2a9d8f;
-    --teal2: #3ab5a5;
-    --accent: #e76f51;
-  }
+  --bg: #0d1b1e;
+  --bg2: #162226;
+  --card: #1c2e32;
+  --card2: #213439;
+  --border: #2a4048;
+  --gold: #c9a84c;
+  --gold2: #e2c97e;
+  --text: #e8e0d5;
+  --text2: #a0b4b8;
+  --teal: #2a9d8f;
+  --teal2: #3ab5a5;
+  --accent: #e76f51;
+}
 
 :root.light-theme {
   --bg: #f5f0eb;
@@ -124,12 +124,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     position: relative;
   }
 
-  .landing-topbar {
-    display: flex;
-    justify-content: flex-end;
-    padding: 20px 20px 0;
-  }
-
   .landing-hero {
     padding: 32px 24px 20px;
     animation: fadeUp .5s ease both;
@@ -171,14 +165,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     height: 2px;
     background: linear-gradient(to right, var(--gold), transparent);
     margin: 16px 0;
-  }
-
-  .landing-intro {
-    font-size: 14px;
-    color: var(--text2);
-    line-height: 1.6;
-    padding: 0 24px 28px;
-    animation: fadeUp .5s .1s ease both;
   }
 
   .apt-cards {
@@ -1316,7 +1302,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     .pin-dialog { width: 360px; }
     .landing-title { font-size: 52px; }
     .landing-hero { padding: 48px 40px 24px; }
-    .landing-intro { padding: 0 40px 32px; }
     .apt-cards { flex-direction: row; flex-wrap: wrap; padding: 0 40px; }
     .apt-card { flex: 1; min-width: 280px; max-width: 420px; padding: 22px 20px; }
     .stats-grid { grid-template-columns: repeat(4, 1fr); }
@@ -1335,7 +1320,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     .section-title { font-size: 30px; }
     /* Landing: hero top-left, cards truly centered in the viewport */
     #landing { justify-content: center; align-items: center; padding: 0; }
-    .landing-topbar { display: none; }
     .landing-hero {
       position: absolute;
       top: 0; left: 0;

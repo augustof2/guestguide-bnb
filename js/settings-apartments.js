@@ -1,10 +1,6 @@
 // ════════════════════════════════════════════
 //  SETTINGS: APARTMENTS MANAGEMENT
 // ════════════════════════════════════════════
-
-// ════════════════════════════════════════════
-//  SETTINGS: DYNAMIC APARTMENTS
-// ════════════════════════════════════════════
 function renderSettingsApts(apts) {
   const container = document.getElementById('s-apts-container');
   container.dataset.count = apts.length;
@@ -19,20 +15,20 @@ function renderSettingsApts(apts) {
     section.innerHTML = `
       <summary class="s-section-title"><span class="s-section-title-inner">🏠 Appartamento ${i + 1}${delBtn}</span></summary>
       <div class="s-fields">
-        <div class="s-field"><label>Nome (IT)</label><input type="text" id="s-a${i}-name" value="${escAttr(apt.name || '')}" placeholder="Appartamento ${i + 1}"></div>
-        <div class="s-field"><label>Indirizzo completo</label><input type="text" id="s-a${i}-address" value="${escAttr(apt.address || '')}"></div>
-        <div class="s-field"><label>Indirizzo breve</label><input type="text" id="s-a${i}-addressShort" value="${escAttr(apt.addressShort || '')}"></div>
-        <div class="s-field"><label>Link Google Maps</label><input type="url" id="s-a${i}-mapsLink" value="${escAttr(apt.mapsLink || '')}"></div>
-        <div class="s-field"><label>Max ospiti (IT)</label><input type="text" id="s-a${i}-maxGuests" value="${escAttr(apt.maxGuests || '')}"></div>
-        <div class="s-field"><label>Max ospiti (EN)</label><input type="text" id="s-a${i}-maxGuestsEn" value="${escAttr(apt.maxGuestsEn || '')}"></div>
-        <div class="s-field"><label>WiFi — Nome rete</label><input type="text" id="s-a${i}-wifi" value="${escAttr(apt.wifi || '')}"></div>
-        <div class="s-field"><label>WiFi — Password</label><input type="text" id="s-a${i}-wifiPass" value="${escAttr(deobfuscate(apt.wifiPass || ''))}"></div>
-        <div class="s-field"><label>Check-in (orario)</label><input type="text" id="s-a${i}-checkin" value="${escAttr(apt.checkin || '')}" placeholder="15:00"></div>
-        <div class="s-field"><label>Check-out (orario)</label><input type="text" id="s-a${i}-checkout" value="${escAttr(apt.checkout || '')}" placeholder="10:00"></div>
+        <div class="s-field"><label>Nome (IT)</label><input type="text" id="s-a${i}-name" value="${escHtml(apt.name || '')}" placeholder="Appartamento ${i + 1}"></div>
+        <div class="s-field"><label>Indirizzo completo</label><input type="text" id="s-a${i}-address" value="${escHtml(apt.address || '')}"></div>
+        <div class="s-field"><label>Indirizzo breve</label><input type="text" id="s-a${i}-addressShort" value="${escHtml(apt.addressShort || '')}"></div>
+        <div class="s-field"><label>Link Google Maps</label><input type="url" id="s-a${i}-mapsLink" value="${escHtml(apt.mapsLink || '')}"></div>
+        <div class="s-field"><label>Max ospiti (IT)</label><input type="text" id="s-a${i}-maxGuests" value="${escHtml(apt.maxGuests || '')}"></div>
+        <div class="s-field"><label>Max ospiti (EN)</label><input type="text" id="s-a${i}-maxGuestsEn" value="${escHtml(apt.maxGuestsEn || '')}"></div>
+        <div class="s-field"><label>WiFi — Nome rete</label><input type="text" id="s-a${i}-wifi" value="${escHtml(apt.wifi || '')}"></div>
+        <div class="s-field"><label>WiFi — Password</label><input type="text" id="s-a${i}-wifiPass" value="${escHtml(deobfuscate(apt.wifiPass || ''))}"></div>
+        <div class="s-field"><label>Check-in (orario)</label><input type="text" id="s-a${i}-checkin" value="${escHtml(apt.checkin || '')}" placeholder="15:00"></div>
+        <div class="s-field"><label>Check-out (orario)</label><input type="text" id="s-a${i}-checkout" value="${escHtml(apt.checkout || '')}" placeholder="10:00"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🌤️ Meteo</div>
-        <div class="s-field"><label>Latitudine (per widget meteo)</label><input type="text" id="s-a${i}-lat" value="${escAttr(apt.lat || '')}" placeholder="41.9028 (Roma)"></div>
-        <div class="s-field"><label>Longitudine (per widget meteo)</label><input type="text" id="s-a${i}-lon" value="${escAttr(apt.lon || '')}" placeholder="12.4964 (Roma)"></div>
+        <div class="s-field"><label>Latitudine (per widget meteo)</label><input type="text" id="s-a${i}-lat" value="${escHtml(apt.lat || '')}" placeholder="41.9028 (Roma)"></div>
+        <div class="s-field"><label>Longitudine (per widget meteo)</label><input type="text" id="s-a${i}-lon" value="${escHtml(apt.lon || '')}" placeholder="12.4964 (Roma)"></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">📍 Come raggiungerci</div>
         <div class="s-field"><label>Come raggiungerci 🇮🇹</label><textarea id="s-a${i}-howToReachIt" placeholder="Dalla stazione centrale..." onblur="autoTranslateField('s-a${i}-howToReachIt','s-a${i}-howToReachEn')">${escHtml(apt.howToReachIt || '')}</textarea></div>
@@ -51,16 +47,16 @@ function renderSettingsApts(apts) {
         <button class="s-add-btn" style="margin-top:8px" onclick="addAptHouseRule(${i})">➕ Aggiungi Regola</button>
         <div class="s-divider"></div>
         <div class="s-sub-title">🛌 Camera da Letto — Dotazioni (comma-separato)</div>
-        <div class="s-field"><label>Dotazioni camera 🇮🇹</label><input type="text" id="s-a${i}-bedroomTagsIt" value="${escAttr(apt.bedroomTagsIt || '')}" placeholder="Letto matrimoniale,Armadio,Biancheria..." onblur="autoTranslateField('s-a${i}-bedroomTagsIt','s-a${i}-bedroomTagsEn')"></div>
-        <div class="s-field"><label>Dotazioni camera 🇬🇧</label><input type="text" id="s-a${i}-bedroomTagsEn" value="${escAttr(apt.bedroomTagsEn || '')}" placeholder="Double bed,Wardrobe,Linen..."></div>
+        <div class="s-field"><label>Dotazioni camera 🇮🇹</label><input type="text" id="s-a${i}-bedroomTagsIt" value="${escHtml(apt.bedroomTagsIt || '')}" placeholder="Letto matrimoniale,Armadio,Biancheria..." onblur="autoTranslateField('s-a${i}-bedroomTagsIt','s-a${i}-bedroomTagsEn')"></div>
+        <div class="s-field"><label>Dotazioni camera 🇬🇧</label><input type="text" id="s-a${i}-bedroomTagsEn" value="${escHtml(apt.bedroomTagsEn || '')}" placeholder="Double bed,Wardrobe,Linen..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🍳 Cucina — Dotazioni (comma-separato)</div>
-        <div class="s-field"><label>Dotazioni cucina 🇮🇹</label><input type="text" id="s-a${i}-kitchenTagsIt" value="${escAttr(apt.kitchenTagsIt || '')}" placeholder="Piano cottura,Forno,Frigorifero..." onblur="autoTranslateField('s-a${i}-kitchenTagsIt','s-a${i}-kitchenTagsEn')"></div>
-        <div class="s-field"><label>Dotazioni cucina 🇬🇧</label><input type="text" id="s-a${i}-kitchenTagsEn" value="${escAttr(apt.kitchenTagsEn || '')}" placeholder="Hob,Oven,Fridge..."></div>
+        <div class="s-field"><label>Dotazioni cucina 🇮🇹</label><input type="text" id="s-a${i}-kitchenTagsIt" value="${escHtml(apt.kitchenTagsIt || '')}" placeholder="Piano cottura,Forno,Frigorifero..." onblur="autoTranslateField('s-a${i}-kitchenTagsIt','s-a${i}-kitchenTagsEn')"></div>
+        <div class="s-field"><label>Dotazioni cucina 🇬🇧</label><input type="text" id="s-a${i}-kitchenTagsEn" value="${escHtml(apt.kitchenTagsEn || '')}" placeholder="Hob,Oven,Fridge..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">🚿 Bagno — Dotazioni (comma-separato)</div>
-        <div class="s-field"><label>Dotazioni bagno 🇮🇹</label><input type="text" id="s-a${i}-bathroomTagsIt" value="${escAttr(apt.bathroomTagsIt || '')}" placeholder="Doccia,Asciugamani,Phon..." onblur="autoTranslateField('s-a${i}-bathroomTagsIt','s-a${i}-bathroomTagsEn')"></div>
-        <div class="s-field"><label>Dotazioni bagno 🇬🇧</label><input type="text" id="s-a${i}-bathroomTagsEn" value="${escAttr(apt.bathroomTagsEn || '')}" placeholder="Shower,Towels,Hair dryer..."></div>
+        <div class="s-field"><label>Dotazioni bagno 🇮🇹</label><input type="text" id="s-a${i}-bathroomTagsIt" value="${escHtml(apt.bathroomTagsIt || '')}" placeholder="Doccia,Asciugamani,Phon..." onblur="autoTranslateField('s-a${i}-bathroomTagsIt','s-a${i}-bathroomTagsEn')"></div>
+        <div class="s-field"><label>Dotazioni bagno 🇬🇧</label><input type="text" id="s-a${i}-bathroomTagsEn" value="${escHtml(apt.bathroomTagsEn || '')}" placeholder="Shower,Towels,Hair dryer..."></div>
         <div class="s-divider"></div>
         <div class="s-sub-title">✨ Servizi Extra</div>
         <div id="s-a${i}-services" data-count="0"></div>
@@ -85,40 +81,40 @@ function renderSettingsApts(apts) {
             <label style="white-space:nowrap">Mostra sezione</label>
             <input type="checkbox" id="s-a${i}-tr-airportEnabled" ${(apt.transport && apt.transport.airportEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
-          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-airportIcon" value="${escAttr((apt.transport && apt.transport.airportIcon) || '✈️')}" placeholder="✈️" style="max-width:80px"></div>
+          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-airportIcon" value="${escHtml((apt.transport && apt.transport.airportIcon) || '✈️')}" placeholder="✈️" style="max-width:80px"></div>
           <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-airportIt" placeholder="All'uscita dell'aeroporto..." onblur="autoTranslateField('s-a${i}-tr-airportIt','s-a${i}-tr-airportEn')">${escHtml((apt.transport && apt.transport.airportIt) || '')}</textarea></div>
           <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${i}-tr-airportEn">${escHtml((apt.transport && apt.transport.airportEn) || '')}</textarea></div>
-          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-airportMaps" value="${escAttr((apt.transport && apt.transport.airportMaps) || '')}" placeholder="https://maps.google.com/..."></div>
+          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-airportMaps" value="${escHtml((apt.transport && apt.transport.airportMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚉 Stazione</div>
           <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
             <label style="white-space:nowrap">Mostra sezione</label>
             <input type="checkbox" id="s-a${i}-tr-stationEnabled" ${(apt.transport && apt.transport.stationEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
-          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-stationIcon" value="${escAttr((apt.transport && apt.transport.stationIcon) || '🚉')}" placeholder="🚉" style="max-width:80px"></div>
+          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-stationIcon" value="${escHtml((apt.transport && apt.transport.stationIcon) || '🚉')}" placeholder="🚉" style="max-width:80px"></div>
           <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-stationIt" placeholder="Dalla stazione..." onblur="autoTranslateField('s-a${i}-tr-stationIt','s-a${i}-tr-stationEn')">${escHtml((apt.transport && apt.transport.stationIt) || '')}</textarea></div>
           <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${i}-tr-stationEn">${escHtml((apt.transport && apt.transport.stationEn) || '')}</textarea></div>
-          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-stationMaps" value="${escAttr((apt.transport && apt.transport.stationMaps) || '')}" placeholder="https://maps.google.com/..."></div>
+          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-stationMaps" value="${escHtml((apt.transport && apt.transport.stationMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚇 Metro</div>
           <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
             <label style="white-space:nowrap">Mostra sezione</label>
             <input type="checkbox" id="s-a${i}-tr-metroEnabled" ${(apt.transport && apt.transport.metroEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
-          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-metroIcon" value="${escAttr((apt.transport && apt.transport.metroIcon) || '🚇')}" placeholder="🚇" style="max-width:80px"></div>
-          <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${i}-tr-metroIt" value="${escAttr((apt.transport && apt.transport.metroIt) || '')}" placeholder="Fermata più vicina..." onblur="autoTranslateField('s-a${i}-tr-metroIt','s-a${i}-tr-metroEn')"></div>
-          <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${i}-tr-metroEn" value="${escAttr((apt.transport && apt.transport.metroEn) || '')}" placeholder="Nearest stop..."></div>
-          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-metroMaps" value="${escAttr((apt.transport && apt.transport.metroMaps) || '')}" placeholder="https://maps.google.com/..."></div>
+          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-metroIcon" value="${escHtml((apt.transport && apt.transport.metroIcon) || '🚇')}" placeholder="🚇" style="max-width:80px"></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${i}-tr-metroIt" value="${escHtml((apt.transport && apt.transport.metroIt) || '')}" placeholder="Fermata più vicina..." onblur="autoTranslateField('s-a${i}-tr-metroIt','s-a${i}-tr-metroEn')"></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${i}-tr-metroEn" value="${escHtml((apt.transport && apt.transport.metroEn) || '')}" placeholder="Nearest stop..."></div>
+          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-metroMaps" value="${escHtml((apt.transport && apt.transport.metroMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🚌 Bus</div>
           <div class="s-field" style="flex-direction:row;align-items:center;gap:10px;flex-wrap:wrap">
             <label style="white-space:nowrap">Mostra sezione</label>
             <input type="checkbox" id="s-a${i}-tr-busEnabled" ${(apt.transport && apt.transport.busEnabled !== false) ? 'checked' : ''} style="width:auto;accent-color:var(--teal)">
           </div>
-          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-busIcon" value="${escAttr((apt.transport && apt.transport.busIcon) || '🚌')}" placeholder="🚌" style="max-width:80px"></div>
-          <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${i}-tr-busIt" value="${escAttr((apt.transport && apt.transport.busIt) || '')}" placeholder="Linee principali..." onblur="autoTranslateField('s-a${i}-tr-busIt','s-a${i}-tr-busEn')"></div>
-          <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${i}-tr-busEn" value="${escAttr((apt.transport && apt.transport.busEn) || '')}" placeholder="Main lines..."></div>
-          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-busMaps" value="${escAttr((apt.transport && apt.transport.busMaps) || '')}" placeholder="https://maps.google.com/..."></div>
+          <div class="s-field"><label>Emoji</label><input type="text" id="s-a${i}-tr-busIcon" value="${escHtml((apt.transport && apt.transport.busIcon) || '🚌')}" placeholder="🚌" style="max-width:80px"></div>
+          <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${i}-tr-busIt" value="${escHtml((apt.transport && apt.transport.busIt) || '')}" placeholder="Linee principali..." onblur="autoTranslateField('s-a${i}-tr-busIt','s-a${i}-tr-busEn')"></div>
+          <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${i}-tr-busEn" value="${escHtml((apt.transport && apt.transport.busEn) || '')}" placeholder="Main lines..."></div>
+          <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${i}-tr-busMaps" value="${escHtml((apt.transport && apt.transport.busMaps) || '')}" placeholder="https://maps.google.com/..."></div>
           <div class="s-divider"></div>
           <div class="s-sub-title" style="font-size:12px">🎫 Biglietti</div>
           <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${i}-tr-ticketsIt" placeholder="Biglietto singolo: ~€1,50..." onblur="autoTranslateField('s-a${i}-tr-ticketsIt','s-a${i}-tr-ticketsEn')">${escHtml((apt.transport && apt.transport.ticketsIt) || '')}</textarea></div>
@@ -341,9 +337,9 @@ function renderAptHouseRules(aptIndex, rules) {
         <span>Regola ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptHouseRule(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-r${j}-icon" value="${escAttr(r.icon || '')}" placeholder="🔇"></div>
-      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escAttr(r.titleIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-r${j}-titleIt','s-a${aptIndex}-r${j}-titleEn')"></div>
-      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-r${j}-titleEn" value="${escAttr(r.titleEn || '')}"></div>
+      <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-r${j}-icon" value="${escHtml(r.icon || '')}" placeholder="🔇"></div>
+      <div class="s-field"><label>Titolo 🇮🇹</label><input type="text" id="s-a${aptIndex}-r${j}-titleIt" value="${escHtml(r.titleIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-r${j}-titleIt','s-a${aptIndex}-r${j}-titleEn')"></div>
+      <div class="s-field"><label>Titolo 🇬🇧</label><input type="text" id="s-a${aptIndex}-r${j}-titleEn" value="${escHtml(r.titleEn || '')}"></div>
       <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-r${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-r${j}-descIt','s-a${aptIndex}-r${j}-descEn')">${escHtml(r.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-r${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>`;
   });
@@ -393,11 +389,11 @@ function renderAptExtraServices(aptIndex, services) {
         <span>Servizio ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptExtraService(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-svc${j}-icon" value="${escAttr(svc.icon || '')}" placeholder="✨"></div>
-      <div class="s-field"><label>Nome 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-nameIt" value="${escAttr(svc.nameIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-svc${j}-nameIt','s-a${aptIndex}-svc${j}-nameEn')"></div>
-      <div class="s-field"><label>Nome 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-nameEn" value="${escAttr(svc.nameEn || '')}"></div>
-      <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-descIt" value="${escAttr(svc.descIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-svc${j}-descIt','s-a${aptIndex}-svc${j}-descEn')"></div>
-      <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-descEn" value="${escAttr(svc.descEn || '')}"></div>
+      <div class="s-field"><label>Icona (emoji)</label><input type="text" id="s-a${aptIndex}-svc${j}-icon" value="${escHtml(svc.icon || '')}" placeholder="✨"></div>
+      <div class="s-field"><label>Nome 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-nameIt" value="${escHtml(svc.nameIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-svc${j}-nameIt','s-a${aptIndex}-svc${j}-nameEn')"></div>
+      <div class="s-field"><label>Nome 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-nameEn" value="${escHtml(svc.nameEn || '')}"></div>
+      <div class="s-field"><label>Descrizione 🇮🇹</label><input type="text" id="s-a${aptIndex}-svc${j}-descIt" value="${escHtml(svc.descIt || '')}" onblur="autoTranslateField('s-a${aptIndex}-svc${j}-descIt','s-a${aptIndex}-svc${j}-descEn')"></div>
+      <div class="s-field"><label>Descrizione 🇬🇧</label><input type="text" id="s-a${aptIndex}-svc${j}-descEn" value="${escHtml(svc.descEn || '')}"></div>
 `;
   });
   container.innerHTML = html;
@@ -446,13 +442,13 @@ function renderAptPlaces(aptIndex, places) {
         <span>Luogo ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptPlace(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-pl${j}-emoji" value="${escAttr(p.emoji || '📍')}" placeholder="📍" style="max-width:80px"></div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-pl${j}-name" value="${escAttr(p.name || '')}"></div>
+      <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-pl${j}-emoji" value="${escHtml(p.emoji || '📍')}" placeholder="📍" style="max-width:80px"></div>
+      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-pl${j}-name" value="${escHtml(p.name || '')}"></div>
       <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-pl${j}-descIt','s-a${aptIndex}-pl${j}-descEn')">${escHtml(p.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-pl${j}-descEn">${escHtml(p.descEn || '')}</textarea></div>
       <div class="s-field"><label>Come arrivarci 🇮🇹</label><textarea id="s-a${aptIndex}-pl${j}-howIt" onblur="autoTranslateField('s-a${aptIndex}-pl${j}-howIt','s-a${aptIndex}-pl${j}-howEn')">${escHtml(p.howIt || '')}</textarea></div>
       <div class="s-field"><label>Come arrivarci 🇬🇧</label><textarea id="s-a${aptIndex}-pl${j}-howEn">${escHtml(p.howEn || '')}</textarea></div>
-      <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-pl${j}-maps" value="${escAttr(p.maps || '')}"></div>`;
+      <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-pl${j}-maps" value="${escHtml(p.maps || '')}"></div>`;
   });
   container.innerHTML = html;
 }
@@ -501,13 +497,13 @@ function renderAptRests(aptIndex, rests) {
         <span>Ristorante ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptRest(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-rt${j}-emoji" value="${escAttr(r.emoji || '🍽️')}" placeholder="🍽️" style="max-width:80px"></div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-rt${j}-name" value="${escAttr(r.name || '')}"></div>
-      <div class="s-field"><label>Tipo</label><input type="text" id="s-a${aptIndex}-rt${j}-tipo" value="${escAttr(r.tipo || '')}"></div>
+      <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-rt${j}-emoji" value="${escHtml(r.emoji || '🍽️')}" placeholder="🍽️" style="max-width:80px"></div>
+      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-rt${j}-name" value="${escHtml(r.name || '')}"></div>
+      <div class="s-field"><label>Tipo</label><input type="text" id="s-a${aptIndex}-rt${j}-tipo" value="${escHtml(r.tipo || '')}"></div>
       <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-rt${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-rt${j}-descIt','s-a${aptIndex}-rt${j}-descEn')">${escHtml(r.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-rt${j}-descEn">${escHtml(r.descEn || '')}</textarea></div>
-      <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-a${aptIndex}-rt${j}-price" value="${escAttr(r.price || '')}" placeholder="€ / €€ / €€€"></div>
-      <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-rt${j}-maps" value="${escAttr(r.maps || '')}"></div>`;
+      <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-a${aptIndex}-rt${j}-price" value="${escHtml(r.price || '')}" placeholder="€ / €€ / €€€"></div>
+      <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-rt${j}-maps" value="${escHtml(r.maps || '')}"></div>`;
   });
   container.innerHTML = html;
 }
@@ -556,13 +552,13 @@ function renderAptSupermarkets(aptIndex, supermarkets) {
         <span>Supermercato ${j + 1}</span>
         <button class="s-remove-btn" onclick="removeAptSupermarket(${aptIndex}, ${j})">🗑️ Rimuovi</button>
       </div>
-      <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-sm${j}-emoji" value="${escAttr(s.emoji || '🛒')}" placeholder="🛒" style="max-width:80px"></div>
-      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-sm${j}-name" value="${escAttr(s.name || '')}"></div>
-      <div class="s-field"><label>Tipo</label><input type="text" id="s-a${aptIndex}-sm${j}-tipo" value="${escAttr(s.tipo || '')}"></div>
+      <div class="s-field"><label>Emoji</label><input type="text" id="s-a${aptIndex}-sm${j}-emoji" value="${escHtml(s.emoji || '🛒')}" placeholder="🛒" style="max-width:80px"></div>
+      <div class="s-field"><label>Nome</label><input type="text" id="s-a${aptIndex}-sm${j}-name" value="${escHtml(s.name || '')}"></div>
+      <div class="s-field"><label>Tipo</label><input type="text" id="s-a${aptIndex}-sm${j}-tipo" value="${escHtml(s.tipo || '')}"></div>
       <div class="s-field"><label>Descrizione 🇮🇹</label><textarea id="s-a${aptIndex}-sm${j}-descIt" onblur="autoTranslateField('s-a${aptIndex}-sm${j}-descIt','s-a${aptIndex}-sm${j}-descEn')">${escHtml(s.descIt || '')}</textarea></div>
       <div class="s-field"><label>Descrizione 🇬🇧</label><textarea id="s-a${aptIndex}-sm${j}-descEn">${escHtml(s.descEn || '')}</textarea></div>
-      <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-a${aptIndex}-sm${j}-price" value="${escAttr(s.price || '')}" placeholder="€ / €€ / €€€"></div>
-      <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-sm${j}-maps" value="${escAttr(s.maps || '')}"></div>`;
+      <div class="s-field"><label>Fascia prezzo</label><input type="text" id="s-a${aptIndex}-sm${j}-price" value="${escHtml(s.price || '')}" placeholder="€ / €€ / €€€"></div>
+      <div class="s-field"><label>Link Maps</label><input type="url" id="s-a${aptIndex}-sm${j}-maps" value="${escHtml(s.maps || '')}"></div>`;
   });
   container.innerHTML = html;
 }

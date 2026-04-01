@@ -282,7 +282,7 @@ async function changeRecoveryWord() {
 }
 
 function removeGithubToken() {
-  localStorage.removeItem(TOKEN_STORE);
+  localStorage.removeItem('bnb_github_token');
   localStorage.removeItem(HOST_TOKEN_STORE);
   const field = document.getElementById('s-github-token');
   if (field) { field.value = ''; field.placeholder = 'ghp_...'; }

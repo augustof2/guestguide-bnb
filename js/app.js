@@ -1,19 +1,3 @@
-// ── Global State (namespaced to reduce global pollution) ──
-// currentData / currentAptIndex are declared in data.js and remain as
-// backwards-compatible globals used by other scripts. AppState mirrors them
-// so new code can reference a single namespace object instead of bare globals.
-const AppState = {
-  currentData: null,
-  currentAptIndex: 0,
-  _renderedTabs: {}  // Track which tabs have been rendered (for lazy rendering)
-};
-
-// Keep AppState in sync whenever the bare globals are updated.
-function _syncState() {
-  AppState.currentData = currentData;
-  AppState.currentAptIndex = currentAptIndex;
-}
-
 // ════════════════════════════════════════════
 //  UNCONFIGURED DATA CHECK
 // ════════════════════════════════════════════
@@ -107,7 +91,6 @@ function updateMetaTags(d) {
 function openGuide(aptIndex, lang) {
   if (lang) setLang(lang);
   currentAptIndex = aptIndex;
-  _syncState();
   document.getElementById('landing').style.display = 'none';
   document.getElementById('gear-btn').classList.add('hidden');
   const guide = document.getElementById('guide');
@@ -190,8 +173,6 @@ function renderApp(aptIndex) {
   document.getElementById('w-sign').textContent = '★ ' + d.hostName;
 
   // Stay tab
-  document.getElementById('st-checkin').textContent = apt.checkin;
-  document.getElementById('st-checkout').textContent = apt.checkout;
   document.getElementById('st-guests').textContent = langField(apt, 'maxGuests');
   // Guard: hide default placeholder WiFi name and password
   const isDefaultWifi = apt.wifi === 'NomeRete' || apt.wifi === 'NomeRete2';
@@ -537,7 +518,7 @@ function renderPlaces(places) {
     const desc = langField(p, 'desc');
     const how  = langField(p, 'how');
     const howLabel  = t('howToArrive');
-    const mapsLabel = t('guideHere');
+    const mapsLabel = t('openInMaps');
     const wazeLabel = t('wazeBtn');
     const hasValidMaps = p.maps && p.maps !== '#';
     const mapsHref = hasValidMaps ? p.maps : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name)}`;
@@ -557,7 +538,7 @@ function renderPlaces(places) {
         ${renderRichText(how)}
       </div>
       <div class="maps-btn-group">
-        <a class="maps-btn google-maps-btn" href="${escAttr(mapsHref)}" target="_blank" rel="noopener noreferrer">${mapsLabel}</a>
+        <a class="maps-btn google-maps-btn" href="${escHtml(mapsHref)}" target="_blank" rel="noopener noreferrer">${mapsLabel}</a>
         ${wazeBtn}
       </div>
     `;
@@ -570,7 +551,7 @@ function renderFood(restaurants, apt) {
   container.innerHTML = '';
   restaurants.forEach(r => {
     const desc = langField(r, 'desc');
-    const mapsLabel = t('viewOnMaps');
+    const mapsLabel = t('openInMaps');
     const wazeLabel = t('wazeBtn');
     const hasValidMaps = r.maps && r.maps !== '#';
     const mapsHref = hasValidMaps ? r.maps : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}`;
@@ -590,7 +571,7 @@ function renderFood(restaurants, apt) {
       </div>
       <p class="rest-desc">${renderRichText(desc)}</p>
       <div class="maps-btn-group">
-        <a class="maps-btn google-maps-btn" href="${escAttr(mapsHref)}" target="_blank" rel="noopener noreferrer">${mapsLabel}</a>
+        <a class="maps-btn google-maps-btn" href="${escHtml(mapsHref)}" target="_blank" rel="noopener noreferrer">${mapsLabel}</a>
         ${wazeBtn}
       </div>
     `;
@@ -599,7 +580,7 @@ function renderFood(restaurants, apt) {
 
   // Supermercato
   const supermarkets = (apt && apt.supermarkets) || [];
-  const mapsLabelSuper = t('viewOnMaps');
+  const mapsLabelSuper = t('openInMaps');
   const wazeLabelSuper = t('wazeBtn');
   supermarkets.forEach(s => {
     const desc = langField(s, 'desc');
@@ -621,7 +602,7 @@ function renderFood(restaurants, apt) {
       </div>
       <p class="rest-desc">${renderRichText(desc)}</p>
       <div class="maps-btn-group">
-        <a class="maps-btn google-maps-btn" href="${escAttr(mapsHrefSuper)}" target="_blank" rel="noopener noreferrer">${mapsLabelSuper}</a>
+        <a class="maps-btn google-maps-btn" href="${escHtml(mapsHrefSuper)}" target="_blank" rel="noopener noreferrer">${mapsLabelSuper}</a>
         ${wazeBtnSuper}
       </div>
     `;
@@ -638,7 +619,7 @@ function renderTransport(transport) {
     { key: 'metro',   icon: transport.metroIcon   || '🚇', label: t('metro'),       text: langField(transport, 'metro'),   maps: transport.metroMaps,   enabled: transport.metroEnabled   !== false },
     { key: 'bus',     icon: transport.busIcon     || '🚌', label: t('bus'),         text: langField(transport, 'bus'),     maps: transport.busMaps,     enabled: transport.busEnabled     !== false }
   ];
-  const mapsLabel = t('viewOnMaps');
+  const mapsLabel = t('openInMaps');
   const wazeLabel = t('wazeBtn');
   items.forEach(item => {
     if (!item.enabled) return;
@@ -648,7 +629,7 @@ function renderTransport(transport) {
     const wazeBtn = showWaze
       ? `<a class="maps-btn waze-btn" href="https://waze.com/ul?q=${encodeURIComponent(item.label)}&navigate=yes" target="_blank" rel="noopener noreferrer">🗺️ ${wazeLabel}</a>`
       : '';
-    const mapsBtn = item.maps ? `<a class="maps-btn google-maps-btn" href="${escAttr(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
+    const mapsBtn = item.maps ? `<a class="maps-btn google-maps-btn" href="${escHtml(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
     card.innerHTML = `
       <div class="transport-header">
         <span class="transport-icon">${escHtml(item.icon)}</span>
@@ -694,7 +675,7 @@ function renderExtraContacts(contacts) {
         <div class="sos-name">${escHtml(c.name || '')}</div>
         <div class="sos-number">📞 ${escHtml(c.phone || '')}</div>
       </div>
-      <a class="call-btn host" href="tel:${escAttr((c.phone || '').replace(/\s/g, ''))}">📞 ${escHtml(t('call'))}</a>
+      <a class="call-btn host" href="tel:${escHtml((c.phone || '').replace(/\s/g, ''))}">📞 ${escHtml(t('call'))}</a>
     `;
     container.appendChild(card);
   });
@@ -1096,7 +1077,6 @@ function previewMode() {
   const d = collectFormData();
   _previewPreviousData = deepClone(currentData);
   currentData = d;
-  _syncState();
   closeSettings();
   renderLanding();
   document.getElementById('preview-banner').classList.add('show');
@@ -1113,7 +1093,6 @@ function previewCancel() {
   if (_previewPreviousData) {
     currentData = _previewPreviousData;
     _previewPreviousData = null;
-    _syncState();
     renderLanding();
   }
   document.getElementById('preview-banner').classList.remove('show');
@@ -1324,7 +1303,6 @@ function initScrollTopBtn() {
 // ════════════════════════════════════════════
 function init() {
   currentData = loadData();
-  _syncState();
 
   // Splash screen
   const splash = document.getElementById('splash-screen');

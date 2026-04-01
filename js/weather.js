@@ -56,17 +56,17 @@ async function renderWeatherWidget(containerId, lat, lon, lang) {
   container.innerHTML = '<div class="weather-loading">🌤️ Caricamento meteo...</div>';
   try {
     // If no explicit coordinates were passed, try to extract them from the
-    // current apartment's mapsUrl before falling back to hardcoded Rome coords.
+    // current apartment's mapsLink before hiding the widget.
     let resolvedLat = lat;
     let resolvedLon = lon;
     if (!resolvedLat || !resolvedLon) {
       try {
         const apt = currentData && currentData.apts && currentData.apts[currentAptIndex];
-        const mapsUrl = apt && apt.mapsUrl;
-        if (mapsUrl) {
+        const mapsLink = apt && apt.mapsLink;
+        if (mapsLink) {
           // Try ?q=lat,lon or @lat,lon patterns used by Google Maps
-          const qMatch  = mapsUrl.match(/[?&]q=([-\d.]+),([-\d.]+)/);
-          const atMatch = mapsUrl.match(/@([-\d.]+),([-\d.]+)/);
+          const qMatch  = mapsLink.match(/[?&]q=([-\d.]+),([-\d.]+)/);
+          const atMatch = mapsLink.match(/@([-\d.]+),([-\d.]+)/);
           const m = qMatch || atMatch;
           if (m) {
             resolvedLat = parseFloat(m[1]);
@@ -74,11 +74,14 @@ async function renderWeatherWidget(containerId, lat, lon, lang) {
           }
         }
       } catch (e) {
-        console.warn('[weather] Failed to parse coordinates from mapsUrl:', e);
-        /* fall through to Rome defaults */
+        console.warn('[weather] Failed to parse coordinates from mapsLink:', e);
       }
     }
-    const data = await fetchWeather(resolvedLat || 41.9028, resolvedLon || 12.4964);
+    if (!resolvedLat || !resolvedLon) {
+      container.innerHTML = '';
+      return;
+    }
+    const data = await fetchWeather(resolvedLat, resolvedLon);
     const cur = data.current;
     const daily = data.daily;
     const wmoCode = cur.weathercode;
