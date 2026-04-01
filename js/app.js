@@ -22,10 +22,10 @@ function renderLanding() {
   const nameParts = d.bbName.split(' ');
   if (nameParts.length >= 3) {
     document.getElementById('l-bbname-line1').textContent = nameParts.slice(0, -1).join(' ');
-    document.getElementById('l-bbname-em').innerHTML = nameParts[nameParts.length - 1];
+    document.getElementById('l-bbname-em').textContent = nameParts[nameParts.length - 1];
   } else {
     document.getElementById('l-bbname-line1').textContent = d.bbName;
-    document.getElementById('l-bbname-em').innerHTML = '';
+    document.getElementById('l-bbname-em').textContent = '';
   }
   document.getElementById('l-subtitle').textContent = d.subtitle;
 
@@ -531,7 +531,7 @@ function renderPlaces(places) {
     card.className = 'place-card';
     card.innerHTML = `
       <div class="place-header">
-        <span class="place-icon">${p.emoji || '📍'}</span>
+        <span class="place-icon">${escHtml(p.emoji || '📍')}</span>
         <span class="place-title">${escHtml(p.name)}</span>
       </div>
       <p class="place-desc">${renderRichText(desc)}</p>
@@ -564,7 +564,7 @@ function renderFood(restaurants, apt) {
     card.className = 'restaurant-card';
     card.innerHTML = `
       <div class="rest-header">
-        <span class="rest-icon">${r.emoji || '🍽️'}</span>
+        <span class="rest-icon">${escHtml(r.emoji || '🍽️')}</span>
         <div class="rest-body">
           <div class="rest-name">${escHtml(r.name)}</div>
           <div class="rest-tipo">${escHtml(r.tipo || '')}</div>
@@ -595,7 +595,7 @@ function renderFood(restaurants, apt) {
     card.className = 'restaurant-card';
     card.innerHTML = `
       <div class="rest-header">
-        <span class="rest-icon">${s.emoji || '🛒'}</span>
+        <span class="rest-icon">${escHtml(s.emoji || '🛒')}</span>
         <div class="rest-body">
           <div class="rest-name">${escHtml(s.name || '')}</div>
           <div class="rest-tipo">${escHtml(s.tipo || '')}</div>
@@ -634,7 +634,7 @@ function renderTransport(transport) {
     const mapsBtn = item.maps ? `<a class="maps-btn google-maps-btn" href="${escAttr(item.maps)}" target="_blank" rel="noopener">${mapsLabel}</a>` : '';
     card.innerHTML = `
       <div class="transport-header">
-        <span class="transport-icon">${item.icon}</span>
+        <span class="transport-icon">${escHtml(item.icon)}</span>
         <span class="transport-title">${escHtml(item.label)}</span>
       </div>
       <p class="transport-desc">${renderRichText(item.text)}</p>
@@ -939,18 +939,16 @@ async function changePin() {
   const newPin = document.getElementById('s-pin-new').value;
   const confirm2 = document.getElementById('s-pin-confirm').value;
   const msg = document.getElementById('s-pin-msg');
-  const showErr = text => { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + text; };
-  const showOk = text => { msg.style.color = 'var(--teal)'; msg.textContent = '✅ ' + text; };
   const currentHash = await hashPin(current);
-  if (currentHash !== getStoredPinHash()) { showErr('PIN attuale non corretto.'); return; }
-  if (!/^\d{4}$/.test(newPin)) { showErr('Il nuovo PIN deve essere di esattamente 4 cifre numeriche.'); return; }
-  if (newPin !== confirm2) { showErr('I due PIN non coincidono. Riprova.'); return; }
+  if (currentHash !== getStoredPinHash()) { showErr(msg, 'PIN attuale non corretto.'); return; }
+  if (!/^\d{4}$/.test(newPin)) { showErr(msg, 'Il nuovo PIN deve essere di esattamente 4 cifre numeriche.'); return; }
+  if (newPin !== confirm2) { showErr(msg, 'I due PIN non coincidono. Riprova.'); return; }
   const newHash = await hashPin(newPin);
   localStorage.setItem(PIN_KEY, newHash);
   document.getElementById('s-pin-current').value = '';
   document.getElementById('s-pin-new').value = '';
   document.getElementById('s-pin-confirm').value = '';
-  showOk('PIN aggiornato con successo!');
+  showOk(msg, 'PIN aggiornato con successo!');
   showToast('PIN aggiornato', 'success');
   setTimeout(() => { msg.textContent = ''; }, 3000);
 }
@@ -1017,18 +1015,16 @@ async function changeCredentials() {
   const newPass = document.getElementById('s-pass-new').value;
   const confirmPass = document.getElementById('s-pass-confirm').value;
   const msg = document.getElementById('s-cred-msg');
-  const showErr = text => { msg.style.color = 'var(--accent)'; msg.textContent = '❌ ' + text; };
-  const showOk = text => { msg.style.color = 'var(--teal)'; msg.textContent = '✅ ' + text; };
-  if (!currentUser || !currentPass) { showErr('Inserisci le credenziali attuali.'); return; }
+  if (!currentUser || !currentPass) { showErr(msg, 'Inserisci le credenziali attuali.'); return; }
   const currentUserHash = await hashPin(currentUser);
   const currentPassHash = await hashPin(currentPass);
   if (currentUserHash !== getStoredUserHash() || currentPassHash !== getStoredPassHash()) {
-    showErr('Credenziali attuali non corrette.');
+    showErr(msg, 'Credenziali attuali non corrette.');
     return;
   }
-  if (!newUser) { showErr('Il nuovo username non può essere vuoto.'); return; }
-  if (!newPass) { showErr('La nuova password non può essere vuota.'); return; }
-  if (newPass !== confirmPass) { showErr('Le due password non coincidono.'); return; }
+  if (!newUser) { showErr(msg, 'Il nuovo username non può essere vuoto.'); return; }
+  if (!newPass) { showErr(msg, 'La nuova password non può essere vuota.'); return; }
+  if (newPass !== confirmPass) { showErr(msg, 'Le due password non coincidono.'); return; }
   const newUserHash = await hashPin(newUser);
   const newPassHash = await hashPin(newPass);
   localStorage.setItem(USER_KEY, newUserHash);
@@ -1038,7 +1034,7 @@ async function changeCredentials() {
   document.getElementById('s-user-new').value = '';
   document.getElementById('s-pass-new').value = '';
   document.getElementById('s-pass-confirm').value = '';
-  showOk('Credenziali aggiornate con successo!');
+  showOk(msg, 'Credenziali aggiornate con successo!');
   showToast('Credenziali aggiornate!', 'success');
   setTimeout(() => { msg.textContent = ''; }, 3000);
 }

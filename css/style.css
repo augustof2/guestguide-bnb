@@ -75,7 +75,11 @@ html.theme-minimal {
   --teal2: #34495e;
   --accent: #e74c3c;
 }
-* { transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
+body, .app-shell, .apt-card, .stat-card, .welcome-card,
+.guide-header, .bottom-nav, .nav-item, .tab-section,
+.section-title, .section-sub {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -113,7 +117,7 @@ html.theme-minimal {
   #landing {
     min-height: 100vh;
     min-height: 100dvh;
-    background: linear-gradient(160deg, #0d1b1e 0%, #162c30 60%, #0d1b1e 100%);
+    background: linear-gradient(160deg, var(--bg) 0%, var(--bg2) 60%, var(--bg) 100%);
     display: flex;
     flex-direction: column;
     padding: 0 0 40px;

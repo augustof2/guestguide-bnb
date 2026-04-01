@@ -5,14 +5,20 @@ const STATIC_ASSETS = [
   './index.html',
   './css/style.css',
   './js/crypto.js',
+  './js/i18n.js',
+  './js/utils.js',
   './js/analytics.js',
   './js/app.js',
   './js/data.js',
-  './js/settings.js',
+  './js/settings-apartments.js',
+  './js/settings-ui.js',
+  './js/settings-publish.js',
   './js/weather.js',
   './js/sw-register.js',
   './js/qr-lib.js',
   './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
   'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap'
 ];
 

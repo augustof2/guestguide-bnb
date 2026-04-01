@@ -91,9 +91,21 @@ function deobfuscate(str) {
 // deobfuscateHash reverses the process, returning the original hex string.
 
 function obfuscateHash(hexHash) {
-  return btoa(hexHash);
+  if (!hexHash) return '';
+  const bytes = [];
+  for (let i = 0; i < hexHash.length; i++) {
+    bytes.push(hexHash.charCodeAt(i) ^ _XOR_KEY);
+  }
+  return btoa(String.fromCharCode(...bytes));
 }
 
 function deobfuscateHash(b64) {
-  try { return atob(b64); } catch (_) { return b64; }
+  try {
+    const raw = atob(b64);
+    let s = '';
+    for (let i = 0; i < raw.length; i++) {
+      s += String.fromCharCode(raw.charCodeAt(i) ^ _XOR_KEY);
+    }
+    return s;
+  } catch (_) { return b64; }
 }
