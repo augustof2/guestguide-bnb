@@ -1373,8 +1373,10 @@ function init() {
 
   document.addEventListener('keydown', function(e) {
     if (!document.getElementById('pin-modal').classList.contains('open')) return;
-    // Don't intercept keys when text inputs in login/recovery views are focused
-    if (e.target && (e.target.tagName === 'INPUT')) return;
+    // Don't intercept digit/backspace keys when a text input inside login or recovery views is focused
+    var loginVisible = document.getElementById('login-view').style.display !== 'none';
+    var recoveryVisible = (document.getElementById('recovery-view') || {}).style && document.getElementById('recovery-view').style.display !== 'none';
+    if (loginVisible || recoveryVisible) return;
     if (e.key >= '0' && e.key <= '9') { e.preventDefault(); pinKey(e.key); }
     else if (e.key === 'Backspace') { e.preventDefault(); pinBackspace(); }
     else if (e.key === 'Escape') closePinModal();
