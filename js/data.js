@@ -238,7 +238,361 @@ const DEFAULT_DATA = {
 };
 
 /* PUBLISHED_DATA_START */
-const PUBLISHED_DATA = {};
+const PUBLISHED_DATA = {
+  "bbName": "FF Elite Apartments",
+  "subtitle": "GUIDA OSPITE",
+  "cityZone": "Roma",
+  "hostName": "Nicolò",
+  "hostPhone": "+393342177311",
+  "googleReviewUrl": "https://g.page/r/CZvIjdaReVG_EBM/review",
+  "qrBaseUrl": "",
+  "supportPhone": "+393450307922",
+  "customDomain": "",
+  "checkinSteps": [
+    {
+      "icon": "📍",
+      "titleIt": "Raggiungi l'appartamento",
+      "titleEn": "Reach the apartment",
+      "descIt": "Segui le indicazioni su Google Maps per raggiungere l'indirizzo.",
+      "descEn": "Follow Google Maps directions to reach the address."
+    },
+    {
+      "icon": "🔑",
+      "titleIt": "Ritira le chiavi",
+      "titleEn": "Pick up the keys",
+      "descIt": "Le chiavi sono nella cassetta di sicurezza accanto alla porta. Il codice ti è stato inviato via messaggio.",
+      "descEn": "Keys are in the lockbox next to the door. The code was sent to you via message."
+    },
+    {
+      "icon": "🚪",
+      "titleIt": "Entra nell'appartamento",
+      "titleEn": "Enter the apartment",
+      "descIt": "Apri la porta e fai come se fossi a casa tua!",
+      "descEn": "Open the door and make yourself at home!"
+    },
+    {
+      "icon": "📶",
+      "titleIt": "Connettiti al WiFi",
+      "titleEn": "Connect to WiFi",
+      "descIt": "Il nome della rete e la password li trovi nella sezione Soggiorno.",
+      "descEn": "You can find the network name and password in the Stay section."
+    }
+  ],
+  "welcomeIt": "Siamo felici di avervi come ospiti e rimaniamo a vostra disposizione per qualsiasi necessità — non esitate a contattarci.",
+  "welcomeEn": "We are delighted to have you as our guests! This apartment has been carefully prepared to make your stay unforgettable. We are at your disposal for any need — do not hesitate to contact us.",
+  "closingTitleIt": "Grazie per aver scelto il nostro B&B!",
+  "closingTitleEn": "Thank you for choosing our B&B!",
+  "closingTextIt": "È stato un piacere avervi come ospiti. Speriamo di rivedervi presto! Buon viaggio! ✈️",
+  "closingTextEn": "It was a pleasure having you as our guests. We hope to see you again soon! Have a great trip! ✈️",
+  "extraContacts": [],
+  "apts": [
+    {
+      "name": "FF Elite Apartment - Nuovo Salario",
+      "address": "Via Suvereto 330, 00139, Roma, Italia",
+      "addressShort": "Via Suvereto 330",
+      "mapsLink": "https://maps.app.goo.gl/Ttk5SWh85eUa2EKE9?g_st=ic",
+      "maxGuests": "3 persone",
+      "maxGuestsEn": "3 people",
+      "wifi": "FF Elite Apartments",
+      "wifiPass": "_OBF_AgsRGwoLbhYeHQ==",
+      "checkin": "15:00",
+      "checkout": "10:00",
+      "lat": "",
+      "lon": "",
+      "howToReachIt": "",
+      "howToReachEn": "",
+      "howToAccessIt": "Le chiavi vi verranno consegnate direttamente dall'host al vostro arrivo. In caso di check-in autonomo, troverete le istruzioni dettagliate via messaggio prima dell'arrivo.",
+      "howToAccessEn": "The keys will be given to you directly by the host upon your arrival. In case of self-check-in, you will find detailed instructions via message before arrival.",
+      "parkingIt": "Parcheggi pubblici gratuiti sono disponibili nelle vicinanze (strisce bianche). A 500mt si trova GARAGE CERVIALTO a pagamento.",
+      "parkingEn": "Free public parking is available nearby (white stripes). At 500m there is A PAID CERVIALTO GARAGE.",
+      "bedroomTagsIt": "Letto matrimoniale,Jacuzzi,Bagno in Camera,Cabina Armadio,Biancheria,Cuscini extra",
+      "bedroomTagsEn": "Double bed,Jacuzzi,En suite bathroom,Wardrobe,Linen, Extra pillows",
+      "kitchenTagsIt": "Piano cottura,Forno,Frigorifero,Lavastoviglie,Caffettiera,Microonde",
+      "kitchenTagsEn": "Cooktop,Oven,Refrigerator,Dishwasher,Coffee maker,Microwave",
+      "bathroomTagsIt": "Doccia,Asciugamani,Phon,Prodotti igiene",
+      "bathroomTagsEn": "Shower,Towels,Hairdryer, Hygiene products",
+      "houseRules": [
+        {
+          "icon": "🔇",
+          "titleIt": "Silenzio Notturno",
+          "titleEn": "Quiet Hours",
+          "descIt": "Dalle 23:00 alle 7:00 si prega di mantenere il silenzio per rispetto dei vicini.",
+          "descEn": "From 23:00 to 08:00 please keep noise to a minimum out of respect for the neighbours."
+        },
+        {
+          "icon": "🚭",
+          "titleIt": "Vietato Fumare",
+          "titleEn": "No Smoking",
+          "descIt": "Vietato fumare all'interno dell'appartamento.",
+          "descEn": "No smoking inside the apartment."
+        },
+        {
+          "icon": "🐾",
+          "titleIt": "Animali Domestici",
+          "titleEn": "Pets",
+          "descIt": "Gli animali domestici non sono ammessi senza previo accordo con l'host.",
+          "descEn": "Pets are not allowed without prior agreement with the host."
+        },
+        {
+          "icon": "👥",
+          "titleIt": "Ospiti Esterni",
+          "titleEn": "External guests",
+          "descIt": "Non sono ammesse feste. Il numero di ospiti non deve superare la capienza massima indicata.",
+          "descEn": "Parties are not allowed. The number of guests must not exceed the maximum capacity indicated."
+        }
+      ],
+      "extraServices": [
+        {
+          "icon": "🧺",
+          "nameIt": "Cambio Biancheria",
+          "nameEn": "Linen Change",
+          "descIt": "Ogni 4 giorni su richiesta (50€)",
+          "descEn": "Every 4 days on request (€50)"
+        },
+        {
+          "icon": "🧹",
+          "nameIt": "Pulizie Aggiuntive",
+          "nameEn": "Additional Cleaning",
+          "descIt": "Disponibile su richiesta (50€)",
+          "descEn": "Available on request (50€)"
+        },
+        {
+          "icon": "🚗",
+          "nameIt": "Transfer Aeroporto",
+          "nameEn": "Airport transfers",
+          "descIt": "Prenotabile in anticipo (50€)",
+          "descEn": "Bookable in advance (€50)"
+        },
+        {
+          "icon": "🛁",
+          "nameIt": "Jacuzzi Pacchetto",
+          "nameEn": "Jacuzzi Package",
+          "descIt": "Disponibile su richiesta: prosecco, fiori, palloncini, cibo (da 30 a 60€)",
+          "descEn": "Available on request: prosecco, flowers, balloons, food (from 30 to 60€)"
+        }
+      ],
+      "places": [
+        {
+          "emoji": "🏛",
+          "name": "Colosseo",
+          "descIt": "il simbolo più famoso di Roma, un’antica arena imperiale che racconta la grandezza della storia romana. Imponente e suggestivo, è una tappa imperdibile per chi visita la città.",
+          "descEn": "the most famous symbol of Rome, an ancient imperial arena that tells the greatness of Roman history. Imposing and evocative, it is an unmissable stop for those who visit the city.",
+          "howIt": "autobus 80 (4 fermate) da Vimercati fino a Conca d’Oro + Metro B1 fino a Colosseo (8 fermate)",
+          "howEn": "bus 80 (4 stops) from Vimercati to Conca d 'Oro + Metro B1 to Colosseum (8 stops)",
+          "maps": "https://maps.app.goo.gl/hg9Zm6WKgg8PcrJG6?g_st=ic"
+        },
+        {
+          "emoji": "⛪️",
+          "name": "San Pietro",
+          "descIt": "uno dei simboli più grandi della cristianità e un capolavoro del Rinascimento, con la sua imponente cupola michelangiolesca e gli interni ricchi di marmi, mosaici e sculture. È meta di pellegrinaggi e visitatori da tutto il mondo, perfetta per una visita lenta e contemplativa al centro del Vaticano.",
+          "descEn": "one of the greatest symbols of Christianity and a masterpiece of the Renaissance, with its imposing Michelangelo dome and interiors rich in marble, mosaics and sculptures. It is a destination for pilgrims and visitors from all over the world, perfect for a slow and contemplative visit to the center of the Vatican.",
+          "howIt": "autobus 80 (14 fermate) da Vimercati fino a Barberini oppure autobus 90 (14 fermate) fino a Termini + Metro A fino a Ottaviano (6 fermate)",
+          "howEn": "bus 80 (14 stops) from Vimercati to Barberini or bus 90 (14 stops) to Termini + Metro A to Ottaviano (6 stops)",
+          "maps": "https://maps.app.goo.gl/YvfySVmPFX7XZHhB7?g_st=ic"
+        },
+        {
+          "emoji": "🎭",
+          "name": "Phanteon",
+          "descIt": "un tempio antico trasformato in chiesa, celebre per la sua cupola perfetta e per il grande oculus che illumina l’interno in modo suggestivo. È uno dei monumenti meglio conservati di Roma, simbolo di genio architettonico e di continuità fra mondo antico e moderno.",
+          "descEn": "an ancient temple transformed into a church, famous for its perfect dome and for the large oculus that illuminates the interior in a suggestive way. It is one of the best preserved monuments in Rome, a symbol of architectural genius and continuity between the ancient and modern world.",
+          "howIt": "autobus 80 da Vimercati (15 fermate)",
+          "howEn": "80 bus from Vimercati (15 stops)",
+          "maps": "https://maps.app.goo.gl/iCwfNkeNLb5BuB7z7?g_st=ic"
+        },
+        {
+          "emoji": "📍",
+          "name": "Altare della Patria",
+          "descIt": "il grande monumento dedicato a Vittorio Emanuele II, al centro del Vittoriano, che domina Piazza Venezia. È un simbolo dell’unità d’Italia, con colonne, sculture e terrazze da cui si gode una vista spettacolare su Roma.",
+          "descEn": "the large monument dedicated to Vittorio Emanuele II, in the centre of the Vittoriano, overlooking Piazza Venezia. It is a symbol of the unity of Italy, with columns, sculptures and terraces from which you can enjoy a spectacular view of Rome.",
+          "howIt": "autobus 80 da Vimercati (16 fermate)",
+          "howEn": "80 bus from Vimercati (16 stops)",
+          "maps": "https://maps.app.goo.gl/n1p2aHj9ifofQNWa7?g_st=ic"
+        },
+        {
+          "emoji": "⛲️",
+          "name": "Fontana di Trevi",
+          "descIt": "è la più celebre delle fontane di Roma, un trionfo barocco di statue, acqua e architettura ai piedi del Palazzo Poli. Luogo di riti, selfie e desideri (con la tradizione della moneta gettata nella vasca), è un must‑see per ogni visita alla città.",
+          "descEn": "is the most famous of Rome's fountains, a Baroque triumph of statues, water and architecture at the foot of Palazzo Poli. Place of rituals, selfies and desires (with the tradition of the coin thrown into the tub), it is a must-see for every visit to the city.",
+          "howIt": "autobus 80 da Vimercati (15 fermate)",
+          "howEn": "80 bus from Vimercati (15 stops)",
+          "maps": "https://maps.app.goo.gl/2rY5e4CFBBy9ANXV7?g_st=ic"
+        }
+      ],
+      "restaurants": [
+        {
+          "emoji": "🍝",
+          "name": "La Villetta dal 1940",
+          "tipo": "",
+          "descIt": "ristorante storico dove la tradizione romana incontra un’atmosfera autentica e accogliente. Piatti classici, materie prime eccellenti e un servizio familiare lo rendono una tappa perfetta per gustare la vera cucina locale.",
+          "descEn": "a historic restaurant where the Roman tradition meets an authentic and welcoming atmosphere. Classic dishes, excellent raw materials and family service make it a perfect stop to enjoy real local cuisine.",
+          "price": "€€",
+          "maps": "https://maps.app.goo.gl/xTnhXpv9NNpGUBzt5?g_st=ic"
+        },
+        {
+          "emoji": "🍕",
+          "name": "50 Kalò",
+          "tipo": "",
+          "descIt": "una pizzeria rinomata per la sua impasto leggero e ingredienti di alta qualità, perfetta per chi cerca sapori tradizionali e genuini.",
+          "descEn": "a pizzeria renowned for its light dough and high quality ingredients, perfect for those looking for traditional and genuine flavours.",
+          "price": "€€",
+          "maps": "https://maps.app.goo.gl/2ieGKwRM6HZFLYv19?g_st=ic"
+        },
+        {
+          "emoji": "🐟",
+          "name": "Ristorante Antamoro",
+          "tipo": "",
+          "descIt": "un elegante ristorante di pesce. Propone piatti curati e ingredienti freschissimi, perfetti per chi desidera gustare specialità di mare in un’atmosfera tranquilla e raffinata.",
+          "descEn": "an elegant seafood restaurant. It offers carefully prepared dishes and fresh ingredients, perfect for those who want to enjoy seafood specialities in a quiet and refined atmosphere.",
+          "price": "€€€",
+          "maps": "https://maps.app.goo.gl/w9fsq3fu5fnMGtds6?g_st=ic"
+        },
+        {
+          "emoji": "🥩",
+          "name": "Carnesa Churrascaria Brasiliana",
+          "tipo": "",
+          "descIt": "dove il rodizio di carni alla brace incontra un’atmosfera vivace e accogliente. Ideale per chi vuole provare una grigliata sudamericana con tagli pregiati, ricco buffet di antipasti e il sapore autentico del Brasile.",
+          "descEn": "where the rodent of grilled meats meets a lively and welcoming atmosphere. Ideal for those who want to try a South American grill with fine cuts, a rich buffet of appetizers and the authentic flavour of Brazil.",
+          "price": "€€€",
+          "maps": "https://maps.app.goo.gl/iKoK5QjAvGYN6EaP7?g_st=ic"
+        }
+      ],
+      "supermarkets": [
+        {
+          "emoji": "🛒",
+          "name": "Todis",
+          "tipo": "",
+          "descIt": "discount di marca, volantini e promozioni frequenti, buona qualità per il prezzo.",
+          "descEn": "brand discounts, frequent flyers and promotions, good quality for the price.",
+          "price": "€",
+          "maps": "https://maps.app.goo.gl/pCaVYYnRBV5epv9z5?g_st=ic"
+        },
+        {
+          "emoji": "🛒",
+          "name": "Conad",
+          "tipo": "",
+          "descIt": "catena medio‑alta, buon assortimento di prodotti freschi e convenzionali, prezzi più alti di Todis ma qualità spesso superiore.",
+          "descEn": "medium-high chain, good assortment of fresh and conventional products, higher prices than Todis but often higher quality.",
+          "price": "€€",
+          "maps": "https://maps.app.goo.gl/zsLP9HziFEhAcCKE6?g_st=ic"
+        }
+      ],
+      "transport": {
+        "airportEnabled": true,
+        "airportIcon": "✈️",
+        "airportIt": "**Opzione 1: Taxi (più comoda, diretta)**\nI taxi ufficiali bianchi sono disponibili ai Terminal 1 e 3 (area arrivi). Il costo fisso per Roma centro è intorno ai 60/70€.\n\n**Opzione 2: Treno Leonardo Express + bus/metro**\nPrendete il Leonardo Express dalla stazione Fiumicino Aeroporto a Roma Termini. Da Termini, prendere la metro B direzione Rebibbia fino a Jonio, poi prendere l’autobus n. 80, 344 o 350 fino a fermata Suvereto/Calcinaia.\n\n**Opzione 3: Treno regionale FL1 + bus**\nTreno FL1 da Fiumicino a Nuovo Salario. Da Nuovo Salario, fermata a 10 min a piedi; altrimenti bus 69 o 349.",
+        "airportEn": "**Option 1: Taxi (more convenient, direct)**\nOfficial white taxis are available at Terminals 1 and 3 (arrivals area). The fixed cost for central Rome is around 60/70€.\n\n**Option 2: Leonardo Express train + bus/metro**\nTake the Leonardo Express from Fiumicino Aeroporto station in Rome Termini. From Termini, take metro B towards Rebibbia until Jonio, then take bus no. 80, 344 or 350 until Suvereto/Calcinaia stop.\n\n**Option 3: Regional train FL1 + bus**\nFL1 train from Fiumicino to Nuovo Salario. From Nuovo Salario, 10 minutes walk otherwise bus 69 or 349.",
+        "airportMaps": "https://maps.app.goo.gl/ryLrzD8CMPjSXJhw7?g_st=ic",
+        "stationEnabled": true,
+        "stationIcon": "🚉",
+        "stationIt": "**Opzione 1: Taxi (più comoda, diretta)**\nI taxi ufficiali bianchi sono disponibili fuori dalla stazione Termini. Il costo per la nostra zona è intorno ai 25-35€.\n\n**Opzione 2: Metro + bus**  \nDa Termini, prendete la metro B verso Rebibbia fino a Jonio. Poi bus 80, 344 o 350 fino alla fermata Suvereto/Calcinaia.\n\n**Opzione 3: Treno regionale FL1/FL3 + bus/a piedi**  \nPrendete il treno FL1 o FL3 da Termini a Nuovo Salario. Dalla stazione Nuovo Salario, 10 minuti a piedi oppure bus 69 o 349.",
+        "stationEn": "**Option 1: Taxi (most convenient, direct)**\nOfficial white taxis are available outside Termini station. The cost for our area is around 25-35€.\n\n**Option 2: Metro + bus**  \nFrom Termini, take metro B towards Rebibbia until Jonio. Then bus 80, 344 or 350 to the Suvereto/Calcinaia stop.\n\n**Option 3: Regional train FL1/FL3 + bus/walk**  \nTake the FL1 or FL3 train from Termini to New Salary. From Nuovo Salario station, a 10-minute walk or bus 69 or 349.",
+        "stationMaps": "https://maps.app.goo.gl/YNQo7Vnp4HCVqFEB8?g_st=ic",
+        "metroEnabled": false,
+        "metroIcon": "🚇",
+        "metroIt": "Fermata più vicina: Centrale (Linea A) a 800 metri dall'appartamento.",
+        "metroEn": "Nearest stop: Central (Line A) 800 meters from the apartment.",
+        "metroMaps": "https://maps.app.goo.gl/DnbiRpgZgTzxD2ni8?g_st=ic",
+        "busEnabled": false,
+        "busIcon": "🚌",
+        "busIt": "Linee principali: Bus 10, 20, 30 verso il centro. Fermata a 200 metri dall'appartamento.",
+        "busEn": "Main lines: Buses 10, 20, 30 to the centre. Stop 200 meters from the apartment.",
+        "busMaps": "https://maps.app.goo.gl/Hs8CX6wZe4ifcZ8t6?g_st=ic",
+        "ticketsIt": "Biglietto singolo: €1,50 (valido 90 minuti). Biglietto giornaliero: €8,50. Si possono acquistare presso le biglietterie, rivenditori autorizzati o via Tap & Go.",
+        "ticketsEn": "Single ticket: €1.50 (valid for 90 minutes). Daily ticket: €8.50. You can buy them at ticket offices, authorized dealers or via Tap & Go.",
+        "taxiIt": "Taxi ufficiali: trovate i posteggi in piazza principale e in stazione. App consigliate: Uber, FREE NOW.",
+        "taxiEn": "Official taxis: find parking spaces in the main square and at the station. Recommended apps: Uber, FREE NOW."
+      },
+      "checkoutSteps": [
+        {
+          "titleIt": "Raccogliete i vostri effetti personali",
+          "titleEn": "Collect your personal belongings",
+          "descIt": "Controllate tutti i cassetti, armadi e il bagno per non dimenticare nulla.",
+          "descEn": "Check all drawers, wardrobes and the bathroom so you don't forget anything."
+        },
+        {
+          "titleIt": "Lasciate le chiavi",
+          "titleEn": "Leave the keys",
+          "descIt": "Depositate le chiavi nel luogo indicato dall'host al momento del check-in.",
+          "descEn": "Deposit your keys at the location indicated by the host at check-in."
+        },
+        {
+          "titleIt": "Rifiuti e raccolta differenziata",
+          "titleEn": "waste management and separate collection",
+          "descIt": "Smaltite i rifiuti negli appositi contenitori seguendo le istruzioni in cucina.",
+          "descEn": "Dispose of the waste in the appropriate containers following the instructions in the kitchen."
+        },
+        {
+          "titleIt": "Lasciate una recensione",
+          "titleEn": "Leave a review",
+          "descIt": "Se avete apprezzato il soggiorno, la vostra recensione è un grande aiuto per noi!",
+          "descEn": "If you enjoyed your stay, your review is a great help for us!"
+        }
+      ]
+    }
+  ],
+  "navLabels": {
+    "homeIt": "Home",
+    "homeEn": "",
+    "homeIcon": "🏠",
+    "stayIt": "Soggiorno",
+    "stayEn": "",
+    "stayIcon": "🛋️",
+    "placesIt": "Luoghi",
+    "placesEn": "",
+    "placesIcon": "🗺️",
+    "foodIt": "Mangiare",
+    "foodEn": "",
+    "foodIcon": "🍽️",
+    "transportIt": "Muoversi",
+    "transportEn": "",
+    "transportIcon": "🚇",
+    "departureIt": "Partenza",
+    "departureEn": "",
+    "departureIcon": "🧳"
+  },
+  "sectionTitles": {
+    "stayEyebrowIt": "Il Tuo Appartamento",
+    "stayEyebrowEn": "",
+    "stayTitleIt": "Soggiorno",
+    "stayTitleEn": "",
+    "placesEyebrowIt": "Scopri la Città",
+    "placesEyebrowEn": "",
+    "placesTitleIt": "Luoghi",
+    "placesTitleEn": "",
+    "foodEyebrowIt": "Dove Mangiare",
+    "foodEyebrowEn": "",
+    "foodTitleIt": "Mangiare",
+    "foodTitleEn": "",
+    "transportEyebrowIt": "In Città",
+    "transportEyebrowEn": "",
+    "transportTitleIt": "Muoversi",
+    "transportTitleEn": "",
+    "departureEyebrowIt": "È Ora di Partire",
+    "departureEyebrowEn": "",
+    "departureTitleIt": "Partenza",
+    "departureTitleEn": ""
+  },
+  "reviews": [
+    {
+      "author": "Maria Rosa",
+      "stars": 5,
+      "textIt": "Appartamento bellissimo, pulito e in posizione perfetta! L'host è stato molto disponibile",
+      "textEn": "Beautiful apartment, clean and perfectly located! The host was very helpful"
+    },
+    {
+      "author": "John Sa",
+      "stars": 5,
+      "textIt": "Esperienza fantastica! Torneremo sicuramente",
+      "textEn": "Fantastic experience! We will definitely come back"
+    },
+    {
+      "author": "Sophie L",
+      "stars": 5,
+      "textIt": "Tutto perfetto, dalla pulizia all'accoglienza. Consigliatissimo",
+      "textEn": "Everything was perfect, from cleanliness to hospitality. Highly recommended"
+    }
+  ]
+};
 /* PUBLISHED_DATA_END */
 
 // ════════════════════════════════════════════
@@ -253,17 +607,17 @@ let settingsDirty = false;
 let pinBuffer = '';
 const PIN_KEY = 'bnb_admin_pin';
 /* DEFAULT_PIN_HASH_START */
-const DEFAULT_PIN_HASH = deobfuscateHash('KAo1L2k7CyoLKBUCHBBjNQk9AgI0C2dnYDtrCA00CBU7NggXGxEIHmgLETxjNDUpHz4NDj8fPBU5MjlvCzAvCwAfGDFn');
+const DEFAULT_PIN_HASH = deobfuscateHash('Pm45Y2NoYmJpPmhraGM/bWhjaGI5OG08OTtjYj5sODs5OD9oPj9tODk7aWhrPzltPm1qY28+PG8/a2ptYmM8aw==');
 /* DEFAULT_PIN_HASH_END */
 
 // Login credentials state
 const USER_KEY = 'bnb_admin_user';
 const PASS_KEY = 'bnb_admin_pass';
 /* DEFAULT_USER_HASH_START */
-const DEFAULT_USER_HASH = deobfuscateHash('HCs0PhAINgspNjwuNy5oE3E3FW0qC2dnYAoyCSMWGTgpKDIqbzgeE24ibBIyFykeMBIvFBkVNwgPHTBvHik2Oy8/MzFn');
+const DEFAULT_USER_HASH = deobfuscateHash('YjlsY21sP284b25ram5rbzg+P2NqYjg+bj4/P2tvPjw4a2xtO2M5Ym1pPDluODhiO2JrPGw8aDs4bm5iO2NrYg==');
 /* DEFAULT_USER_HASH_END */
 /* DEFAULT_PASS_HASH_START */
-const DEFAULT_PASS_HASH = deobfuscateHash('bgBrHywZFQMSHQw3HBUeOWkOIxYjC2dnYB4zAhA1KCppbxUWDSsUHgxpDBcYPh0RCS0JMT4+Y28XFx42GBgoNjRiKTVn');
+const DEFAULT_PASS_HASH = deobfuscateHash('YjlsY21sP284b25ram5rbzg+P2NqYjg+bj4/P2tvPjw4a2xtO2M5Ym1pPDluODhiO2JrPGw8aDs4bm5iO2NrYg==');
 /* DEFAULT_PASS_HASH_END */
 
 const RECOVERY_KEY = 'bnb_recovery_hash';
