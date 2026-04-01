@@ -245,7 +245,7 @@ const PUBLISHED_DATA = {
   "googleReviewUrl": "https://g.page/r/CZvIjdaReVG_EBM/review",
   "qrBaseUrl": "",
   "supportPhone": "+393450307922",
-  "customDomain": "guida-ffeliteapartments.it",
+  "customDomain": "",
   "checkinSteps": [
     {
       "icon": "📍",
