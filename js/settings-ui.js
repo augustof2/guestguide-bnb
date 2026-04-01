@@ -333,6 +333,9 @@ async function collectFormData() {
     departureIcon:  document.getElementById('s-nl-departureIcon').value.trim() || '🧳'
   };
 
+  // Theme (published so all users share the same default)
+  d.theme = localStorage.getItem('bnb_theme') || d.theme || 'dark';
+
   // Section Titles
   d.sectionTitles = {
     stayEyebrowIt:      document.getElementById('s-st-stayEyebrowIt').value.trim() || 'Il Tuo Appartamento',
