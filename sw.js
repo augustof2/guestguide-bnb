@@ -90,7 +90,7 @@ self.addEventListener('fetch', e => {
             getCache().then(cache => cache.put(e.request, c)).then(() => {
               // Notify all active clients that fresh content is available
               self.clients.matchAll().then(clients => {
-                clients.forEach(client => client.postMessage({ type: 'CONTENT_UPDATED' }));
+                clients.forEach(client => client.postMessage({ type: 'CONTENT_UPDATED', version: CACHE_VERSION }));
               });
             });
           }

@@ -1472,7 +1472,7 @@ function init() {
   // Analytics: track visit on page load
   if (typeof GuestAnalytics !== 'undefined') GuestAnalytics.trackVisit();
 
-  const savedTheme = localStorage.getItem('bnb_theme') ||
+  const savedTheme = localStorage.getItem('bnb_theme') || currentData.theme ||
     (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
   applyTheme(savedTheme);
 

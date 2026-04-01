@@ -231,31 +231,30 @@ async function saveTokenForHost() {
 
 async function hostPublishNow() {
   const btn = document.getElementById('host-publish-btn');
+  const msg = document.getElementById('s-publish-msg');
 
   // Prova a recuperare il token pre-salvato dall'admin (cifrato in localStorage)
   const encTok = localStorage.getItem(HOST_TOKEN_STORE) || '';
   const token = encTok ? await decryptToken(encTok).catch(() => '') : '';
 
   if (!token) {
-    // Fallback: nessun token configurato, usa il vecchio metodo di invio email/JSON
-    showToast('⚠️ L\'amministratore non ha ancora configurato la pubblicazione automatica. Invio modifiche via email...', 'info');
-    sendChangesAsHost();
+    // Nessun token: mostra errore nel pannello (stesso stile dell'admin) invece di aprire WhatsApp silenziosamente
+    showErr(msg, '⚠️ La pubblicazione automatica non è ancora configurata. Chiedi all\'amministratore di salvare il token GitHub nella sezione Sicurezza, poi riprova.');
+    showToast('⚠️ Pubblicazione automatica non configurata.', 'info');
     return;
   }
 
   if (!confirm('Vuoi pubblicare le modifiche online? Saranno visibili a tutti gli ospiti in pochi secondi.')) return;
+
+  // Mostra subito lo stato di caricamento, prima di qualsiasi operazione asincrona
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Pubblicazione…'; }
+  if (msg) msg.textContent = '';
 
   // 1. Salva localmente
   const d = await collectFormData();
   currentData = d;
   saveData(d);
   renderLanding();
-
-  // 2. Pubblica usando il token pre-salvato
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Pubblicazione…'; }
-
-  const msg = document.getElementById('s-publish-msg');
-  if (msg) msg.textContent = '';
 
   // Show deploy progress steps
   const deploySteps = [

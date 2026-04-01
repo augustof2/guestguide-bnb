@@ -5,6 +5,7 @@ const DEFAULT_DATA = {
   bbName: "Il Tuo B&B",
   subtitle: "Guest Guide",
   cityZone: "La Tua Città · Zona",
+  theme: 'dark',
   pwaName: '',
   pwaShortName: '',
   hostName: "Nome Host",
