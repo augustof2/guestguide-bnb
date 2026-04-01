@@ -421,7 +421,8 @@ function saveAndApply() {
 }
 
 function sendChangesAsHost() {
-  window.open('https://wa.me/393450307922', '_blank');
+  const phone = ((currentData && currentData.supportPhone) || '+393450307922').replace(/\D/g, '');
+  window.open('https://wa.me/' + phone, '_blank');
   showToast('💬 WhatsApp aperto.', 'success');
 }
 function resetData() {
@@ -578,9 +579,9 @@ function printAllQr() {
     var name = apt.name || ('Appartamento ' + (idx + 1));
     var url = base + '?apt=' + idx;
     items += '<div style="page-break-inside:avoid;display:inline-block;margin:20px;text-align:center;vertical-align:top">'
-      + '<p style="font-family:serif;font-size:16px;color:#c9a84c;margin-bottom:8px">' + name + '</p>'
+      + '<p style="font-family:serif;font-size:16px;color:#c9a84c;margin-bottom:8px">' + escHtml(name) + '</p>'
       + (dataUrl ? '<img src="' + dataUrl + '" style="width:200px;height:200px">' : '')
-      + '<p style="font-size:10px;color:#666;margin-top:8px;word-break:break-all;max-width:200px">' + url + '</p>'
+      + '<p style="font-size:10px;color:#666;margin-top:8px;word-break:break-all;max-width:200px">' + escHtml(url) + '</p>'
       + '</div>';
   });
   var win = window.open('', '_blank', 'noopener');

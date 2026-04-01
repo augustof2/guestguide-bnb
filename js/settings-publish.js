@@ -99,9 +99,6 @@ async function publishOnline() {
     return;
   }
 
-  // [SECURITY] Warn that the token is being used client-side
-  console.warn('[SECURITY] GitHub token is being used client-side. Consider using a serverless backend (e.g., GitHub Actions workflow_dispatch) for safer publishing.');
-
   // Persist token encrypted for future use
   encryptToken(token).then(enc => localStorage.setItem(HOST_TOKEN_STORE, enc)).catch(() => {});
 
@@ -144,10 +141,6 @@ async function publishOnline() {
 
     try {
       setStep('step-fetch', 'active');
-      setStep('step-fetch', 'done');
-      setStep('step-patch', 'active');
-      setStep('step-patch', 'done');
-      setStep('step-upload', 'active');
 
       await _commitDataToGitHub(
         token,
@@ -156,6 +149,9 @@ async function publishOnline() {
         true /* patchHashes */
       );
 
+      setStep('step-fetch', 'done');
+      setStep('step-patch', 'active');
+      setStep('step-patch', 'done');
       setStep('step-upload', 'done');
       setStep('step-deploy', 'active');
 
@@ -238,9 +234,6 @@ async function hostPublishNow() {
   }
 
   if (!confirm('Vuoi pubblicare le modifiche online? Saranno visibili a tutti gli ospiti in pochi secondi.')) return;
-
-  // [SECURITY] Warn that the token is being used client-side
-  console.warn('[SECURITY] GitHub token is being used client-side. Consider using a serverless backend (e.g., GitHub Actions workflow_dispatch) for safer publishing.');
 
   // 1. Salva localmente
   const d = collectFormData();

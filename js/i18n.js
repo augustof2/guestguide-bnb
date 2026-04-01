@@ -6,6 +6,7 @@ let currentLang = localStorage.getItem('bnb_lang') || 'it';
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('bnb_lang', lang);
+  document.documentElement.lang = lang;
 }
 
 const UI_STRINGS = {

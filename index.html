@@ -18,7 +18,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Guida FF Elite">
 <meta name="theme-color" content="#1a3238">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com https://api.github.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com https://api.github.com https://api.mymemory.translated.net;">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -82,7 +82,7 @@
   <div class="guide-content" id="guide-content">
 
     <!-- ── TAB: HOME ── -->
-    <div class="tab-section active" id="tab-home">
+    <div class="tab-section active" id="tab-home" role="tabpanel" aria-labelledby="nav-home" tabindex="0">
 
       <div class="home-hero">
         <div class="section-eyebrow" id="h-eyebrow">✦ LA TUA CITTÀ · ZONA</div>
@@ -126,46 +126,46 @@
 
       <div class="quick-nav">
         <div class="quick-nav-title" data-i18n="exploreGuide">Esplora la guida</div>
-        <div class="quick-nav-card" data-tab="stay" onclick="switchTab('stay')">
+        <button class="quick-nav-card" data-tab="stay" onclick="switchTab('stay')">
           <div class="quick-nav-icon">🛋️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Soggiorno</div>
             <div class="quick-nav-desc" data-i18n="stayDesc">WiFi, regole, spazi, servizi</div>
           </div>
           <div class="quick-nav-arrow">›</div>
-        </div>
-        <div class="quick-nav-card" data-tab="places" onclick="switchTab('places')">
+        </button>
+        <button class="quick-nav-card" data-tab="places" onclick="switchTab('places')">
           <div class="quick-nav-icon">🗺️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Luoghi</div>
             <div class="quick-nav-desc" data-i18n="placesDesc">Attrazioni e punti di interesse</div>
           </div>
           <div class="quick-nav-arrow">›</div>
-        </div>
-        <div class="quick-nav-card" data-tab="food" onclick="switchTab('food')">
+        </button>
+        <button class="quick-nav-card" data-tab="food" onclick="switchTab('food')">
           <div class="quick-nav-icon">🍽️</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Mangiare</div>
             <div class="quick-nav-desc" data-i18n="foodDesc">Ristoranti, bar, supermercati</div>
           </div>
           <div class="quick-nav-arrow">›</div>
-        </div>
-        <div class="quick-nav-card" data-tab="transport" onclick="switchTab('transport')">
+        </button>
+        <button class="quick-nav-card" data-tab="transport" onclick="switchTab('transport')">
           <div class="quick-nav-icon">🚇</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Muoversi</div>
             <div class="quick-nav-desc" data-i18n="transportDesc">Metro, bus, taxi, emergenze</div>
           </div>
           <div class="quick-nav-arrow">›</div>
-        </div>
-        <div class="quick-nav-card" data-tab="departure" onclick="switchTab('departure')">
+        </button>
+        <button class="quick-nav-card" data-tab="departure" onclick="switchTab('departure')">
           <div class="quick-nav-icon">🧳</div>
           <div class="quick-nav-body">
             <div class="quick-nav-label">Partenza</div>
             <div class="quick-nav-desc" data-i18n="departureDesc">Check-out e recensione</div>
           </div>
           <div class="quick-nav-arrow">›</div>
-        </div>
+        </button>
       </div>
 
       <div id="home-review-section" class="hidden-pb-4">
@@ -182,7 +182,7 @@
     </div><!-- /tab-home -->
 
     <!-- ── TAB: STAY ── -->
-    <div class="tab-section" id="tab-stay">
+    <div class="tab-section" id="tab-stay" role="tabpanel" aria-labelledby="nav-stay" tabindex="0">
       <div class="tab-header">
         <div class="section-eyebrow">Il Tuo Appartamento</div>
         <div class="section-title">Soggiorno</div>
@@ -289,7 +289,7 @@
     </div><!-- /tab-stay -->
 
     <!-- ── TAB: PLACES ── -->
-    <div class="tab-section" id="tab-places">
+    <div class="tab-section" id="tab-places" role="tabpanel" aria-labelledby="nav-places" tabindex="0">
       <div class="tab-header">
         <div class="section-eyebrow">Scopri la Città</div>
         <div class="section-title">Luoghi</div>
@@ -301,7 +301,7 @@
     </div>
 
     <!-- ── TAB: FOOD ── -->
-    <div class="tab-section" id="tab-food">
+    <div class="tab-section" id="tab-food" role="tabpanel" aria-labelledby="nav-food" tabindex="0">
       <div class="tab-header">
         <div class="section-eyebrow">Dove Mangiare</div>
         <div class="section-title">Mangiare</div>
@@ -313,7 +313,7 @@
     </div>
 
     <!-- ── TAB: TRANSPORT ── -->
-    <div class="tab-section" id="tab-transport">
+    <div class="tab-section" id="tab-transport" role="tabpanel" aria-labelledby="nav-transport" tabindex="0">
       <div class="tab-header">
         <div class="section-eyebrow">In Città</div>
         <div class="section-title">Muoversi</div>
@@ -388,7 +388,7 @@
     </div><!-- /tab-transport -->
 
     <!-- ── TAB: DEPARTURE ── -->
-    <div class="tab-section" id="tab-departure">
+    <div class="tab-section" id="tab-departure" role="tabpanel" aria-labelledby="nav-departure" tabindex="0">
       <div class="tab-header">
         <div class="section-eyebrow">È Ora di Partire</div>
         <div class="section-title">Partenza</div>
@@ -422,28 +422,28 @@
   </div><!-- /guide-content -->
 
   <!-- Bottom Navigation -->
-  <nav class="bottom-nav" id="bottom-nav">
-    <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
+  <nav class="bottom-nav" id="bottom-nav" role="tablist" aria-label="Navigazione guida">
+    <button class="nav-item active" id="nav-home" role="tab" data-tab="home" aria-controls="tab-home" aria-selected="true" onclick="switchTab('home')">
       <span class="nav-icon">🏠</span>
       <span class="nav-label">Home</span>
     </button>
-    <button class="nav-item" data-tab="stay" onclick="switchTab('stay')">
+    <button class="nav-item" id="nav-stay" role="tab" data-tab="stay" aria-controls="tab-stay" aria-selected="false" onclick="switchTab('stay')">
       <span class="nav-icon">🛋️</span>
       <span class="nav-label">Soggiorno</span>
     </button>
-    <button class="nav-item" data-tab="places" onclick="switchTab('places')">
+    <button class="nav-item" id="nav-places" role="tab" data-tab="places" aria-controls="tab-places" aria-selected="false" onclick="switchTab('places')">
       <span class="nav-icon">🗺️</span>
       <span class="nav-label">Luoghi</span>
     </button>
-    <button class="nav-item" data-tab="food" onclick="switchTab('food')">
+    <button class="nav-item" id="nav-food" role="tab" data-tab="food" aria-controls="tab-food" aria-selected="false" onclick="switchTab('food')">
       <span class="nav-icon">🍽️</span>
       <span class="nav-label">Mangiare</span>
     </button>
-    <button class="nav-item" data-tab="transport" onclick="switchTab('transport')">
+    <button class="nav-item" id="nav-transport" role="tab" data-tab="transport" aria-controls="tab-transport" aria-selected="false" onclick="switchTab('transport')">
       <span class="nav-icon">🚇</span>
       <span class="nav-label">Muoversi</span>
     </button>
-    <button class="nav-item" data-tab="departure" onclick="switchTab('departure')">
+    <button class="nav-item" id="nav-departure" role="tab" data-tab="departure" aria-controls="tab-departure" aria-selected="false" onclick="switchTab('departure')">
       <span class="nav-icon">🧳</span>
       <span class="nav-label">Partenza</span>
     </button>
@@ -776,11 +776,11 @@
 <!-- ════════════════════════════════════════════
      PIN MODAL
 ════════════════════════════════════════════ -->
-<div id="pin-modal">
+<div id="pin-modal" role="dialog" aria-modal="true" aria-labelledby="pin-modal-title">
   <div class="pin-dialog">
     <!-- PIN view -->
     <div id="pin-view">
-      <div class="pin-title">🔐 Area Host</div>
+      <div class="pin-title" id="pin-modal-title">🔐 Area Host</div>
       <div class="pin-subtitle">Inserisci il PIN per modificare le impostazioni</div>
       <div class="pin-dots" id="pin-dots">
         <div class="pin-dot" id="pd0"></div>
@@ -808,7 +808,7 @@
       <button class="pin-cancel pin-login-btn" onclick="openLoginForm()">🛡️ Accesso Admin</button>
     </div>
     <!-- Login form view -->
-    <div id="login-view">
+    <div id="login-view" style="display:none">
       <div class="pin-title">🛡️ Pannello Admin</div>
       <div class="pin-subtitle">Accesso riservato all'amministratore</div>
       <input class="login-input" type="text" id="login-username" placeholder="Username" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false">
@@ -816,6 +816,15 @@
       <div class="login-error" id="login-error"></div>
       <button class="login-submit-btn" onclick="submitLogin()">Accedi</button>
       <button class="pin-cancel" style="margin-top:12px" onclick="closeLoginForm()">← Torna al PIN</button>
+    </div>
+    <!-- Recovery view (H-2: replaces window.prompt(), works in iOS PWA standalone) -->
+    <div id="recovery-view" style="display:none">
+      <div class="pin-title">🔑 Recovery PIN</div>
+      <div class="pin-subtitle">Inserisci la parola segreta per sbloccare il PIN</div>
+      <input class="login-input" type="password" id="recovery-word-input" placeholder="Parola segreta" autocomplete="off">
+      <div class="login-error" id="recovery-error"></div>
+      <button class="login-submit-btn" onclick="submitRecovery()">Verifica</button>
+      <button class="pin-cancel" style="margin-top:12px" onclick="closeRecoveryView()">← Torna al PIN</button>
     </div>
   </div>
 </div>

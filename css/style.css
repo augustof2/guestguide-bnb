@@ -326,7 +326,7 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
   .guide-content {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 80px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   }
 
   .tab-section { display: none; }
@@ -344,6 +344,7 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     border-top: 1px solid var(--border);
     display: flex;
     z-index: 50;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .nav-item {
@@ -504,6 +505,11 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     cursor: pointer;
     transition: border-color .2s, transform .15s;
     margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
   }
   .quick-nav-card:hover, .quick-nav-card:active {
     border-color: var(--gold);

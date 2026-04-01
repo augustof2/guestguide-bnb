@@ -187,7 +187,10 @@ function renderApp(aptIndex) {
   stMaps.href = apt.mapsLink || '#';
 
   // Stay tab - extended fields (language-aware)
-  document.getElementById('st-how-reach').innerHTML = renderRichText(langField(apt, 'howToReach') || '');
+  const howReachText = langField(apt, 'howToReach') || '';
+  const howReachEl = document.getElementById('st-how-reach');
+  howReachEl.innerHTML = renderRichText(howReachText);
+  howReachEl.style.display = howReachText ? '' : 'none';
   document.getElementById('st-how-access').innerHTML = renderRichText(langField(apt, 'howToAccess') || '');
   document.getElementById('st-parking').innerHTML = renderRichText(langField(apt, 'parking') || '');
 
@@ -305,12 +308,9 @@ function renderApp(aptIndex) {
   updateWaFab();
 
   // Weather widget
-  if (typeof renderWeatherWidget === 'function' && apt.lat && apt.lon) {
+  if (typeof renderWeatherWidget === 'function') {
     const wContainer = document.getElementById('weather-container');
-    if (wContainer) renderWeatherWidget('weather-container', apt.lat, apt.lon, currentLang);
-  } else if (typeof renderWeatherWidget === 'function') {
-    const wContainer = document.getElementById('weather-container');
-    if (wContainer) renderWeatherWidget('weather-container', 41.9028, 12.4964, currentLang);
+    if (wContainer) renderWeatherWidget('weather-container', apt.lat || '', apt.lon || '', currentLang);
   }
 
   // Update nav labels (language-aware: EN from t(), IT from data)
@@ -386,7 +386,10 @@ function updateLanguageOnly(aptIndex) {
 
   // Stay tab text
   document.getElementById('st-guests').textContent = langField(apt, 'maxGuests');
-  document.getElementById('st-how-reach').innerHTML = renderRichText(langField(apt, 'howToReach') || '');
+  const howReachTextLang = langField(apt, 'howToReach') || '';
+  const howReachElLang = document.getElementById('st-how-reach');
+  howReachElLang.innerHTML = renderRichText(howReachTextLang);
+  howReachElLang.style.display = howReachTextLang ? '' : 'none';
   document.getElementById('st-how-access').innerHTML = renderRichText(langField(apt, 'howToAccess') || '');
   document.getElementById('st-parking').innerHTML = renderRichText(langField(apt, 'parking') || '');
   const sMaps = document.getElementById('s-maps');
@@ -509,6 +512,12 @@ function updateLanguageOnly(aptIndex) {
     if (eyebrowEl) eyebrowEl.textContent = eyebrow;
     if (titleEl) titleEl.textContent = title;
   });
+
+  // H-1: Re-render weather widget labels in the new language (uses cached data, no new fetch)
+  if (typeof renderWeatherWidget === 'function') {
+    const wContainer = document.getElementById('weather-container');
+    if (wContainer) renderWeatherWidget('weather-container', apt.lat || '', apt.lon || '', currentLang);
+  }
 }
 
 function renderPlaces(places) {
@@ -810,6 +819,8 @@ function closePinModal() {
   pinBuffer = '';
   // Reset to PIN view when modal closes
   document.getElementById('login-view').style.display = 'none';
+  const rv = document.getElementById('recovery-view');
+  if (rv) rv.style.display = 'none';
   document.getElementById('pin-view').style.display = 'block';
 }
 
@@ -870,24 +881,42 @@ function checkPin() {
 }
 
 async function forgotPin() {
-  const word = prompt('Inserisci la parola segreta per resettare il PIN:');
-  if (word === null) return;
+  // H-2: Show custom recovery-view instead of window.prompt() (prompt is blocked in iOS PWA standalone)
+  document.getElementById('pin-view').style.display = 'none';
+  const rv = document.getElementById('recovery-view');
+  if (rv) {
+    rv.style.display = 'block';
+    document.getElementById('recovery-word-input').value = '';
+    document.getElementById('recovery-error').textContent = '';
+    setTimeout(() => { const inp = document.getElementById('recovery-word-input'); if (inp) inp.focus(); }, 50);
+  }
+}
+
+function closeRecoveryView() {
+  const rv = document.getElementById('recovery-view');
+  if (rv) rv.style.display = 'none';
+  document.getElementById('pin-view').style.display = 'block';
+  const err = document.getElementById('recovery-error');
+  if (err) err.textContent = '';
+}
+
+async function submitRecovery() {
+  const inp = document.getElementById('recovery-word-input');
+  const word = inp ? inp.value : '';
+  if (!word) return;
   const wordHash = await hashPin(word);
+  const errEl = document.getElementById('recovery-error');
   if (wordHash !== getStoredRecoveryHash()) {
-    const err = document.getElementById('pin-error');
-    err.style.color = 'var(--accent)';
-    err.textContent = '❌ Parola segreta errata.';
-    setTimeout(() => { err.style.color = ''; err.textContent = ''; }, 2000);
+    errEl.style.color = 'var(--accent)';
+    errEl.textContent = '❌ Parola segreta errata.';
+    setTimeout(() => { errEl.textContent = ''; }, 2000);
     return;
   }
   const hash = await hashPin('1234');
   localStorage.setItem(PIN_KEY, hash);
-  pinBuffer = '';
-  updatePinDots();
-  const err = document.getElementById('pin-error');
-  err.style.color = 'var(--teal)';
-  err.textContent = '✅ PIN resettato a 1234.';
-  setTimeout(() => { err.style.color = ''; err.textContent = ''; closePinModal(); }, 1800);
+  errEl.style.color = 'var(--teal)';
+  errEl.textContent = '✅ PIN resettato a 1234.';
+  setTimeout(() => { errEl.style.color = ''; errEl.textContent = ''; closeRecoveryView(); closePinModal(); }, 1800);
 }
 
 function _openSettingsPanel() {
@@ -1219,7 +1248,9 @@ function showTab(tabId) {
   }
 
   document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === tabId);
+    const isActive = btn.dataset.tab === tabId;
+    btn.classList.toggle('active', isActive);
+    btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
 
   const content = document.getElementById('guide-content');
@@ -1331,7 +1362,8 @@ function init() {
       if (aptParam !== null) {
         var aptIdx = parseInt(aptParam, 10);
         if (!isNaN(aptIdx) && aptIdx >= 0 && aptIdx < (currentData.apts || []).length) {
-          renderApp(aptIdx);
+          // C-1: Use openGuide() so the guide panel is shown and landing hidden
+          openGuide(aptIdx, currentLang);
           return;
         }
       }
@@ -1341,6 +1373,10 @@ function init() {
 
   document.addEventListener('keydown', function(e) {
     if (!document.getElementById('pin-modal').classList.contains('open')) return;
+    // Don't intercept digit/backspace keys when a text input inside login or recovery views is focused
+    var loginVisible = document.getElementById('login-view').style.display !== 'none';
+    var recoveryVisible = (document.getElementById('recovery-view') || {}).style && document.getElementById('recovery-view').style.display !== 'none';
+    if (loginVisible || recoveryVisible) return;
     if (e.key >= '0' && e.key <= '9') { e.preventDefault(); pinKey(e.key); }
     else if (e.key === 'Backspace') { e.preventDefault(); pinBackspace(); }
     else if (e.key === 'Escape') closePinModal();

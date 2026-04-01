@@ -390,7 +390,7 @@ const PUBLISHED_DATA = {
         },
         {
           "emoji": "🎭",
-          "name": "Phanteon",
+          "name": "Pantheon",
           "descIt": "un tempio antico trasformato in chiesa, celebre per la sua cupola perfetta e per il grande oculus che illumina l’interno in modo suggestivo. È uno dei monumenti meglio conservati di Roma, simbolo di genio architettonico e di continuità fra mondo antico e moderno.",
           "descEn": "an ancient temple transformed into a church, famous for its perfect dome and for the large oculus that illuminates the interior in a suggestive way. It is one of the best preserved monuments in Rome, a symbol of architectural genius and continuity between the ancient and modern world.",
           "howIt": "autobus 80 da Vimercati (15 fermate)",
@@ -449,7 +449,7 @@ const PUBLISHED_DATA = {
           "name": "Carnesa Churrascaria Brasiliana",
           "tipo": "",
           "descIt": "dove il rodizio di carni alla brace incontra un’atmosfera vivace e accogliente. Ideale per chi vuole provare una grigliata sudamericana con tagli pregiati, ricco buffet di antipasti e il sapore autentico del Brasile.",
-          "descEn": "where the rodent of grilled meats meets a lively and welcoming atmosphere. Ideal for those who want to try a South American grill with fine cuts, a rich buffet of appetizers and the authentic flavour of Brazil.",
+          "descEn": "where the rodizio of grilled meats meets a lively and welcoming atmosphere. Ideal for those who want to try a South American grill with fine cuts, a rich buffet of appetizers and the authentic flavour of Brazil.",
           "price": "€€€",
           "maps": "https://maps.app.goo.gl/iKoK5QjAvGYN6EaP7?g_st=ic"
         }
@@ -483,7 +483,7 @@ const PUBLISHED_DATA = {
         "stationEnabled": true,
         "stationIcon": "🚉",
         "stationIt": "**Opzione 1: Taxi (più comoda, diretta)**\nI taxi ufficiali bianchi sono disponibili fuori dalla stazione Termini. Il costo per la nostra zona è intorno ai 25-35€.\n\n**Opzione 2: Metro + bus**  \nDa Termini, prendete la metro B verso Rebibbia fino a Jonio. Poi bus 80, 344 o 350 fino alla fermata Suvereto/Calcinaia.\n\n**Opzione 3: Treno regionale FL1/FL3 + bus/a piedi**  \nPrendete il treno FL1 o FL3 da Termini a Nuovo Salario. Dalla stazione Nuovo Salario, 10 minuti a piedi oppure bus 69 o 349.",
-        "stationEn": "**Option 1: Taxi (most convenient, direct)**\nOfficial white taxis are available outside Termini station. The cost for our area is around 25-35€.\n\n**Option 2: Metro + bus**  \nFrom Termini, take metro B towards Rebibbia until Jonio. Then bus 80, 344 or 350 to the Suvereto/Calcinaia stop.\n\n**Option 3: Regional train FL1/FL3 + bus/walk**  \nTake the FL1 or FL3 train from Termini to New Salary. From Nuovo Salario station, a 10-minute walk or bus 69 or 349.",
+        "stationEn": "**Option 1: Taxi (most convenient, direct)**\nOfficial white taxis are available outside Termini station. The cost for our area is around 25-35€.\n\n**Option 2: Metro + bus**  \nFrom Termini, take metro B towards Rebibbia until Jonio. Then bus 80, 344 or 350 to the Suvereto/Calcinaia stop.\n\n**Option 3: Regional train FL1/FL3 + bus/walk**  \nTake the FL1 or FL3 train from Termini to Nuovo Salario. From Nuovo Salario station, a 10-minute walk or bus 69 or 349.",
         "stationMaps": "https://maps.app.goo.gl/YNQo7Vnp4HCVqFEB8?g_st=ic",
         "metroEnabled": false,
         "metroIcon": "🚇",
