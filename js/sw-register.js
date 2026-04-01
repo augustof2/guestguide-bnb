@@ -22,5 +22,14 @@ function showUpdateBanner() {
   document.body.appendChild(banner);
 }
 
-// Call init after all scripts are loaded
-if (typeof init === 'function') init();
+// Call init after all scripts are loaded.
+// Use a retry loop in case deferred scripts haven't finished loading yet
+// (script execution order isn't guaranteed across all browsers/configurations).
+function tryInit(attempts) {
+  if (typeof init === 'function') {
+    init();
+  } else if (attempts > 0) {
+    setTimeout(() => tryInit(attempts - 1), 50);
+  }
+}
+tryInit(10);

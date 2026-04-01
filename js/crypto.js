@@ -3,24 +3,90 @@
 //  AES-GCM token encryption + XOR obfuscation
 // ════════════════════════════════════════════
 
-const CRYPTO_KEY_STORE = 'bnb_enc_key';
+const CRYPTO_KEY_STORE    = 'bnb_enc_key';
+const CRYPTO_IDB_DB       = 'bnb_crypto';
+const CRYPTO_IDB_STORE    = 'keys';
+const CRYPTO_IDB_KEY_NAME = 'aes_gcm_key';
 const TOKEN_STORE      = 'bnb_github_token';
 const HOST_TOKEN_STORE = 'bnb_host_publish_token';
 
 // ── Key management ───────────────────────────
+// Keys are stored in IndexedDB as non-extractable CryptoKey objects.
+// Falls back to localStorage (extractable JWK) when IndexedDB is unavailable
+// (e.g. private browsing on some browsers) or during migration from older versions.
+
+function _openKeyDb() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(CRYPTO_IDB_DB, 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore(CRYPTO_IDB_STORE);
+    req.onsuccess = e => resolve(e.target.result);
+    req.onerror   = e => reject(e.target.error);
+  });
+}
+
+async function _loadKeyFromIdb() {
+  try {
+    const db = await _openKeyDb();
+    return await new Promise((resolve, reject) => {
+      const tx = db.transaction(CRYPTO_IDB_STORE, 'readonly');
+      const req = tx.objectStore(CRYPTO_IDB_STORE).get(CRYPTO_IDB_KEY_NAME);
+      req.onsuccess = e => resolve(e.target.result || null);
+      req.onerror   = e => reject(e.target.error);
+    });
+  } catch (_) { return null; }
+}
+
+async function _saveKeyToIdb(key) {
+  const db = await _openKeyDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(CRYPTO_IDB_STORE, 'readwrite');
+    const req = tx.objectStore(CRYPTO_IDB_STORE).put(key, CRYPTO_IDB_KEY_NAME);
+    req.onsuccess = () => resolve();
+    req.onerror   = e => reject(e.target.error);
+  });
+}
 
 async function _getOrCreateKey() {
+  // 1. Try IndexedDB (non-extractable key — safest option)
+  try {
+    const idbKey = await _loadKeyFromIdb();
+    if (idbKey) return idbKey;
+  } catch (_) { /* fall through */ }
+
+  // 2. Try to migrate existing JWK from localStorage → IndexedDB
   try {
     const stored = localStorage.getItem(CRYPTO_KEY_STORE);
     if (stored) {
       const jwk = JSON.parse(stored);
-      return await crypto.subtle.importKey('jwk', jwk, { name: 'AES-GCM' }, true, ['encrypt', 'decrypt']);
+      // Re-import as non-extractable so it cannot be exported again
+      const migratedKey = await crypto.subtle.importKey(
+        'jwk', jwk, { name: 'AES-GCM' }, false, ['encrypt', 'decrypt']
+      );
+      try {
+        await _saveKeyToIdb(migratedKey);
+        localStorage.removeItem(CRYPTO_KEY_STORE); // clean up extractable copy
+      } catch (_) { /* IDB not available — keep localStorage copy for now */ }
+      return migratedKey;
     }
   } catch (_) { /* generate fresh key */ }
 
-  const key = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']);
-  const jwk = await crypto.subtle.exportKey('jwk', key);
-  localStorage.setItem(CRYPTO_KEY_STORE, JSON.stringify(jwk));
+  // 3. Generate a new non-extractable key
+  const key = await crypto.subtle.generateKey(
+    { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
+  );
+
+  // 4. Persist: prefer IndexedDB; fall back to localStorage (extractable JWK)
+  try {
+    await _saveKeyToIdb(key);
+  } catch (_) {
+    // IndexedDB unavailable (e.g. private mode) — fall back to exportable localStorage
+    const fallbackKey = await crypto.subtle.generateKey(
+      { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']
+    );
+    const jwk = await crypto.subtle.exportKey('jwk', fallbackKey);
+    localStorage.setItem(CRYPTO_KEY_STORE, JSON.stringify(jwk));
+    return fallbackKey;
+  }
   return key;
 }
 
@@ -54,8 +120,12 @@ async function decryptToken(ciphertext) {
 }
 
 // ── WiFi password XOR obfuscation ────────────
-// Simple XOR with a fixed key + Base64.  Not cryptographic, but prevents
-// plain-text passwords being instantly readable in the source file.
+// ⚠️  WARNING: This is NOT cryptographic encryption.
+//    XOR with a fixed key provides only minimal obfuscation — it prevents
+//    casual reading of the value in source/localStorage but offers no real
+//    security. Anyone who reads this source file can reverse it instantly.
+//    For sensitive data use encryptWifiPass() / decryptWifiPass() below,
+//    which use AES-GCM (the same algorithm used for GitHub tokens).
 // Values prefixed with _OBF_ are obfuscated; plain-text values are returned
 // as-is to maintain backward compatibility with existing localStorage data.
 
@@ -108,4 +178,18 @@ function deobfuscateHash(b64) {
     }
     return s;
   } catch (_) { return b64; }
+}
+
+// ── AES-GCM WiFi password helpers ───────────
+// Use these instead of obfuscate/deobfuscate for proper encryption.
+// The admin panel can call encryptWifiPass() when saving a password and
+// decryptWifiPass() when displaying it. Encrypted values are Base64 strings
+// that are NOT backward-compatible with the _OBF_ prefix format.
+
+async function encryptWifiPass(pass) {
+  return encryptToken(pass);
+}
+
+async function decryptWifiPass(encrypted) {
+  return decryptToken(encrypted);
 }

@@ -55,7 +55,30 @@ async function renderWeatherWidget(containerId, lat, lon, lang) {
   if (!container) return;
   container.innerHTML = '<div class="weather-loading">🌤️ Caricamento meteo...</div>';
   try {
-    const data = await fetchWeather(lat || 41.9028, lon || 12.4964);
+    // If no explicit coordinates were passed, try to extract them from the
+    // current apartment's mapsUrl before falling back to hardcoded Rome coords.
+    let resolvedLat = lat;
+    let resolvedLon = lon;
+    if (!resolvedLat || !resolvedLon) {
+      try {
+        const apt = currentData && currentData.apts && currentData.apts[currentAptIndex];
+        const mapsUrl = apt && apt.mapsUrl;
+        if (mapsUrl) {
+          // Try ?q=lat,lon or @lat,lon patterns used by Google Maps
+          const qMatch  = mapsUrl.match(/[?&]q=([-\d.]+),([-\d.]+)/);
+          const atMatch = mapsUrl.match(/@([-\d.]+),([-\d.]+)/);
+          const m = qMatch || atMatch;
+          if (m) {
+            resolvedLat = parseFloat(m[1]);
+            resolvedLon = parseFloat(m[2]);
+          }
+        }
+      } catch (e) {
+        console.warn('[weather] Failed to parse coordinates from mapsUrl:', e);
+        /* fall through to Rome defaults */
+      }
+    }
+    const data = await fetchWeather(resolvedLat || 41.9028, resolvedLon || 12.4964);
     const cur = data.current;
     const daily = data.daily;
     const wmoCode = cur.weathercode;

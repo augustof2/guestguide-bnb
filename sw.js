@@ -22,10 +22,22 @@ const STATIC_ASSETS = [
   'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap'
 ];
 
-// Perf: cache the Cache API reference to avoid repeated caches.open() calls
+// Perf: cache the Cache API reference to avoid repeated caches.open() calls.
+// The promise is reset on rejection so the next call retries the open.
+// We capture the promise reference before attaching the catch handler so that
+// concurrent callers who already hold the same promise don't accidentally
+// reset a successfully-opened cache created by a later call.
 let _cachePromise = null;
 function getCache() {
-  if (!_cachePromise) _cachePromise = caches.open(CACHE_NAME);
+  if (!_cachePromise) {
+    const p = caches.open(CACHE_NAME);
+    _cachePromise = p;
+    p.catch(err => {
+      // Only reset if our promise is still the active one (guard against races)
+      if (_cachePromise === p) _cachePromise = null;
+      throw err;
+    });
+  }
   return _cachePromise;
 }
 
@@ -33,7 +45,14 @@ self.addEventListener('install', e => {
   e.waitUntil(
     getCache()
       .then(c => c.addAll(STATIC_ASSETS.map(u => new Request(u, {cache: 'reload'}))))
-      .catch(() => getCache().then(c => c.add('./')))
+      // Primary precache failed — fall back to caching only the root so the
+      // app shell is available offline even if assets are missing.
+      .catch(err => {
+        console.warn('[SW] Full precache failed, falling back to root only:', err);
+        return getCache().then(c => c.add('./')).catch(fallbackErr => {
+          console.error('[SW] Fallback cache also failed:', fallbackErr);
+        });
+      })
   );
   self.skipWaiting();
 });

@@ -101,7 +101,7 @@ const GuestAnalytics = (function () {
     const pv = d.pageViews || {};
     const tabs = ['home', 'stay', 'places', 'food', 'transport', 'departure'];
     const tabLabels = { home: 'Home', stay: 'Soggiorno', places: 'Luoghi', food: 'Mangiare', transport: 'Muoversi', departure: 'Partenza' };
-    const maxPv = Math.max(1, ...tabs.map(t => pv[t] || 0));
+    const maxPv = Math.max(1, ...tabs.map(tab => pv[tab] || 0));
 
     const lc = d.langCounts || { it: 0, en: 0 };
     const totalLang = (lc.it || 0) + (lc.en || 0);
@@ -135,7 +135,7 @@ const GuestAnalytics = (function () {
           <div class="an-stat-label">Visite totali</div>
         </div>
         <div class="an-stat-card">
-          <div class="an-stat-value">${tabs.reduce((s, t) => s + (pv[t] || 0), 0)}</div>
+          <div class="an-stat-value">${tabs.reduce((s, tab) => s + (pv[tab] || 0), 0)}</div>
           <div class="an-stat-label">Pagine viste</div>
         </div>
         <div class="an-stat-card">

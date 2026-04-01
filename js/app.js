@@ -1,3 +1,19 @@
+// ── Global State (namespaced to reduce global pollution) ──
+// currentData / currentAptIndex are declared in data.js and remain as
+// backwards-compatible globals used by other scripts. AppState mirrors them
+// so new code can reference a single namespace object instead of bare globals.
+const AppState = {
+  currentData: null,
+  currentAptIndex: 0,
+  _renderedTabs: {}  // Track which tabs have been rendered (for lazy rendering)
+};
+
+// Keep AppState in sync whenever the bare globals are updated.
+function _syncState() {
+  AppState.currentData = currentData;
+  AppState.currentAptIndex = currentAptIndex;
+}
+
 // ════════════════════════════════════════════
 //  UNCONFIGURED DATA CHECK
 // ════════════════════════════════════════════
@@ -91,6 +107,7 @@ function updateMetaTags(d) {
 function openGuide(aptIndex, lang) {
   if (lang) setLang(lang);
   currentAptIndex = aptIndex;
+  _syncState();
   document.getElementById('landing').style.display = 'none';
   document.getElementById('gear-btn').classList.add('hidden');
   const guide = document.getElementById('guide');
@@ -1079,6 +1096,7 @@ function previewMode() {
   const d = collectFormData();
   _previewPreviousData = deepClone(currentData);
   currentData = d;
+  _syncState();
   closeSettings();
   renderLanding();
   document.getElementById('preview-banner').classList.add('show');
@@ -1095,6 +1113,7 @@ function previewCancel() {
   if (_previewPreviousData) {
     currentData = _previewPreviousData;
     _previewPreviousData = null;
+    _syncState();
     renderLanding();
   }
   document.getElementById('preview-banner').classList.remove('show');
@@ -1305,6 +1324,7 @@ function initScrollTopBtn() {
 // ════════════════════════════════════════════
 function init() {
   currentData = loadData();
+  _syncState();
 
   // Splash screen
   const splash = document.getElementById('splash-screen');

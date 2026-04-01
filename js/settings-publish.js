@@ -9,6 +9,81 @@ function getGitHubOwnerRepo() {
   return { owner: 'ffeliteapartments', repo: 'guide' };
 }
 
+// ── Shared GitHub commit helper ───────────────────────────────────────────────
+// Fetches js/data.js, patches it, and pushes the result back to GitHub.
+// patchHashes: when true, also patches PIN/user/pass/recovery hashes (admin flow).
+
+async function _commitDataToGitHub(token, dataObj, commitMessage, patchHashes) {
+  const { owner: OWNER, repo: REPO } = getGitHubOwnerRepo();
+  const DATA_FILE = 'js/data.js';
+  const BRANCH    = 'main';
+  const DATA_API  = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${DATA_FILE}`;
+
+  // 1. Fetch current file (need SHA for the PUT)
+  const getResp = await fetch(`${DATA_API}?ref=${BRANCH}`, {
+    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (!getResp.ok) {
+    const e = await getResp.json().catch(() => ({}));
+    throw new Error(e.message || `HTTP ${getResp.status}`);
+  }
+  const fileData = await getResp.json();
+  let newContent = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
+
+  // 2. Optionally patch credential hashes (admin only)
+  if (patchHashes) {
+    const pinHash = getStoredPinHash();
+    newContent = newContent.replace(
+      /\/\* DEFAULT_PIN_HASH_START \*\/[\s\S]*?\/\* DEFAULT_PIN_HASH_END \*\//,
+      `/* DEFAULT_PIN_HASH_START */\nconst DEFAULT_PIN_HASH = deobfuscateHash('${obfuscateHash(pinHash)}');\n/* DEFAULT_PIN_HASH_END */`
+    );
+    const userHash = getStoredUserHash();
+    newContent = newContent.replace(
+      /\/\* DEFAULT_USER_HASH_START \*\/[\s\S]*?\/\* DEFAULT_USER_HASH_END \*\//,
+      `/* DEFAULT_USER_HASH_START */\nconst DEFAULT_USER_HASH = deobfuscateHash('${obfuscateHash(userHash)}');\n/* DEFAULT_USER_HASH_END */`
+    );
+    const passHash = getStoredPassHash();
+    newContent = newContent.replace(
+      /\/\* DEFAULT_PASS_HASH_START \*\/[\s\S]*?\/\* DEFAULT_PASS_HASH_END \*\//,
+      `/* DEFAULT_PASS_HASH_START */\nconst DEFAULT_PASS_HASH = deobfuscateHash('${obfuscateHash(passHash)}');\n/* DEFAULT_PASS_HASH_END */`
+    );
+    const recoveryHash = getStoredRecoveryHash();
+    newContent = newContent.replace(
+      /\/\* DEFAULT_RECOVERY_HASH_START \*\/[\s\S]*?\/\* DEFAULT_RECOVERY_HASH_END \*\//,
+      `/* DEFAULT_RECOVERY_HASH_START */\nconst DEFAULT_RECOVERY_HASH = deobfuscateHash('${obfuscateHash(recoveryHash)}');\n/* DEFAULT_RECOVERY_HASH_END */`
+    );
+  }
+
+  // 3. Patch PUBLISHED_DATA
+  const dataStr = JSON.stringify(dataObj, null, 2);
+  newContent = newContent.replace(
+    /\/\* PUBLISHED_DATA_START \*\/[\s\S]*?\/\* PUBLISHED_DATA_END \*\//,
+    `/* PUBLISHED_DATA_START */\nconst PUBLISHED_DATA = ${dataStr};\n/* PUBLISHED_DATA_END */`
+  );
+
+  // 4. Push
+  const newContentB64 = btoa(unescape(encodeURIComponent(newContent)));
+  const putResp = await fetch(DATA_API, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      message: commitMessage,
+      content: newContentB64,
+      sha: fileData.sha,
+      branch: BRANCH
+    })
+  });
+  if (!putResp.ok) {
+    const e = await putResp.json().catch(() => ({}));
+    throw new Error(e.message || `HTTP ${putResp.status}`);
+  }
+  return { owner: OWNER, repo: REPO };
+}
+
 async function publishOnline() {
   const tokenInput = document.getElementById('s-github-token');
   const typedToken = tokenInput && tokenInput.value.trim();
@@ -23,6 +98,10 @@ async function publishOnline() {
     showErr(msg, 'Inserisci il GitHub Token nella sezione Sicurezza PIN prima di pubblicare.');
     return;
   }
+
+  // [SECURITY] Warn that the token is being used client-side
+  console.warn('[SECURITY] GitHub token is being used client-side. Consider using a serverless backend (e.g., GitHub Actions workflow_dispatch) for safer publishing.');
+
   // Persist token encrypted for future use
   encryptToken(token).then(enc => localStorage.setItem(HOST_TOKEN_STORE, enc)).catch(() => {});
 
@@ -32,9 +111,7 @@ async function publishOnline() {
 
   try {
     const { owner: OWNER, repo: REPO } = getGitHubOwnerRepo();
-    const DATA_FILE = 'js/data.js';
     const BRANCH = 'main';
-    const DATA_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${DATA_FILE}`;
 
     // Show deploy progress
     const deploySteps = [
@@ -63,124 +140,57 @@ async function publishOnline() {
     }, 100);
 
     try {
-    setStep('step-fetch', 'active');
-    // 1. Get current js/data.js file (for SHA)
-    const getResp = await fetch(`${DATA_API}?ref=${BRANCH}`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (!getResp.ok) {
-      setStep('step-fetch', 'error');
-      const e = await getResp.json().catch(() => ({}));
-      throw new Error(e.message || `HTTP ${getResp.status}`);
-    }
-    const fileData = await getResp.json();
-    setStep('step-fetch', 'done');
-    const rawContent = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
+      setStep('step-fetch', 'active');
+      setStep('step-fetch', 'done');
+      setStep('step-patch', 'active');
+      setStep('step-patch', 'done');
+      setStep('step-upload', 'active');
 
-    setStep('step-patch', 'active');
-    // 2. Get current PIN hash
-    const pinHash = getStoredPinHash();
+      await _commitDataToGitHub(
+        token,
+        collectFormData(),
+        'Aggiorna guida e PIN [via admin panel]',
+        true /* patchHashes */
+      );
 
-    // 3. Get current data from the form (includes unsaved changes in settings)
-    const dataStr = JSON.stringify(collectFormData(), null, 2);
+      setStep('step-upload', 'done');
+      setStep('step-deploy', 'active');
 
-    // 4. Patch DEFAULT_PIN_HASH
-    let newContent = rawContent.replace(
-      /\/\* DEFAULT_PIN_HASH_START \*\/[\s\S]*?\/\* DEFAULT_PIN_HASH_END \*\//,
-      `/* DEFAULT_PIN_HASH_START */\nconst DEFAULT_PIN_HASH = deobfuscateHash('${obfuscateHash(pinHash)}');\n/* DEFAULT_PIN_HASH_END */`
-    );
-
-    // 4b. Patch DEFAULT_USER_HASH
-    const userHash = getStoredUserHash();
-    newContent = newContent.replace(
-      /\/\* DEFAULT_USER_HASH_START \*\/[\s\S]*?\/\* DEFAULT_USER_HASH_END \*\//,
-      `/* DEFAULT_USER_HASH_START */\nconst DEFAULT_USER_HASH = deobfuscateHash('${obfuscateHash(userHash)}');\n/* DEFAULT_USER_HASH_END */`
-    );
-
-    // 4c. Patch DEFAULT_PASS_HASH
-    const passHash = getStoredPassHash();
-    newContent = newContent.replace(
-      /\/\* DEFAULT_PASS_HASH_START \*\/[\s\S]*?\/\* DEFAULT_PASS_HASH_END \*\//,
-      `/* DEFAULT_PASS_HASH_START */\nconst DEFAULT_PASS_HASH = deobfuscateHash('${obfuscateHash(passHash)}');\n/* DEFAULT_PASS_HASH_END */`
-    );
-
-    // 4d. Patch DEFAULT_RECOVERY_HASH
-    const recoveryHash = getStoredRecoveryHash();
-    newContent = newContent.replace(
-      /\/\* DEFAULT_RECOVERY_HASH_START \*\/[\s\S]*?\/\* DEFAULT_RECOVERY_HASH_END \*\//,
-      `/* DEFAULT_RECOVERY_HASH_START */\nconst DEFAULT_RECOVERY_HASH = deobfuscateHash('${obfuscateHash(recoveryHash)}');\n/* DEFAULT_RECOVERY_HASH_END */`
-    );
-
-    // 5. Patch PUBLISHED_DATA
-    newContent = newContent.replace(
-      /\/\* PUBLISHED_DATA_START \*\/[\s\S]*?\/\* PUBLISHED_DATA_END \*\//,
-      `/* PUBLISHED_DATA_START */\nconst PUBLISHED_DATA = ${dataStr};\n/* PUBLISHED_DATA_END */`
-    );
-
-    // 6. Base64-encode (handle Unicode)
-    const newContentB64 = btoa(unescape(encodeURIComponent(newContent)));
-
-    setStep('step-patch', 'done');
-    setStep('step-upload', 'active');
-    // 7. Commit to js/data.js
-    const putResp = await fetch(DATA_API, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: 'Aggiorna guida e PIN [via admin panel]',
-        content: newContentB64,
-        sha: fileData.sha,
-        branch: BRANCH
-      })
-    });
-
-    if (!putResp.ok) {
-      setStep('step-upload', 'error');
-      const e = await putResp.json().catch(() => ({}));
-      throw new Error(e.message || `HTTP ${putResp.status}`);
-    }
-    setStep('step-upload', 'done');
-    setStep('step-deploy', 'active');
-
-    // 8. Patch CACHE_VERSION in sw.js
-    try {
-      const SW_FILE = 'sw.js';
-      const SW_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${SW_FILE}`;
-      const swGetResp = await fetch(`${SW_API}?ref=${BRANCH}`, {
-        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-      });
-      if (swGetResp.ok) {
-        const swFileData = await swGetResp.json();
-        const swRaw = decodeURIComponent(escape(atob(swFileData.content.replace(/\n/g, ''))));
-        const newVersion = new Date().toISOString().slice(0, 10) + '-v' + Date.now();
-        const swUpdated = swRaw.replace(
-          /const CACHE_VERSION = '[^']+';/,
-          `const CACHE_VERSION = '${newVersion}';`
-        );
-        await fetch(SW_API, {
-          method: 'PUT',
-          headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: '🔄 Aggiorna cache SW [auto]',
-            content: btoa(unescape(encodeURIComponent(swUpdated))),
-            sha: swFileData.sha,
-            branch: BRANCH
-          })
+      // Patch CACHE_VERSION in sw.js
+      try {
+        const SW_FILE = 'sw.js';
+        const SW_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${SW_FILE}`;
+        const swGetResp = await fetch(`${SW_API}?ref=${BRANCH}`, {
+          headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
         });
-      }
-    } catch(swErr) { /* Non-fatal: SW cache patch failed */ }
+        if (swGetResp.ok) {
+          const swFileData = await swGetResp.json();
+          const swRaw = decodeURIComponent(escape(atob(swFileData.content.replace(/\n/g, ''))));
+          const newVersion = new Date().toISOString().slice(0, 10) + '-v' + Date.now();
+          const swUpdated = swRaw.replace(
+            /const CACHE_VERSION = '[^']+';/,
+            `const CACHE_VERSION = '${newVersion}';`
+          );
+          await fetch(SW_API, {
+            method: 'PUT',
+            headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: '🔄 Aggiorna cache SW [auto]',
+              content: btoa(unescape(encodeURIComponent(swUpdated))),
+              sha: swFileData.sha,
+              branch: BRANCH
+            })
+          });
+        }
+      } catch(swErr) { /* Non-fatal: SW cache patch failed */ }
 
-    setTimeout(() => { setStep('step-deploy', 'done'); }, 1500);
+      setTimeout(() => { setStep('step-deploy', 'done'); }, 1500);
 
-    clearInterval(timerInterval);
-    showOk(msg, '✅ Pubblicato! Le modifiche saranno live tra qualche secondo.');
-    showToast('Pubblicato online!', 'success');
-    addChangelogEntry('Pubblicazione online (admin)', 'admin');
-    setTimeout(() => { if (msg) msg.innerHTML = ''; }, 12000);
+      clearInterval(timerInterval);
+      showOk(msg, '✅ Pubblicato! Le modifiche saranno live tra qualche secondo.');
+      showToast('Pubblicato online!', 'success');
+      addChangelogEntry('Pubblicazione online (admin)', 'admin');
+      setTimeout(() => { if (msg) msg.innerHTML = ''; }, 12000);
     } catch(innerErr) {
       clearInterval(timerInterval);
       throw innerErr;
@@ -226,6 +236,9 @@ async function hostPublishNow() {
 
   if (!confirm('Vuoi pubblicare le modifiche online? Saranno visibili a tutti gli ospiti in pochi secondi.')) return;
 
+  // [SECURITY] Warn that the token is being used client-side
+  console.warn('[SECURITY] GitHub token is being used client-side. Consider using a serverless backend (e.g., GitHub Actions workflow_dispatch) for safer publishing.');
+
   // 1. Salva localmente
   const d = collectFormData();
   currentData = d;
@@ -236,45 +249,12 @@ async function hostPublishNow() {
   if (btn) { btn.disabled = true; btn.textContent = '⏳ Pubblicazione…'; }
 
   try {
-    const { owner: OWNER, repo: REPO } = getGitHubOwnerRepo();
-    const DATA_FILE = 'js/data.js';
-    const BRANCH = 'main';
-    const DATA_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${DATA_FILE}`;
-
-    // Get current js/data.js SHA
-    const getResp = await fetch(`${DATA_API}?ref=${BRANCH}`, {
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (!getResp.ok) {
-      const e = await getResp.json().catch(() => ({}));
-      throw new Error(e.message || `HTTP ${getResp.status}`);
-    }
-    const fileData = await getResp.json();
-
-    // Build updated js/data.js
-    const rawHtml = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ''))));
-    const jsonStr = JSON.stringify(d, null, 2);
-    const updatedHtml = rawHtml.replace(
-      /\/\* PUBLISHED_DATA_START \*\/[\s\S]*?\/\* PUBLISHED_DATA_END \*\//,
-      '/* PUBLISHED_DATA_START */\nconst PUBLISHED_DATA = ' + jsonStr + ';\n/* PUBLISHED_DATA_END */'
+    await _commitDataToGitHub(
+      token,
+      d,
+      '📱 Aggiornamento guida (host) — ' + new Date().toLocaleDateString('it-IT'),
+      false /* patchHashes */
     );
-
-    // Push updated file
-    const putResp = await fetch(DATA_API, {
-      method: 'PUT',
-      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: '📱 Aggiornamento guida (host) — ' + new Date().toLocaleDateString('it-IT'),
-        content: btoa(unescape(encodeURIComponent(updatedHtml))),
-        sha: fileData.sha,
-        branch: BRANCH
-      })
-    });
-
-    if (!putResp.ok) {
-      const e = await putResp.json().catch(() => ({}));
-      throw new Error(e.message || `HTTP ${putResp.status}`);
-    }
 
     showToast('✅ Pubblicato! Le modifiche saranno online tra qualche secondo.', 'success');
     closeSettings();
