@@ -759,8 +759,6 @@ function requestService(svc) {
 // ════════════════════════════════════════════
 //  TAB NAVIGATION
 // ════════════════════════════════════════════
-const TAB_IDS = ['home', 'stay', 'places', 'food', 'transport', 'departure'];
-
 function switchTab(tabId) {
   showTab(tabId);
   if (typeof GuestAnalytics !== 'undefined') GuestAnalytics.trackPageView(tabId);
