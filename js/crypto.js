@@ -87,6 +87,8 @@ function deobfuscate(str) {
 }
 
 // ── Hash obfuscation helpers (used by publishOnline) ──
+// obfuscateHash expects a hex SHA-256 string and returns a Base64 string.
+// deobfuscateHash reverses the process, returning the original hex string.
 
 function obfuscateHash(hexHash) {
   return btoa(hexHash);

@@ -336,7 +336,7 @@ function collectSettingsApts() {
      'howToReachIt','howToReachEn','howToAccessIt','howToAccessEn','parkingIt','parkingEn',
      'bedroomTagsIt','bedroomTagsEn','kitchenTagsIt','kitchenTagsEn','bathroomTagsIt','bathroomTagsEn'].forEach(k => {
       const el = document.getElementById(`s-a${i}-${k}`);
-      if (el) apt[k] = k === 'wifiPass' ? obfuscate(el.value) : el.value;
+      if (el) apt[k] = k === 'wifiPass' ? obfuscate(el.value) : el.value; // re-obfuscate WiFi password before storing
     });
     apt.houseRules = collectAptHouseRules(i);
     apt.extraServices = collectAptExtraServices(i);
