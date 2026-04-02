@@ -80,7 +80,9 @@ const UI_STRINGS = {
     departureTitle: 'Partenza',
     langToggle:     '🇬🇧 EN',
     selfCheckin:    'Self Check-in',
-    arrivalInstructions: 'Istruzioni Arrivo'
+    arrivalInstructions: 'Istruzioni Arrivo',
+    updateAvailable: 'Aggiornamento disponibile',
+    updateNow:       'Aggiorna ora'
   },
   en: {
     landingIntro:   'Welcome! Select your apartment to access the complete guide.',
@@ -152,7 +154,9 @@ const UI_STRINGS = {
     departureTitle: 'Departure',
     langToggle:     '🇮🇹 IT',
     selfCheckin:    'Self Check-in',
-    arrivalInstructions: 'Arrival Instructions'
+    arrivalInstructions: 'Arrival Instructions',
+    updateAvailable: 'Update available',
+    updateNow:       'Update now'
   }
 };
 

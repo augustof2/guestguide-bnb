@@ -1760,6 +1760,43 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
 #offline-banner { display: none; position: fixed; top: 0; left: 0; right: 0; background: var(--accent); color: #fff; text-align: center; padding: 8px 16px; font-size: 0.85rem; z-index: 9998; font-family: Jost, sans-serif; }
 #offline-banner.show { display: block; }
 
+/* ── UPDATE AVAILABLE BANNER ── */
+#update-banner {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: var(--teal);
+  color: #fff;
+  text-align: center;
+  padding: 12px 16px;
+  font-size: 14px;
+  z-index: 9999;
+  animation: slideDown 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: Jost, sans-serif;
+}
+#update-banner.d-none { display: none; }
+#update-banner button {
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #fff;
+  padding: 4px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+}
+@keyframes slideDown {
+  from { transform: translateX(-50%) translateY(-100%); }
+  to { transform: translateX(-50%) translateY(0); }
+}
+
 /* ── SPLASH SCREEN ── */
 #splash-screen {
   position: fixed;

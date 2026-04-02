@@ -88,6 +88,36 @@ async function _commitDataToGitHub(token, dataObj, commitMessage, patchHashes) {
   return { owner: OWNER, repo: REPO };
 }
 
+// ── Shared SW cache version bump helper ──────────────────────────────────────
+// Fetches sw.js from GitHub, increments CACHE_VERSION, and pushes it back.
+// Non-fatal: errors are silently swallowed so the caller's main flow continues.
+
+async function _bumpSwCacheVersion(token, owner, repo, branch) {
+  const SW_FILE = 'sw.js';
+  const SW_API = `https://api.github.com/repos/${owner}/${repo}/contents/${SW_FILE}`;
+  const swGetResp = await fetch(`${SW_API}?ref=${branch}`, {
+    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (!swGetResp.ok) return;
+  const swFileData = await swGetResp.json();
+  const swRaw = decodeURIComponent(escape(atob(swFileData.content.replace(/\n/g, ''))));
+  const newVersion = new Date().toISOString().slice(0, 10) + '-v' + Date.now();
+  const swUpdated = swRaw.replace(
+    /const CACHE_VERSION = '[^']+';/,
+    `const CACHE_VERSION = '${newVersion}';`
+  );
+  await fetch(SW_API, {
+    method: 'PUT',
+    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message: '🔄 Aggiorna cache SW [auto]',
+      content: btoa(unescape(encodeURIComponent(swUpdated))),
+      sha: swFileData.sha,
+      branch: branch
+    })
+  });
+}
+
 async function publishOnline() {
   const tokenInput = document.getElementById('s-github-token');
   const typedToken = tokenInput && tokenInput.value.trim();
@@ -167,30 +197,7 @@ async function publishOnline() {
 
       // Patch CACHE_VERSION in sw.js
       try {
-        const SW_FILE = 'sw.js';
-        const SW_API = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${SW_FILE}`;
-        const swGetResp = await fetch(`${SW_API}?ref=${BRANCH}`, {
-          headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-        });
-        if (swGetResp.ok) {
-          const swFileData = await swGetResp.json();
-          const swRaw = decodeURIComponent(escape(atob(swFileData.content.replace(/\n/g, ''))));
-          const newVersion = new Date().toISOString().slice(0, 10) + '-v' + Date.now();
-          const swUpdated = swRaw.replace(
-            /const CACHE_VERSION = '[^']+';/,
-            `const CACHE_VERSION = '${newVersion}';`
-          );
-          await fetch(SW_API, {
-            method: 'PUT',
-            headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              message: '🔄 Aggiorna cache SW [auto]',
-              content: btoa(unescape(encodeURIComponent(swUpdated))),
-              sha: swFileData.sha,
-              branch: BRANCH
-            })
-          });
-        }
+        await _bumpSwCacheVersion(token, OWNER, REPO, BRANCH);
       } catch(swErr) { /* Non-fatal: SW cache patch failed */ }
 
       setTimeout(() => { setStep('step-deploy', 'done'); }, 1500);
@@ -294,6 +301,12 @@ async function hostPublishNow() {
       '📱 Aggiornamento guida (host) — ' + new Date().toLocaleDateString('it-IT'),
       false /* patchHashes */
     );
+
+    // Patch CACHE_VERSION in sw.js
+    try {
+      const ownerRepo = getGitHubOwnerRepo();
+      if (ownerRepo) await _bumpSwCacheVersion(token, ownerRepo.owner, ownerRepo.repo, 'main');
+    } catch(swErr) { /* Non-fatal: SW cache patch failed */ }
 
     setStep('hstep-fetch', 'done');
     setStep('hstep-patch', 'active');
