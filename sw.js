@@ -46,6 +46,7 @@ function getCache() {
 }
 
 self.addEventListener('install', e => {
+  self.skipWaiting();
   e.waitUntil(
     getCache()
       .then(c => c.addAll(STATIC_ASSETS.map(u => new Request(u, {cache: 'reload'}))))

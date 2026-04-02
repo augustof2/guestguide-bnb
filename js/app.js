@@ -186,16 +186,16 @@ function renderApp(aptIndex) {
   }
 
   // Stay tab
-  document.getElementById('st-guests').textContent = langField(apt, 'maxGuests');
   // Guard: hide default placeholder WiFi name and password
-  document.getElementById('st-wifi-name').textContent = getDisplayableWifiName(apt);
+  const wifiName = getDisplayableWifiName(apt);
+  document.getElementById('st-wifi-name').textContent = wifiName;
   // Decrypt WiFi password asynchronously (AES-GCM or legacy XOR)
   const copyBtn = document.getElementById('copy-wifi-btn');
   if (copyBtn) copyBtn.style.display = 'none';
   document.getElementById('st-wifi-pass').textContent = '';
   decryptWifi(apt.wifiPass || '').then(plainPass => {
-    const isDefaultPass = plainPass === 'password123' || plainPass === 'password456';
-    const displayPass = isDefaultPass ? '' : plainPass;
+    // Show password whenever the WiFi name is real (not a placeholder)
+    const displayPass = wifiName ? plainPass : '';
     document.getElementById('st-wifi-pass').textContent = displayPass;
     if (copyBtn) copyBtn.style.display = displayPass ? '' : 'none';
     // Home WiFi copy button — same password, hidden until available
@@ -263,7 +263,7 @@ function renderApp(aptIndex) {
       const name = langField(svc, 'name') || '';
       const desc = langField(svc, 'desc') || '';
       const a = document.createElement('a');
-      a.className = 'service-item';
+      a.className = 'service-item-full';
       a.href = '#';
       a.addEventListener('click', function(e) {
         e.preventDefault();
@@ -271,8 +271,10 @@ function renderApp(aptIndex) {
       });
       a.innerHTML = `
         <div class="service-icon">${escHtml(svc.icon || '✨')}</div>
-        <div class="service-name">${escHtml(name)}</div>
-        <div class="service-desc">${escHtml(desc)}</div>
+        <div class="service-body">
+          <div class="service-name">${escHtml(name)}</div>
+          <div class="service-desc">${escHtml(desc)}</div>
+        </div>
         <div class="service-wa-hint">${escHtml(t('waHint'))}</div>`;
       servicesEl.appendChild(a);
     });
@@ -417,7 +419,6 @@ function updateLanguageOnly(aptIndex) {
   }
 
   // Stay tab text
-  document.getElementById('st-guests').textContent = langField(apt, 'maxGuests');
   const howReachTextLang = langField(apt, 'howToReach') || '';
   const howReachElLang = document.getElementById('st-how-reach');
   howReachElLang.innerHTML = renderRichText(howReachTextLang);
@@ -470,7 +471,7 @@ function updateLanguageOnly(aptIndex) {
       const name = langField(svc, 'name') || '';
       const desc = langField(svc, 'desc') || '';
       const a = document.createElement('a');
-      a.className = 'service-item';
+      a.className = 'service-item-full';
       a.href = '#';
       a.addEventListener('click', function(e) {
         e.preventDefault();
@@ -478,8 +479,10 @@ function updateLanguageOnly(aptIndex) {
       });
       a.innerHTML = `
         <div class="service-icon">${escHtml(svc.icon || '✨')}</div>
-        <div class="service-name">${escHtml(name)}</div>
-        <div class="service-desc">${escHtml(desc)}</div>
+        <div class="service-body">
+          <div class="service-name">${escHtml(name)}</div>
+          <div class="service-desc">${escHtml(desc)}</div>
+        </div>
         <div class="service-wa-hint">${escHtml(t('waHint'))}</div>`;
       servicesEl.appendChild(a);
     });
@@ -1568,6 +1571,12 @@ function initEventListeners() {
   // ── Copy WiFi button ──────────────────────
   var copyWifiBtn = document.getElementById('copy-wifi-btn');
   if (copyWifiBtn) copyWifiBtn.addEventListener('click', copyWifi);
+
+  // ── WiFi card tap-to-copy (whole card) ───
+  var wifiCard = document.querySelector('#tab-stay .wifi-card');
+  if (wifiCard) wifiCard.addEventListener('click', function(e) {
+    if (!e.target.closest('#copy-wifi-btn') && !e.target.closest('#st-wifi-pass')) copyWifi();
+  });
 
   var copyHomeWifiBtn = document.getElementById('copy-home-wifi-btn');
   if (copyHomeWifiBtn) copyHomeWifiBtn.addEventListener('click', copyHomeWifi);

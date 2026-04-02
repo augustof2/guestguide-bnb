@@ -540,19 +540,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
   .time-value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold2); }
   .time-icon { font-size: 20px; margin-bottom: 6px; }
 
-  .guests-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--teal);
-    color: #fff;
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-
   .info-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -596,6 +583,7 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     margin-bottom: 14px;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
   }
   .wifi-card::before {
     content: '📶';
@@ -1849,8 +1837,3 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
 .pt-0 { padding-top: 0; }
 .d-none { display: none; }
 .hidden-pb-4 { display: none; padding-bottom: 4px; }
-
-/* ── UPDATE BANNER ── */
-#sw-update-banner { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: var(--teal); color: #fff; padding: 12px 20px; border-radius: 12px; z-index: 9999; display: flex; gap: 12px; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,.4); font-family: Jost, sans-serif; }
-.sw-banner-btn-update { background: #fff; color: var(--teal); border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-.sw-banner-btn-close { background: none; border: none; color: #fff; cursor: pointer; font-size: 18px; }
