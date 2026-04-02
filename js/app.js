@@ -1023,6 +1023,10 @@ function _openSettingsPanel() {
     el.addEventListener('input', function() { settingsDirty = true; }, { once: false });
   });
   if (typeof GuestAnalytics !== 'undefined') GuestAnalytics.renderDashboard('an-dashboard');
+  if (typeof renderMtPropertiesList === 'function') renderMtPropertiesList();
+  if (typeof initMtSettings === 'function') initMtSettings();
+  if (typeof renderVersioningList === 'function') renderVersioningList();
+  if (typeof initVersioningSettings === 'function') initVersioningSettings();
 }
 
 function applyRoleVisibility() {
@@ -1258,19 +1262,54 @@ function renderReviews(reviews) {
   const container = document.getElementById('reviews-container');
   if (!section || !container) return;
   if (!reviews || reviews.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = '';
+
+  const platformEmojis = { google: '🌐', airbnb: '🏠', booking: '📅', tripadvisor: '🦉' };
+  const platformNames = { google: 'Google', airbnb: 'Airbnb', booking: 'Booking.com', tripadvisor: 'TripAdvisor' };
+
   container.innerHTML = '';
+  container.className = 'reviews-container' + (reviews.length >= 4 ? ' reviews-carousel' : '');
+
   reviews.forEach(function(r) {
-    const text = currentLang === 'en' ? (r.textEn || r.textIt || '') : (r.textIt || r.textEn || '');
-    const stars = '★'.repeat(Math.max(1, Math.min(5, r.stars || 5)));
+    const stars = '★'.repeat(Math.min(5, r.stars || 5)) + '☆'.repeat(Math.max(0, 5 - (r.stars || 5)));
+    const text = (currentLang === 'en' && r.textEn) ? r.textEn : (r.textIt || r.textEn || '');
+    if (!text && !r.author) return;
     const card = document.createElement('div');
-    card.className = 'review-card';
+    card.className = 'review-card review-fade-in';
+    const platform = r.platform || 'google';
+    const platformHtml = platform
+      ? '<div class="review-platform"><span class="review-platform-icon">'+escHtml(platformEmojis[platform]||'🌐')+'</span><span class="review-platform-name">'+escHtml(platformNames[platform]||platform)+'</span></div>'
+      : '';
+    let dateHtml = '';
+    if (r.date) {
+      try {
+        const dateObj = new Date(r.date);
+        if (!isNaN(dateObj)) {
+          dateHtml = '<div class="review-date">'+dateObj.toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'it-IT', {year:'numeric', month:'long'})+'</div>';
+        }
+      } catch(e) {}
+    }
     card.innerHTML =
       '<div class="review-stars">' + escHtml(stars) + '</div>' +
       '<p class="review-text">"' + escHtml(text) + '"</p>' +
-      '<div class="review-author">— ' + escHtml(r.author || '') + '</div>';
+      '<div class="review-author">— ' + escHtml(r.author || '') + '</div>' +
+      platformHtml + dateHtml;
     container.appendChild(card);
   });
-  section.style.display = 'block';
+
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('review-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    container.querySelectorAll('.review-fade-in').forEach(function(el) { obs.observe(el); });
+  } else {
+    container.querySelectorAll('.review-fade-in').forEach(function(el) { el.classList.add('review-visible'); });
+  }
 }
 
 
@@ -1804,6 +1843,8 @@ function initEventListeners() {
         case 'removeSettingsCheckinStep': removeSettingsCheckinStep(idx); break;
         case 'removeSettingsContact':     removeSettingsContact(idx); break;
         case 'removeSettingsReview':      removeSettingsReview(idx); break;
+        case 'moveReviewUp':              moveReviewUp(idx); break;
+        case 'moveReviewDown':            moveReviewDown(idx); break;
       }
     });
   }

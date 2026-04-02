@@ -232,9 +232,9 @@ const DEFAULT_DATA = {
     departureTitleIt: "Partenza"
   },
   reviews: [
-    { author: "Maria R.", stars: 5, textIt: "Appartamento bellissimo, pulito e in posizione perfetta! L'host è stato molto disponibile.", textEn: "Beautiful apartment, clean and perfectly located! The host was very helpful." },
-    { author: "John S.", stars: 5, textIt: "Esperienza fantastica! Torneremo sicuramente.", textEn: "Fantastic experience! We will definitely come back." },
-    { author: "Sophie L.", stars: 5, textIt: "Tutto perfetto, dalla pulizia all'accoglienza. Consigliatissimo!", textEn: "Everything was perfect, from cleanliness to hospitality. Highly recommended!" }
+    { author: "Maria R.", stars: 5, textIt: "Appartamento bellissimo, pulito e in posizione perfetta! L'host è stato molto disponibile.", textEn: "Beautiful apartment, clean and perfectly located! The host was very helpful.", date: '', platform: 'google' },
+    { author: "John S.", stars: 5, textIt: "Esperienza fantastica! Torneremo sicuramente.", textEn: "Fantastic experience! We will definitely come back.", date: '', platform: 'airbnb' },
+    { author: "Sophie L.", stars: 5, textIt: "Tutto perfetto, dalla pulizia all'accoglienza. Consigliatissimo!", textEn: "Everything was perfect, from cleanliness to hospitality. Highly recommended!", date: '', platform: 'booking' }
   ]
 };
 
@@ -687,9 +687,89 @@ function mergeWithDefaults(stored, defaults) {
   return result;
 }
 
+// ════════════════════════════════════════════
+//  MULTI-TENANT SUPPORT
+// ════════════════════════════════════════════
+const MT_PROPS_KEY = 'bnb_mt_properties'; // list of {id, name}
+const MT_CURRENT_KEY = 'bnb_mt_current';  // current property id
+
+function getPropertyId() {
+  const params = new URLSearchParams(window.location.search);
+  const fromUrl = params.get('property');
+  if (fromUrl) return fromUrl.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  return localStorage.getItem(MT_CURRENT_KEY) || 'default';
+}
+
+function getDataKey(propId) {
+  const id = propId || getPropertyId();
+  return id === 'default' ? 'bnb_guide_data' : 'bnb_guide_data_' + id;
+}
+
+function getChangelogKey(propId) {
+  const id = propId || getPropertyId();
+  return id === 'default' ? 'bnb_changelog' : 'bnb_changelog_' + id;
+}
+
+function getSnapshotsKey(propId) {
+  const id = propId || getPropertyId();
+  return id === 'default' ? 'bnb_snapshots' : 'bnb_snapshots_' + id;
+}
+
+function listProperties() {
+  try {
+    const raw = localStorage.getItem(MT_PROPS_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    if (!list.find(function(p) { return p.id === 'default'; })) {
+      list.unshift({ id: 'default', name: 'Default' });
+    }
+    return list;
+  } catch(e) { return [{ id: 'default', name: 'Default' }]; }
+}
+
+function savePropertiesList(list) {
+  try { localStorage.setItem(MT_PROPS_KEY, JSON.stringify(list)); } catch(e) {}
+}
+
+function createProperty(id, name) {
+  const sanitized = id.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  if (!sanitized) return false;
+  const list = listProperties();
+  if (list.find(function(p) { return p.id === sanitized; })) return false;
+  list.push({ id: sanitized, name: name || sanitized });
+  savePropertiesList(list);
+  return sanitized;
+}
+
+function deleteProperty(id) {
+  if (id === 'default') return false;
+  const list = listProperties().filter(function(p) { return p.id !== id; });
+  savePropertiesList(list);
+  localStorage.removeItem(getDataKey(id));
+  localStorage.removeItem(getChangelogKey(id));
+  localStorage.removeItem(getSnapshotsKey(id));
+  return true;
+}
+
+function duplicateProperty(sourceId, newId, newName) {
+  const sanitized = newId.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  if (!sanitized) return false;
+  const list = listProperties();
+  if (list.find(function(p) { return p.id === sanitized; })) return false;
+  const srcData = localStorage.getItem(getDataKey(sourceId));
+  if (srcData) localStorage.setItem(getDataKey(sanitized), srcData);
+  list.push({ id: sanitized, name: newName || sanitized });
+  savePropertiesList(list);
+  return sanitized;
+}
+
+function switchProperty(id) {
+  localStorage.setItem(MT_CURRENT_KEY, id);
+  window.location.href = window.location.pathname + (id === 'default' ? '' : '?property=' + id);
+}
+
 function loadData() {
   try {
-    const raw = localStorage.getItem('bnb_guide_data');
+    const raw = localStorage.getItem(getDataKey());
     if (raw) {
       const stored = JSON.parse(raw);
       // Migrate legacy contact2Name/contact2Phone to extraContacts array
@@ -730,7 +810,7 @@ function loadData() {
 
 function saveData(data) {
   try {
-    localStorage.setItem('bnb_guide_data', JSON.stringify(data));
+    localStorage.setItem(getDataKey(), JSON.stringify(data));
   } catch(e) { console.error('Failed to save data:', e); }
 }
 
@@ -796,7 +876,7 @@ const MAX_CHANGELOG_ENTRIES = 50;
 
 function getChangelog() {
   try {
-    const raw = localStorage.getItem(CHANGELOG_KEY);
+    const raw = localStorage.getItem(getChangelogKey());
     return raw ? JSON.parse(raw) : [];
   } catch(e) { return []; }
 }
@@ -810,6 +890,75 @@ function addChangelogEntry(description, who) {
       who: who || 'admin'
     });
     if (log.length > MAX_CHANGELOG_ENTRIES) log.splice(MAX_CHANGELOG_ENTRIES);
-    localStorage.setItem(CHANGELOG_KEY, JSON.stringify(log));
+    localStorage.setItem(getChangelogKey(), JSON.stringify(log));
   } catch(e) {}
+}
+
+// ════════════════════════════════════════════
+//  SNAPSHOTS / VERSIONING
+// ════════════════════════════════════════════
+const MAX_SNAPSHOTS = 20;
+
+function simpleHash(str) {
+  let hash = 0;
+  for (let i = 0; i < Math.min(str.length, 200); i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
+function getSnapshots() {
+  try {
+    const key = (typeof getSnapshotsKey === 'function') ? getSnapshotsKey() : 'bnb_snapshots';
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function saveSnapshots(snaps) {
+  try {
+    const key = (typeof getSnapshotsKey === 'function') ? getSnapshotsKey() : 'bnb_snapshots';
+    localStorage.setItem(key, JSON.stringify(snaps));
+  } catch(e) {}
+}
+
+function createSnapshot(description, who, data) {
+  const snaps = getSnapshots();
+  const dataToSnap = data || (typeof currentData !== 'undefined' ? currentData : {});
+  const json = JSON.stringify(dataToSnap);
+  const hash = simpleHash(json);
+  if (snaps.length > 0 && snaps[0].hash === hash) return;
+  snaps.unshift({
+    ts: Date.now(),
+    desc: description || 'Salvataggio',
+    who: who || (typeof currentRole !== 'undefined' ? currentRole : 'admin') || 'admin',
+    hash: hash,
+    data: dataToSnap
+  });
+  if (snaps.length > MAX_SNAPSHOTS) snaps.splice(MAX_SNAPSHOTS);
+  saveSnapshots(snaps);
+}
+
+function restoreSnapshot(idx) {
+  const snaps = getSnapshots();
+  if (!snaps[idx]) return false;
+  const snap = snaps[idx];
+  if (typeof currentData !== 'undefined') currentData = deepClone(snap.data);
+  if (typeof saveData === 'function') saveData(currentData);
+  const dateStr = new Date(snap.ts).toLocaleDateString('it-IT') + ' ' + new Date(snap.ts).toLocaleTimeString('it-IT', {hour:'2-digit',minute:'2-digit'});
+  if (typeof addChangelogEntry === 'function') addChangelogEntry('Ripristinato snapshot del ' + dateStr, snap.who || 'admin');
+  return true;
+}
+
+function localStorageUsage() {
+  let total = 0;
+  try {
+    for (const key of Object.keys(localStorage)) {
+      total += ((localStorage.getItem(key) || '').length + key.length) * 2;
+    }
+  } catch(e) {}
+  if (total < 1024) return total + ' B';
+  if (total < 1024*1024) return (total/1024).toFixed(1) + ' KB';
+  return (total/1024/1024).toFixed(2) + ' MB';
 }

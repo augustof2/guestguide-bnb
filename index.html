@@ -756,6 +756,21 @@
       </div>
     </details>
 
+    <!-- Versioning / Rollback (admin-only) -->
+    <details class="s-section admin-only">
+      <summary class="s-section-title">📦 Versioning</summary>
+      <div class="s-fields">
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Snapshot automatici dei dati. Massimo 20 snapshot.</p>
+        <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+          <button class="s-btn" id="snap-import-btn">📥 Importa Snapshot</button>
+          <button class="s-btn danger" id="snap-reset-btn">🗑️ Elimina tutti</button>
+          <span id="snap-storage-info" style="font-size:11px;color:var(--text2);align-self:center"></span>
+        </div>
+        <input type="file" id="snap-import-input" accept=".json" style="display:none">
+        <div id="versioning-list"><!-- populated by JS --></div>
+      </div>
+    </details>
+
     <!-- Self Check-in -->
     <details class="s-section">
       <summary class="s-section-title">📅 Self Check-in</summary>
@@ -788,6 +803,21 @@
           <li>Attendi la propagazione DNS (fino a 24h)</li>
           <li>Abilita <strong>"Enforce HTTPS"</strong></li>
         </ol>
+      </div>
+    </details>
+
+    <!-- Multi-struttura (admin-only) -->
+    <details class="s-section admin-only">
+      <summary class="s-section-title">🏢 Multi-struttura</summary>
+      <div class="s-fields">
+        <p style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">Gestisci più strutture dallo stesso sito. Ogni struttura ha dati indipendenti.</p>
+        <div id="mt-properties-list"><!-- populated by JS --></div>
+        <div class="s-divider"></div>
+        <div class="s-sub-title">➕ Nuova Struttura</div>
+        <div class="s-field"><label>ID (solo lettere minuscole, trattini)</label><input type="text" id="mt-new-id" placeholder="es. villa-roma" pattern="[a-z0-9_-]+"></div>
+        <div class="s-field"><label>Nome</label><input type="text" id="mt-new-name" placeholder="es. Villa Roma"></div>
+        <button class="s-btn" id="mt-create-btn">➕ Crea Struttura</button>
+        <div id="mt-msg" style="font-size:12px;min-height:18px;margin-top:8px"></div>
       </div>
     </details>
 
@@ -881,6 +911,8 @@
 <script defer src="js/settings-apartments.js"></script>
 <script defer src="js/settings-ui.js"></script>
 <script defer src="js/settings-publish.js"></script>
+<script defer src="js/settings-multitenant.js"></script>
+<script defer src="js/settings-versioning.js"></script>
 <script defer src="js/weather.js"></script>
 <script defer src="js/sw-register.js"></script>
 </body>

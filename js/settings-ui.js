@@ -411,6 +411,7 @@ function saveAndApply() {
     if (!confirm('Vuoi salvare le modifiche? Le vedranno tutti gli ospiti.')) return;
     collectFormData().then(d => {
       currentData = d;
+      if (typeof createSnapshot === 'function') createSnapshot('Salvataggio manuale', 'host');
       saveData(d);
       renderLanding();
       updateDynamicManifest();
@@ -419,10 +420,12 @@ function saveAndApply() {
       showToast("✅ Salvato! Ricorda di cliccare '🚀 Pubblica Ora' per aggiornare il sito online.", 'success');
       addChangelogEntry('Impostazioni salvate', 'host');
       if (typeof renderChangelogSection === 'function') renderChangelogSection();
+      if (typeof renderVersioningList === 'function') renderVersioningList();
     });
   } else {
     collectFormData().then(d => {
       currentData = d;
+      if (typeof createSnapshot === 'function') createSnapshot('Salvataggio manuale', 'admin');
       saveData(d);
       renderLanding();
       updateDynamicManifest();
@@ -431,6 +434,7 @@ function saveAndApply() {
       showToast('✅ Salvato con successo!', 'success');
       addChangelogEntry('Impostazioni salvate', 'admin');
       if (typeof renderChangelogSection === 'function') renderChangelogSection();
+      if (typeof renderVersioningList === 'function') renderVersioningList();
     });
   }
 }
@@ -520,7 +524,9 @@ async function renderQrSection() {
   }
   try { await loadQrLib(); } catch(e) { console.error('Failed to load QR library:', e); }
   apts.forEach(function(apt, idx) {
-    const url = base + '?apt=' + idx;
+    const propId = (typeof getPropertyId === 'function') ? getPropertyId() : 'default';
+    const propParam = propId && propId !== 'default' ? '&property=' + encodeURIComponent(propId) : '';
+    const url = base + '?apt=' + idx + propParam;
     const name = apt.name || ('Appartamento ' + (idx + 1));
     const card = document.createElement('div');
     card.className = 'qr-card';
@@ -598,18 +604,30 @@ function renderSettingsReviews(reviews) {
 function _buildReviewItem(r, idx) {
   const wrap = document.createElement('div');
   wrap.className = 's-review-item';
+  wrap.dataset.idx = idx;
   wrap.style.cssText = 'border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px';
+  const platformEmojis = { google: '🌐', airbnb: '🏠', booking: '📅', tripadvisor: '🦉' };
+  const platformOptions = ['google','airbnb','booking','tripadvisor'].map(function(p) {
+    return '<option value="'+p+'"'+(p === (r.platform||'google')?' selected':'')+'>'+platformEmojis[p]+' '+p.charAt(0).toUpperCase()+p.slice(1)+'</option>';
+  }).join('');
+  const starsHtml = [5,4,3,2,1].map(function(n) {
+    return '<option value="'+n+'"'+(n===(r.stars||5)?' selected':'')+'>'+n+' ★</option>';
+  }).join('');
   wrap.innerHTML =
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
-      '<strong style="font-size:12px;color:var(--gold)">Recensione #' + (idx+1) + '</strong>' +
-      '<button data-action="removeSettingsReview" data-idx="' + idx + '" style="background:transparent;border:none;color:var(--accent);cursor:pointer;font-size:16px">✕</button>' +
+      '<strong style="font-size:12px;color:var(--gold)">Recensione #'+(idx+1)+'</strong>' +
+      '<div style="display:flex;gap:6px;align-items:center">' +
+        '<button data-action="moveReviewUp" data-idx="'+idx+'" style="background:transparent;border:1px solid var(--border);color:var(--text1);cursor:pointer;border-radius:4px;padding:2px 6px;font-size:12px" aria-label="Sposta su">▲</button>' +
+        '<button data-action="moveReviewDown" data-idx="'+idx+'" style="background:transparent;border:1px solid var(--border);color:var(--text1);cursor:pointer;border-radius:4px;padding:2px 6px;font-size:12px" aria-label="Sposta giù">▼</button>' +
+        '<button data-action="removeSettingsReview" data-idx="'+idx+'" style="background:transparent;border:none;color:var(--accent);cursor:pointer;font-size:16px" aria-label="Rimuovi recensione">✕</button>' +
+      '</div>' +
     '</div>' +
-    '<div class="s-field"><label>Nome Ospite</label><input type="text" class="rev-author" placeholder="es. Maria R." value="' + escHtml(r.author || '') + '"></div>' +
-    '<div class="s-field"><label>Stelle</label><select class="rev-stars">' +
-      [5,4,3,2,1].map(function(n) { return '<option value="' + n + '"' + (n === (r.stars||5) ? ' selected' : '') + '>' + n + ' ★</option>'; }).join('') +
-    '</select></div>' +
-    '<div class="s-field"><label>Testo 🇮🇹</label><textarea class="rev-textIt" rows="2" placeholder="Testo recensione in italiano...">' + escHtml(r.textIt || '') + '</textarea></div>' +
-    '<div class="s-field"><label>Testo 🇬🇧</label><textarea class="rev-textEn" rows="2" placeholder="Review text in English...">' + escHtml(r.textEn || '') + '</textarea></div>';
+    '<div class="s-field"><label>Nome Ospite</label><input type="text" class="rev-author" placeholder="es. Maria R." value="'+escHtml(r.author||'')+'"></div>' +
+    '<div class="s-field"><label>Piattaforma</label><select class="rev-platform">'+platformOptions+'</select></div>' +
+    '<div class="s-field"><label>Stelle</label><select class="rev-stars">'+starsHtml+'</select></div>' +
+    '<div class="s-field"><label>Data</label><input type="date" class="rev-date" value="'+escHtml(r.date||'')+'"></div>' +
+    '<div class="s-field"><label>Testo 🇮🇹</label><textarea class="rev-textIt" rows="2" placeholder="Testo recensione in italiano...">'+escHtml(r.textIt||'')+'</textarea></div>' +
+    '<div class="s-field"><label>Testo 🇬🇧</label><textarea class="rev-textEn" rows="2" placeholder="Review text in English...">'+escHtml(r.textEn||'')+'</textarea></div>';
   return wrap;
 }
 
@@ -623,7 +641,9 @@ function collectSettingsReviews() {
       author: item.querySelector('.rev-author').value.trim(),
       stars: parseInt(item.querySelector('.rev-stars').value, 10) || 5,
       textIt: item.querySelector('.rev-textIt').value.trim(),
-      textEn: item.querySelector('.rev-textEn').value.trim()
+      textEn: item.querySelector('.rev-textEn').value.trim(),
+      date: item.querySelector('.rev-date') ? item.querySelector('.rev-date').value.trim() : '',
+      platform: item.querySelector('.rev-platform') ? item.querySelector('.rev-platform').value : 'google'
     });
   });
   return reviews;
@@ -633,7 +653,7 @@ function addSettingsReview() {
   const container = document.getElementById('s-reviews-container');
   if (!container) return;
   const current = collectSettingsReviews();
-  const newReview = { author: '', stars: 5, textIt: '', textEn: '' };
+  const newReview = { author: '', stars: 5, textIt: '', textEn: '', date: '', platform: 'google' };
   current.push(newReview);
   container.appendChild(_buildReviewItem(newReview, current.length - 1));
   container.dataset.count = current.length;
@@ -644,6 +664,26 @@ function removeSettingsReview(idx) {
   const current = collectSettingsReviews();
   current.splice(idx, 1);
   renderSettingsReviews(current);
+  settingsDirty = true;
+}
+
+function moveReviewUp(idx) {
+  const reviews = collectSettingsReviews();
+  if (idx <= 0) return;
+  const tmp = reviews[idx];
+  reviews[idx] = reviews[idx-1];
+  reviews[idx-1] = tmp;
+  renderSettingsReviews(reviews);
+  settingsDirty = true;
+}
+
+function moveReviewDown(idx) {
+  const reviews = collectSettingsReviews();
+  if (idx >= reviews.length - 1) return;
+  const tmp = reviews[idx];
+  reviews[idx] = reviews[idx+1];
+  reviews[idx+1] = tmp;
+  renderSettingsReviews(reviews);
   settingsDirty = true;
 }
 
