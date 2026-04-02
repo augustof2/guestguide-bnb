@@ -1284,7 +1284,7 @@ function renderReviews(reviews) {
     if (r.date) {
       try {
         const dateObj = new Date(r.date);
-        if (!isNaN(dateObj)) {
+        if (!isNaN(dateObj.getTime())) {
           dateHtml = '<div class="review-date">'+dateObj.toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'it-IT', {year:'numeric', month:'long'})+'</div>';
         }
       } catch(e) {}

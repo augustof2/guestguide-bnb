@@ -56,7 +56,7 @@ function initVersioningSettings() {
           const snap = JSON.parse(ev.target.result);
           if (!snap.data || !snap.ts) throw new Error('Invalid snapshot');
           const snaps = (typeof getSnapshots === 'function') ? getSnapshots() : [];
-          snap.desc = (snap.desc || 'Importato') + ' (importato)';
+          snap.desc = snap.desc && snap.desc.includes('importato') ? snap.desc : (snap.desc || 'Importato') + ' (importato)';
           snap.ts = snap.ts || Date.now();
           snaps.unshift(snap);
           if (snaps.length > 20) snaps.splice(20);
