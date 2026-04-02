@@ -22,7 +22,24 @@ if ('serviceWorker' in navigator) {
         const newWorker = reg.installing;
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            showUpdateBanner(newWorker, null);
+            // Ask the waiting SW for its CACHE_VERSION via a dedicated MessageChannel
+            // so the reply doesn't go through the global navigator.serviceWorker.message
+            // handler and avoids interference with CONTENT_UPDATED messages.
+            const mc = new MessageChannel();
+            let timeoutId;
+            mc.port1.onmessage = event => {
+              if (event.data && event.data.type === 'SW_VERSION') {
+                clearTimeout(timeoutId);
+                mc.port1.onmessage = null;
+                showUpdateBanner(newWorker, event.data.version);
+              }
+            };
+            newWorker.postMessage({ type: 'GET_VERSION' }, [mc.port2]);
+            // Fallback: show the banner without a version if no reply within 500 ms.
+            timeoutId = setTimeout(() => {
+              mc.port1.onmessage = null; // discard any late-arriving reply
+              showUpdateBanner(newWorker, null);
+            }, 500);
           }
         });
       });
@@ -68,6 +85,8 @@ function showUpdateBanner(worker, version) {
   });
   document.getElementById('sw-update-btn').addEventListener('click', () => {
     sessionStorage.setItem('sw_just_updated', '1');
+    // Persist dismissal so the banner doesn't reappear in the next browsing session.
+    if (version) localStorage.setItem('sw_dismissed_' + version, '1');
     if (worker) {
       // Dice al nuovo SW di attivarsi → trigga controllerchange → reload
       worker.postMessage({ type: 'SKIP_WAITING' });

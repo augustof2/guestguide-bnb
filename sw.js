@@ -29,6 +29,9 @@ const STATIC_ASSETS = [
 // concurrent callers who already hold the same promise don't accidentally
 // reset a successfully-opened cache created by a later call.
 let _cachePromise = null;
+// Ensure CONTENT_UPDATED is broadcast at most once per SW activation to avoid
+// repeated update banners when multiple JS/CSS assets are revalidated in parallel.
+let _contentUpdateNotified = false;
 function getCache() {
   if (!_cachePromise) {
     const p = caches.open(CACHE_NAME);
@@ -88,10 +91,16 @@ self.addEventListener('fetch', e => {
           if (response && response.status === 200 && response.type === 'basic') {
             const c = response.clone();
             getCache().then(cache => cache.put(e.request, c)).then(() => {
-              // Notify all active clients that fresh content is available
-              self.clients.matchAll().then(clients => {
-                clients.forEach(client => client.postMessage({ type: 'CONTENT_UPDATED', version: CACHE_VERSION }));
-              });
+              // Notify clients only once per SW activation to avoid repeated banners
+              // when multiple JS/CSS assets are revalidated in parallel.
+              // JS is single-threaded so the check+set is atomic within this callback,
+              // but set the flag first to make the guard intent explicit.
+              if (!_contentUpdateNotified) {
+                _contentUpdateNotified = true;
+                self.clients.matchAll().then(clients => {
+                  clients.forEach(client => client.postMessage({ type: 'CONTENT_UPDATED', version: CACHE_VERSION }));
+                });
+              }
             });
           }
           return response;
@@ -118,4 +127,9 @@ self.addEventListener('fetch', e => {
 
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SKIP_WAITING') self.skipWaiting();
+  // Reply via the dedicated MessageChannel port so the response is routed directly
+  // to the caller without going through the global navigator.serviceWorker.message.
+  if (e.data && e.data.type === 'GET_VERSION' && e.ports && e.ports[0]) {
+    e.ports[0].postMessage({ type: 'SW_VERSION', version: CACHE_VERSION });
+  }
 });
