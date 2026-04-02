@@ -1,13 +1,13 @@
 {
-  "name": "Guida FF Elite",
-  "short_name": "Guida FF",
+  "name": "Guest Guide",
+  "short_name": "Guida",
   "start_url": "./",
   "scope": "./",
   "lang": "it",
   "display": "standalone",
   "background_color": "#1a3238",
   "theme_color": "#1a3238",
-  "description": "Guida digitale per gli ospiti di FF Elite Apartments",
+  "description": "Guida digitale per gli ospiti del tuo B&B",
   "categories": ["travel", "utilities"],
   "icons": [
     {

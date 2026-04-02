@@ -1,15 +1,36 @@
 // ════════════════════════════════════════════
+//  GLOBAL ERROR BOUNDARY
+// ════════════════════════════════════════════
+window.addEventListener('error', function(event) {
+  console.error('[app] Unhandled error:', event.message, 'at', event.filename + ':' + event.lineno);
+});
+window.addEventListener('unhandledrejection', function(event) {
+  console.error('[app] Unhandled promise rejection:', event.reason);
+});
+
+// ════════════════════════════════════════════
+//  FONT LOADING (CSP-safe, JS-driven)
+// ════════════════════════════════════════════
+(function loadFonts() {
+  var fontUrl = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap';
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = fontUrl;
+  document.head.appendChild(link);
+})();
+
+// ════════════════════════════════════════════
 //  UNCONFIGURED DATA CHECK
 // ════════════════════════════════════════════
 function checkUnconfigured() {
-  const banner = document.getElementById('setup-banner');
-  if (!banner) return;
   const d = currentData;
   const firstApt = d.apts && d.apts[0];
   // WiFi name check is sufficient — after AES-GCM migration wifiPass can't be sync-compared
   const isDefault = d.bbName === 'Il Tuo B&B' ||
     (firstApt && firstApt.wifi === 'NomeRete');
-  banner.style.display = isDefault ? 'block' : 'none';
+  if (isDefault && typeof showSetupWizard === 'function') {
+    showSetupWizard();
+  }
 }
 
 // ════════════════════════════════════════════
@@ -83,6 +104,15 @@ function updateMetaTags(d) {
   setMeta('meta[name="twitter:title"]',      'content', title);
   setMeta('meta[name="twitter:description"]','content', desc);
   setMeta('meta[name="apple-mobile-web-app-title"]', 'content', d.bbName || 'Guest Guide');
+  // Update og:url and og:image using customDomain or qrBaseUrl
+  const domain = (d.customDomain && d.customDomain.trim()) ? d.customDomain.trim() : '';
+  const qrUrl  = (d.qrBaseUrl    && d.qrBaseUrl.trim())    ? d.qrBaseUrl.trim()    : '';
+  const baseUrl = domain || qrUrl;
+  if (baseUrl) {
+    const cleanBase = baseUrl.replace(/\/$/, '');
+    setMeta('meta[property="og:url"]',   'content', cleanBase);
+    setMeta('meta[property="og:image"]', 'content', cleanBase + '/og-image.png');
+  }
 }
 
 // ════════════════════════════════════════════
@@ -1602,6 +1632,7 @@ function init() {
   applyTheme(savedTheme);
 
   migratePinIfNeeded();
+  migrateWifiPasswords();
 
   (function() {
     try {

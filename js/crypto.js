@@ -32,7 +32,10 @@ async function _loadKeyFromIdb() {
       req.onsuccess = e => resolve(e.target.result || null);
       req.onerror   = e => reject(e.target.error);
     });
-  } catch (_) { return null; }
+  } catch (_) {
+    console.warn('[crypto] Failed to load key from IndexedDB:', _);
+    return null;
+  }
 }
 
 async function _saveKeyToIdb(key) {
@@ -50,7 +53,10 @@ async function _getOrCreateKey() {
   try {
     const idbKey = await _loadKeyFromIdb();
     if (idbKey) return idbKey;
-  } catch (_) { /* fall through */ }
+  } catch (_) {
+    console.warn('[crypto] IndexedDB key load failed, trying localStorage:', _);
+    /* fall through */
+  }
 
   // 2. Try to migrate existing JWK from localStorage → IndexedDB
   try {
@@ -64,10 +70,16 @@ async function _getOrCreateKey() {
       try {
         await _saveKeyToIdb(migratedKey);
         localStorage.removeItem(CRYPTO_KEY_STORE); // clean up extractable copy
-      } catch (_) { /* IDB not available — keep localStorage copy for now */ }
+      } catch (_) {
+        console.warn('[crypto] IndexedDB save failed, falling back to localStorage:', _);
+        /* IDB not available — keep localStorage copy for now */
+      }
       return migratedKey;
     }
-  } catch (_) { /* generate fresh key */ }
+  } catch (_) {
+    console.warn('[crypto] localStorage key migration failed:', _);
+    /* generate fresh key */
+  }
 
   // 3. Generate a new non-extractable key
   const key = await crypto.subtle.generateKey(
@@ -78,6 +90,7 @@ async function _getOrCreateKey() {
   try {
     await _saveKeyToIdb(key);
   } catch (_) {
+    console.warn('[crypto] IndexedDB save failed, falling back to localStorage:', _);
     // IndexedDB unavailable (e.g. private mode) — fall back to exportable localStorage
     const fallbackKey = await crypto.subtle.generateKey(
       { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']
@@ -113,7 +126,8 @@ async function decryptToken(ciphertext) {
     const data = combined.slice(12);
     const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
     return new TextDecoder().decode(plainBuf);
-  } catch (_) {
+  } catch (err) {
+    console.warn('[crypto] Token decryption failed:', err);
     return '';
   }
 }
@@ -140,7 +154,10 @@ async function encryptWifi(plaintext) {
 async function decryptWifi(ciphertext) {
   if (!ciphertext) return '';
   // Handle legacy XOR-obfuscated values transparently
-  if (ciphertext.startsWith(_OBF_PREFIX)) return deobfuscate(ciphertext);
+  if (ciphertext.startsWith(_OBF_PREFIX)) {
+    console.warn('[crypto] Legacy XOR-obfuscated WiFi password detected. Please re-encrypt with AES-GCM via the settings panel.');
+    return deobfuscate(ciphertext);
+  }
   if (!ciphertext.startsWith(_WIFI_AES_PREFIX)) return ciphertext; // plain-text fallback
   try {
     const key = await _getOrCreateKey();
@@ -155,10 +172,13 @@ async function decryptWifi(ciphertext) {
   }
 }
 
-// ── WiFi password XOR obfuscation (DEPRECATED) ───
-// ⚠️  DEPRECATED: XOR obfuscation is kept only for backward-compatible migration
+// ── WiFi password XOR obfuscation (DEPRECATED — removal planned 2027-01) ───
+// ⚠️  DEPRECATED: XOR obfuscation is kept ONLY for backward-compatible migration
 //    of existing data. New values are encrypted with AES-GCM via encryptWifi().
 //    Do NOT use obfuscate()/deobfuscate() for new WiFi password storage.
+//    Do NOT remove deobfuscate()/_xorBase64Decode() — required for legacy migration.
+//    Do NOT remove obfuscateHash()/deobfuscateHash() — used by settings-publish.js.
+//    Planned removal date: 2027-01-01
 // Values prefixed with _OBF_ are obfuscated; plain-text values are returned
 // as-is to maintain backward compatibility with existing localStorage data.
 
@@ -185,6 +205,7 @@ function _xorBase64Decode(b64) {
 
 function obfuscate(str) {
   if (!str) return '';
+  console.warn('[crypto] obfuscate() is deprecated and should not be used for new data. Use encryptWifi() instead.');
   return _OBF_PREFIX + _xorBase64(str);
 }
 
@@ -194,6 +215,7 @@ function deobfuscate(str) {
   try {
     return _xorBase64Decode(str.slice(_OBF_PREFIX.length));
   } catch (_) {
+    console.warn('[crypto] XOR deobfuscation failed:', _);
     return str;
   }
 }
@@ -210,5 +232,8 @@ function obfuscateHash(hexHash) {
 function deobfuscateHash(b64) {
   try {
     return _xorBase64Decode(b64);
-  } catch (_) { return b64; }
+  } catch (_) {
+    console.warn('[crypto] Hash deobfuscation failed:', _);
+    return b64;
+  }
 }

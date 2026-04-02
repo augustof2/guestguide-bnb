@@ -18,6 +18,7 @@ const STATIC_ASSETS = [
   './js/settings-versioning.js',
   './js/weather.js',
   './js/sw-register.js',
+  './js/setup-wizard.js',
   './manifest.json',
   './icon.svg',
   './icon-192.png',

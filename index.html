@@ -6,24 +6,23 @@
 <title>Il Tuo B&amp;B — Guest Guide</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231a3238'/><text x='50' y='68' font-size='50' font-weight='bold' font-family='serif' fill='%23c9a84c' text-anchor='middle'>FF</text></svg>">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<meta property="og:title" content="FF Elite Apartments — Guida Ospite">
-<meta property="og:description" content="La guida digitale interattiva per gli ospiti di FF Elite Apartments a Roma.">
+<meta property="og:title" content="Il Tuo B&amp;B — Guest Guide">
+<meta property="og:description" content="La guida digitale interattiva per gli ospiti del tuo B&amp;B.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://guida-ffeliteapartments.it/og-image.png">
-<meta property="og:url" content="https://guida-ffeliteapartments.it">
+<meta property="og:image" content="og-image.png">
+<meta property="og:url" content="">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FF Elite Apartments — Guida Ospite">
-<meta name="twitter:description" content="La guida digitale interattiva per gli ospiti di FF Elite Apartments a Roma.">
+<meta name="twitter:title" content="Il Tuo B&amp;B — Guest Guide">
+<meta name="twitter:description" content="La guida digitale interattiva per gli ospiti del tuo B&amp;B.">
 <link rel="manifest" id="manifest-link" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Guida FF Elite">
+<meta name="apple-mobile-web-app-title" content="Guest Guide">
 <meta name="theme-color" content="#1a3238">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.open-meteo.com https://api.github.com https://api.mymemory.translated.net;">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" as="style">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -52,6 +51,167 @@
 </div>
 
 <div class="app-shell">
+
+<!-- ════════════════════════════════════════════
+     SETUP WIZARD OVERLAY
+════════════════════════════════════════════ -->
+<div id="setup-wizard" class="wizard-overlay d-none" role="dialog" aria-modal="true" aria-labelledby="wizard-title">
+  <div class="wizard-modal">
+    <div class="wizard-header">
+      <h2 class="wizard-title" id="wizard-title">🏨 Configura il tuo B&amp;B</h2>
+      <div class="wizard-steps-indicator">
+        <span class="wizard-step-dot active" data-step="1"></span>
+        <span class="wizard-step-dot" data-step="2"></span>
+        <span class="wizard-step-dot" data-step="3"></span>
+        <span class="wizard-step-dot" data-step="4"></span>
+        <span class="wizard-step-dot" data-step="5"></span>
+      </div>
+    </div>
+
+    <!-- Step 1: Informazioni Base -->
+    <div class="wizard-step active" data-step="1">
+      <h3 class="wizard-step-title">Step 1 — Informazioni Base</h3>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-bbname" data-wizard-en="Property name">Nome struttura</label>
+        <input class="wizard-input" type="text" id="wz-bbname" placeholder="Es. Villa Rossi, B&B Centrale…">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-subtitle" data-wizard-en="Subtitle">Sottotitolo</label>
+        <input class="wizard-input" type="text" id="wz-subtitle" placeholder="Es. Guest Guide, Guida Ospiti…">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-cityzone" data-wizard-en="City / Area">Città / Zona</label>
+        <input class="wizard-input" type="text" id="wz-cityzone" placeholder="Es. Roma · Centro Storico">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-hostname" data-wizard-en="Host name">Nome host</label>
+        <input class="wizard-input" type="text" id="wz-hostname" placeholder="Es. Marco Rossi">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-hostphone" data-wizard-en="Host phone">Telefono host</label>
+        <input class="wizard-input" type="tel" id="wz-hostphone" placeholder="+39 333 1234567">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" data-wizard-en="Theme">Tema</label>
+        <div class="wizard-theme-picker" id="wz-theme-picker">
+          <button type="button" class="wizard-theme-btn active" data-theme="dark">🌑 Dark</button>
+          <button type="button" class="wizard-theme-btn" data-theme="light">☀️ Light</button>
+          <button type="button" class="wizard-theme-btn" data-theme="roma">🏛️ Roma</button>
+          <button type="button" class="wizard-theme-btn" data-theme="romantic">🌹 Romantic</button>
+          <button type="button" class="wizard-theme-btn" data-theme="minimal">⬜ Minimal</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Sicurezza -->
+    <div class="wizard-step" data-step="2">
+      <h3 class="wizard-step-title">Step 2 — Sicurezza</h3>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-pin" data-wizard-en="New admin PIN (4 digits)">Nuovo PIN admin (4 cifre)</label>
+        <input class="wizard-input" type="password" id="wz-pin" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="••••">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-pin-confirm" data-wizard-en="Confirm PIN">Conferma PIN</label>
+        <input class="wizard-input" type="password" id="wz-pin-confirm" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="••••">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-admin-user" data-wizard-en="Admin username">Username admin</label>
+        <input class="wizard-input" type="text" id="wz-admin-user" autocomplete="username" placeholder="admin">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-admin-pass" data-wizard-en="Admin password">Password admin</label>
+        <input class="wizard-input" type="password" id="wz-admin-pass" autocomplete="new-password" placeholder="••••••••">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-admin-pass-confirm" data-wizard-en="Confirm password">Conferma password</label>
+        <input class="wizard-input" type="password" id="wz-admin-pass-confirm" autocomplete="new-password" placeholder="••••••••">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-recovery" data-wizard-en="Recovery word">Parola di recovery</label>
+        <input class="wizard-input" type="text" id="wz-recovery" placeholder="Es. mammaRosa1975">
+      </div>
+      <p class="wizard-hint" data-wizard-en="Leave blank to keep default credentials (admin/admin/1234).">Lascia vuoto per mantenere le credenziali di default (admin/admin/PIN 1234).</p>
+    </div>
+
+    <!-- Step 3: Primo Appartamento -->
+    <div class="wizard-step" data-step="3">
+      <h3 class="wizard-step-title">Step 3 — Primo Appartamento</h3>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-apt-name" data-wizard-en="Apartment name">Nome appartamento</label>
+        <input class="wizard-input" type="text" id="wz-apt-name" placeholder="Es. Appartamento 1, Suite Roma…">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-apt-address" data-wizard-en="Full address">Indirizzo completo</label>
+        <input class="wizard-input" type="text" id="wz-apt-address" placeholder="Es. Via Roma 1, 00100 Roma">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-apt-address-short" data-wizard-en="Short address">Indirizzo breve</label>
+        <input class="wizard-input" type="text" id="wz-apt-address-short" placeholder="Es. Via Roma 1">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-apt-maps" data-wizard-en="Google Maps link">Link Google Maps</label>
+        <input class="wizard-input" type="url" id="wz-apt-maps" placeholder="https://maps.google.com/…">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-wifi-name" data-wizard-en="WiFi network name">Nome rete WiFi</label>
+        <input class="wizard-input" type="text" id="wz-wifi-name" placeholder="Es. NomeRete_2.4G">
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-wifi-pass" data-wizard-en="WiFi password">Password WiFi</label>
+        <input class="wizard-input" type="text" id="wz-wifi-pass" placeholder="Password WiFi">
+      </div>
+      <div class="wizard-field wizard-field-row">
+        <div>
+          <label class="wizard-label" for="wz-checkin" data-wizard-en="Check-in time">Check-in</label>
+          <input class="wizard-input" type="text" id="wz-checkin" placeholder="14:00">
+        </div>
+        <div>
+          <label class="wizard-label" for="wz-checkout" data-wizard-en="Check-out time">Check-out</label>
+          <input class="wizard-input" type="text" id="wz-checkout" placeholder="11:00">
+        </div>
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-maxguests" data-wizard-en="Max guests">Max ospiti</label>
+        <input class="wizard-input" type="number" id="wz-maxguests" min="1" max="20" placeholder="2">
+      </div>
+    </div>
+
+    <!-- Step 4: Pubblicazione -->
+    <div class="wizard-step" data-step="4">
+      <h3 class="wizard-step-title">Step 4 — Pubblicazione</h3>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-qr-url" data-wizard-en="QR Base URL">QR Base URL</label>
+        <input class="wizard-input" type="url" id="wz-qr-url" placeholder="https://tuonome.github.io/guide">
+        <p class="wizard-hint" data-wizard-en="The public URL where the guide is hosted. Used for generating QR codes.">L'URL pubblico dove è ospitata la guida. Usato per generare i QR code.</p>
+      </div>
+      <div class="wizard-field">
+        <label class="wizard-label" for="wz-gh-token" data-wizard-en="GitHub Token">GitHub Token</label>
+        <input class="wizard-input" type="password" id="wz-gh-token" autocomplete="off" placeholder="ghp_…">
+        <p class="wizard-hint" data-wizard-en="Go to github.com → Settings → Developer settings → Personal access tokens → Generate new token (classic) with 'repo' scope.">Vai su github.com → Settings → Developer settings → Personal access tokens → Genera token con scope 'repo'.</p>
+      </div>
+      <div id="wz-publish-status" class="wizard-publish-status d-none"></div>
+    </div>
+
+    <!-- Step 5: Completato -->
+    <div class="wizard-step" data-step="5">
+      <div class="wizard-success">
+        <div class="wizard-success-icon">🎉</div>
+        <h3 class="wizard-step-title" data-wizard-en="Setup complete!">Configurazione completata!</h3>
+        <p class="wizard-success-msg" data-wizard-en="Your guest guide is ready. You can customise every detail from the ⚙️ settings panel.">La tua guida ospiti è pronta. Puoi personalizzare ogni dettaglio dal pannello ⚙️.</p>
+      </div>
+    </div>
+
+    <div id="wz-error" class="wizard-error d-none"></div>
+
+    <div class="wizard-footer">
+      <button type="button" class="wizard-btn wizard-btn-skip" id="wz-skip-btn" data-wizard-en="Skip">Salta</button>
+      <div class="wizard-footer-nav">
+        <button type="button" class="wizard-btn wizard-btn-secondary" id="wz-prev-btn" data-wizard-en="Back">← Indietro</button>
+        <button type="button" class="wizard-btn wizard-btn-primary" id="wz-next-btn" data-wizard-en="Next">Avanti →</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ════════════════════════════════════════════
      LANDING PAGE
@@ -895,6 +1055,7 @@
 <script defer src="js/settings-multitenant.js"></script>
 <script defer src="js/settings-versioning.js"></script>
 <script defer src="js/weather.js"></script>
+<script defer src="js/setup-wizard.js"></script>
 <script defer src="js/sw-register.js"></script>
 </body>
 </html>

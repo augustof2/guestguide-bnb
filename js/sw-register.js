@@ -47,14 +47,11 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Call init after all scripts are loaded.
-// Use a retry loop in case deferred scripts haven't finished loading yet
-// (script execution order isn't guaranteed across all browsers/configurations).
-function tryInit(attempts) {
-  if (typeof init === 'function') {
-    init();
-  } else if (attempts > 0) {
-    setTimeout(() => tryInit(attempts - 1), 50);
-  }
+// Call init after all deferred scripts have been parsed.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof init === 'function') init();
+  });
+} else {
+  if (typeof init === 'function') init();
 }
-tryInit(10);
