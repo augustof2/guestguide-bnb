@@ -245,7 +245,7 @@ const PUBLISHED_DATA = {
   "cityZone": "Roma",
   "theme": "dark",
   "pwaName": "Guida - FF Elite Apartments",
-  "pwaShortName": "Guida- FF Elite",
+  "pwaShortName": "Guida - FF Elite",
   "hostName": "Nicolò",
   "hostPhone": "+393342177311",
   "googleReviewUrl": "https://g.page/r/CZvIjdaReVG_EBM/review",
@@ -582,23 +582,23 @@ const PUBLISHED_DATA = {
       "stars": 5,
       "textIt": "Appartamento bellissimo, pulito e in posizione perfetta! L'host è stato molto disponibile",
       "textEn": "Beautiful apartment, clean and perfectly located! The host was very helpful",
-      "date": "2026-01-14",
-      "platform": "airbnb"
+      "date": "",
+      "platform": "google"
     },
     {
       "author": "John Sa",
       "stars": 5,
       "textIt": "Esperienza fantastica! Torneremo sicuramente",
       "textEn": "Fantastic experience! We will definitely come back",
-      "date": "2026-01-27",
-      "platform": "booking"
+      "date": "",
+      "platform": "google"
     },
     {
       "author": "Sophie L",
       "stars": 5,
       "textIt": "Tutto perfetto, dalla pulizia all'accoglienza. Consigliatissimo",
       "textEn": "Everything was perfect, from cleanliness to hospitality. Highly recommended",
-      "date": "2026-01-02",
+      "date": "",
       "platform": "google"
     }
   ]
