@@ -1257,7 +1257,8 @@ function renderReviews(reviews) {
   const section = document.getElementById('reviews-section');
   const container = document.getElementById('reviews-container');
   if (!section || !container) return;
-  if (!reviews || reviews.length === 0) { section.style.display = 'none'; return; }
+  if (!reviews || reviews.length === 0) { section.classList.add('d-none'); return; }
+  section.classList.remove('d-none');
   section.style.display = '';
 
   const platformEmojis = { google: '🌐', airbnb: '🏠', booking: '📅', tripadvisor: '🦉' };

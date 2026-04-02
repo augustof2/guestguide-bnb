@@ -34,6 +34,13 @@ let _cachePromise = null;
 // Ensure CONTENT_UPDATED is broadcast at most once per SW activation to avoid
 // repeated update banners when multiple JS/CSS assets are revalidated in parallel.
 let _contentUpdateNotified = false;
+// Compare two ArrayBuffers byte-by-byte; used to detect real content changes.
+function _buffersEqual(a, b) {
+  if (a.byteLength !== b.byteLength) return false;
+  const va = new Uint8Array(a), vb = new Uint8Array(b);
+  for (let i = 0; i < va.length; i++) if (va[i] !== vb[i]) return false;
+  return true;
+}
 function getCache() {
   if (!_cachePromise) {
     const p = caches.open(CACHE_NAME);
@@ -90,21 +97,37 @@ self.addEventListener('fetch', e => {
   if (isJsOrCss) {
     e.respondWith(
       caches.match(e.request).then(cached => {
-        const networkFetch = fetch(e.request).then(response => {
+        const networkFetch = fetch(e.request).then(async response => {
           if (response && response.status === 200 && response.type === 'basic') {
-            const c = response.clone();
-            getCache().then(cache => cache.put(e.request, c)).then(() => {
+            // Clone upfront before any body is consumed: one for comparison,
+            // one for cache storage, original for returning to the browser.
+            const forComparison = response.clone();
+            const forCache = response.clone();
+            const cache = await getCache();
+            const cachedResponse = await cache.match(e.request);
+            let changed = true;
+            if (cachedResponse) {
+              try {
+                const [networkBuf, cachedBuf] = await Promise.all([
+                  forComparison.arrayBuffer(),
+                  cachedResponse.arrayBuffer()
+                ]);
+                changed = !_buffersEqual(networkBuf, cachedBuf);
+              } catch (_e) {
+                changed = true;
+              }
+            }
+            if (changed) {
+              await cache.put(e.request, forCache);
               // Notify clients only once per SW activation to avoid repeated banners
               // when multiple JS/CSS assets are revalidated in parallel.
-              // JS is single-threaded so the check+set is atomic within this callback,
-              // but set the flag first to make the guard intent explicit.
               if (!_contentUpdateNotified) {
                 _contentUpdateNotified = true;
                 self.clients.matchAll().then(clients => {
                   clients.forEach(client => client.postMessage({ type: 'CONTENT_UPDATED', version: CACHE_VERSION }));
                 });
               }
-            });
+            }
           }
           return response;
         });
