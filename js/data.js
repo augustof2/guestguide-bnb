@@ -240,7 +240,7 @@ const DEFAULT_DATA = {
 /* PUBLISHED_DATA_START */
 const PUBLISHED_DATA = {
   "bbName": "FF Elite Apartments",
-  "subtitle": "GUIDA OSPIT",
+  "subtitle": "GUIDA OSPITE",
   "cityZone": "Roma",
   "theme": "dark",
   "pwaName": "Guida - FF Elite Apartments",
@@ -313,7 +313,7 @@ const PUBLISHED_DATA = {
       "kitchenTagsEn": "Cooktop,Oven,Refrigerator,Dishwasher,Coffee maker,Microwave",
       "bathroomTagsIt": "Doccia,Asciugamani,Phon,Prodotti igiene",
       "bathroomTagsEn": "Shower,Towels,Hairdryer, Hygiene products",
-      "wifiPass": "_OBF_AgsRGwoLbhYeHQ==",
+      "wifiPass": "_AESGCM_pz8YP8eIKDQ8s/DmkEvR8YwdE/ZZh5q6dSV5ZGX69qcVAQg+Cbs=",
       "houseRules": [
         {
           "icon": "🔇",
