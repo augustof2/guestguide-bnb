@@ -1,6 +1,10 @@
 if ('serviceWorker' in navigator) {
   let waitingSW = null;
 
+  // Capture whether a SW was already controlling this page before registration.
+  // This is false on the very first visit, so we can skip the reload in that case.
+  const hadController = !!navigator.serviceWorker.controller;
+
   function showUpdateBanner() {
     const banner = document.getElementById('update-banner');
     if (banner) banner.classList.remove('d-none');
@@ -19,8 +23,14 @@ if ('serviceWorker' in navigator) {
     });
   }
 
-  // When the new SW takes control, reload the page to get fresh assets
+  // When the new SW takes control, reload the page to get fresh assets.
+  // Skip the reload on the very first install (no previous SW was controlling
+  // the page), to avoid showing the splash screen twice.
+  let refreshing = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (refreshing) return;
+    if (!hadController) return; // First-ever install — no reload needed
+    refreshing = true;
     location.reload();
   });
 
