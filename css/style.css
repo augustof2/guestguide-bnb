@@ -202,13 +202,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     box-shadow: 0 8px 32px rgba(201,168,76,.15);
   }
 
-  .apt-card-icon {
-    font-size: 28px;
-    flex-shrink: 0;
-  }
-
-  .apt-card-body { flex: 1; min-width: 0; }
-
   .apt-card-name {
     font-family: 'Playfair Display', serif;
     font-size: 18px;
@@ -246,12 +239,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .apt-card-arrow {
-    font-size: 20px;
-    color: var(--gold);
-    flex-shrink: 0;
   }
 
   .gear-btn {
@@ -1732,10 +1719,6 @@ body, .app-shell, .apt-card, .stat-card, .welcome-card,
   transition: transform .2s;
 }
 .theme-option.active .theme-preview { transform: scale(1.1); box-shadow: 0 0 0 2px var(--gold); }
-
-/* ════════════════════════════════════════════
-   NEW FEATURES CSS
-   ════════════════════════════════════════════ */
 
 /* ── RATE LIMITING ── */
 .rate-limit-msg { color: var(--accent); font-size: 0.85rem; margin-top: 8px; text-align: center; }

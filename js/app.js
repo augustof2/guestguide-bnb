@@ -1,6 +1,4 @@
-// ════════════════════════════════════════════
-//  GLOBAL ERROR BOUNDARY
-// ════════════════════════════════════════════
+// GLOBAL ERROR BOUNDARY
 window.addEventListener('error', function(event) {
   console.error('[app] Unhandled error:', event.message, 'at', event.filename + ':' + event.lineno);
 });
@@ -8,9 +6,7 @@ window.addEventListener('unhandledrejection', function(event) {
   console.error('[app] Unhandled promise rejection:', event.reason);
 });
 
-// ════════════════════════════════════════════
-//  FONT LOADING (CSP-safe, JS-driven)
-// ════════════════════════════════════════════
+// FONT LOADING (CSP-safe, JS-driven)
 (function loadFonts() {
   var fontUrl = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap';
   var link = document.createElement('link');
@@ -19,9 +15,7 @@ window.addEventListener('unhandledrejection', function(event) {
   document.head.appendChild(link);
 })();
 
-// ════════════════════════════════════════════
-//  UNCONFIGURED DATA CHECK
-// ════════════════════════════════════════════
+// UNCONFIGURED DATA CHECK
 function checkUnconfigured() {
   const d = currentData;
   const firstApt = d.apts && d.apts[0];
@@ -33,9 +27,7 @@ function checkUnconfigured() {
   }
 }
 
-// ════════════════════════════════════════════
-//  RENDER LANDING
-// ════════════════════════════════════════════
+// RENDER LANDING
 function renderLanding() {
   const d = currentData;
 
@@ -115,9 +107,7 @@ function updateMetaTags(d) {
   }
 }
 
-// ════════════════════════════════════════════
-//  OPEN / CLOSE GUIDE
-// ════════════════════════════════════════════
+// OPEN / CLOSE GUIDE
 function openGuide(aptIndex, lang) {
   if (lang) setLang(lang);
   currentAptIndex = aptIndex;
@@ -147,9 +137,7 @@ function goBack() {
   document.title = `${currentData.bbName} — ${currentData.subtitle}`;
 }
 
-// ════════════════════════════════════════════
-//  RENDER APP (guide for an apt)
-// ════════════════════════════════════════════
+// RENDER APP (guide for an apt)
 function getDisplayableWifiName(apt) {
   return (apt.wifi === 'NomeRete' || apt.wifi === 'NomeRete2') ? '' : apt.wifi;
 }
@@ -330,7 +318,7 @@ function renderApp(aptIndex) {
   // SOS
   document.getElementById('sos-host-name').textContent = d.hostName;
   // Guard: hide default placeholder phone
-  const isDefaultPhone = d.hostPhone === '+39 000 000 0000';
+  const isDefaultPhone = d.hostPhone === DEMO_PHONE;
   const phoneEl = document.getElementById('sos-host-phone');
   const callEl = document.getElementById('sos-host-call');
   if (isDefaultPhone) {
@@ -418,9 +406,7 @@ function renderApp(aptIndex) {
   });
 }
 
-// ════════════════════════════════════════════
-//  LANGUAGE-ONLY UPDATE (avoids full DOM rebuild)
-// ════════════════════════════════════════════
+// LANGUAGE-ONLY UPDATE (avoids full DOM rebuild)
 function updateLanguageOnly(aptIndex) {
   const d = currentData;
   const apt = d.apts[aptIndex] || d.apts[0];
@@ -731,9 +717,7 @@ function renderTransport(transport) {
   if (taxiCard) taxiCard.style.display = taxiText ? '' : 'none';
 }
 
-// ════════════════════════════════════════════
-//  EXTRA CONTACTS RENDER
-// ════════════════════════════════════════════
+// EXTRA CONTACTS RENDER
 function renderExtraContacts(contacts) {
   const container = document.getElementById('sos-extra-contacts');
   container.innerHTML = '';
@@ -753,9 +737,7 @@ function renderExtraContacts(contacts) {
   });
 }
 
-// ════════════════════════════════════════════
-//  CHECKIN STEPS RENDER
-// ════════════════════════════════════════════
+// CHECKIN STEPS RENDER
 function renderCheckinSteps(steps) {
   const container = document.getElementById('checkin-steps-list');
   if (!container) return;
@@ -777,9 +759,7 @@ function renderCheckinSteps(steps) {
   });
 }
 
-// ════════════════════════════════════════════
-//  DEPARTURE TAB RENDER
-// ════════════════════════════════════════════
+// DEPARTURE TAB RENDER
 function renderDeparture(d, checkoutSteps) {
   const titleEl = document.getElementById('closing-title');
   const textEl  = document.getElementById('closing-text');
@@ -806,9 +786,7 @@ function renderDeparture(d, checkoutSteps) {
   }
 }
 
-// ════════════════════════════════════════════
-//  HOME TAB — EXTRA SERVICES (full-width cards)
-// ════════════════════════════════════════════
+// HOME TAB — EXTRA SERVICES (full-width cards)
 function renderHomeExtraServices(apt) {
   const section   = document.getElementById('home-extra-services-section');
   const container = document.getElementById('home-extra-services');
@@ -843,9 +821,7 @@ function renderHomeExtraServices(apt) {
   });
 }
 
-// ════════════════════════════════════════════
-//  WHATSAPP SERVICE REQUEST
-// ════════════════════════════════════════════
+// WHATSAPP SERVICE REQUEST
 function requestService(svc) {
   const phone   = ((currentData && currentData.hostPhone) || '').replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
   const svcName = langField(svc, 'name') || svc.nameIt || '';
@@ -857,18 +833,14 @@ function requestService(svc) {
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-// ════════════════════════════════════════════
-//  TAB NAVIGATION
-// ════════════════════════════════════════════
+// TAB NAVIGATION
 function switchTab(tabId) {
   showTab(tabId);
   if (typeof GuestAnalytics !== 'undefined') GuestAnalytics.trackPageView(tabId);
   updateWaFab(tabId);
 }
 
-// ════════════════════════════════════════════
-//  WIFI COPY
-// ════════════════════════════════════════════
+// WIFI COPY
 function copyWifi() {
   const pass = document.getElementById('st-wifi-pass').textContent;
   const btn = document.getElementById('copy-wifi-btn');
@@ -922,9 +894,7 @@ function fallbackCopy(text, btn, resetEmoji) {
   }
 }
 
-// ════════════════════════════════════════════
-//  PIN MODAL
-// ════════════════════════════════════════════
+// PIN MODAL
 function openSettings() {
   pinBuffer = '';
   updatePinDots();
@@ -1103,9 +1073,7 @@ async function changePin() {
   setTimeout(() => { msg.textContent = ''; }, 3000);
 }
 
-// ════════════════════════════════════════════
-//  LOGIN FORM (username + password)
-// ════════════════════════════════════════════
+// LOGIN FORM (username + password)
 function openLoginForm() {
   document.getElementById('pin-view').style.display = 'none';
   document.getElementById('login-view').style.display = 'block';
@@ -1197,11 +1165,7 @@ async function changeCredentials() {
   setTimeout(() => { msg.textContent = ''; }, 3000);
 }
 
-// ════════════════════════════════════════════
-//  PIN MIGRATION (plain 4-digit → PBKDF2)
-//  SHA-256 → PBKDF2 migration happens naturally on first successful login
-//  (verifyPin accepts both formats and callers re-hash after verification).
-// ════════════════════════════════════════════
+// PIN migration (plain 4-digit → PBKDF2; SHA-256 → PBKDF2 on first successful login)
 async function migratePinIfNeeded() {
   const stored = localStorage.getItem(PIN_KEY);
   // Migrate plain 4-digit PINs stored before any hashing was introduced
@@ -1211,9 +1175,7 @@ async function migratePinIfNeeded() {
   }
 }
 
-// ════════════════════════════════════════════
-//  WIFI PASSWORD MIGRATION (XOR → AES-GCM)
-// ════════════════════════════════════════════
+// WIFI PASSWORD MIGRATION (XOR → AES-GCM)
 async function migrateWifiPasswords() {
   if (!currentData || !currentData.apts) return;
   let migrated = false;
@@ -1226,12 +1188,10 @@ async function migrateWifiPasswords() {
   }
   if (migrated) {
     saveData(currentData);
-    console.log('[wifi] XOR passwords migrated to AES-GCM');
   }
 }
 
-// ════════════════════════════════════════════
-//  PUBLISH ONLINE (GitHub API)
+// Publish online (GitHub API)
 
 function showToast(message, type = 'success', duration = 2500) {
   const container = document.getElementById('toast-container');
@@ -1250,9 +1210,7 @@ function showToast(message, type = 'success', duration = 2500) {
   }, duration);
 }
 
-// ════════════════════════════════════════════
-//  PREVIEW MODE
-// ════════════════════════════════════════════
+// PREVIEW MODE
 let _previewPreviousData = null;
 
 async function previewMode() {
@@ -1280,9 +1238,7 @@ function previewCancel() {
   document.getElementById('preview-banner').classList.remove('show');
 }
 
-// ════════════════════════════════════════════
-//  REVIEWS
-// ════════════════════════════════════════════
+// REVIEWS
 function renderReviews(reviews) {
   const section = document.getElementById('reviews-section');
   const container = document.getElementById('reviews-container');
@@ -1341,14 +1297,12 @@ function renderReviews(reviews) {
 }
 
 
-// ════════════════════════════════════════════
-//  WHATSAPP FAB
-// ════════════════════════════════════════════
+// WHATSAPP FAB
 function updateWaFab(tabId) {
   const fab = document.getElementById('wa-fab');
   if (!fab) return;
   const phone = ((currentData && currentData.hostPhone) || '').replace(/[\s\-\(\)]/g, '').replace(/^\+/, '');
-  if (!phone || currentData.hostPhone === '+39 000 000 0000') { fab.style.display = 'none'; fab.classList.remove('visible'); return; }
+  if (!phone || currentData.hostPhone === DEMO_PHONE) { fab.style.display = 'none'; fab.classList.remove('visible'); return; }
   const aptName = (currentData && currentData.apts && currentData.apts[currentAptIndex]) ? currentData.apts[currentAptIndex].name : '';
 
   if (!tabId) {
@@ -1373,9 +1327,7 @@ function updateWaFab(tabId) {
   setTimeout(() => fab.classList.add('visible'), 50);
 }
 
-// ════════════════════════════════════════════
-//  CHAR COUNTER (textarea)
-// ════════════════════════════════════════════
+// CHAR COUNTER (textarea)
 function initCharCounters() {
   document.querySelectorAll('#settings-panel textarea').forEach(function(ta) {
     if (ta.nextElementSibling && ta.nextElementSibling.classList.contains('char-counter')) return;
@@ -1393,9 +1345,7 @@ function initCharCounters() {
   });
 }
 
-// ════════════════════════════════════════════
-//  THEME (Dark/Light)
-// ════════════════════════════════════════════
+// THEME (Dark/Light)
 function applyTheme(theme) {
   document.documentElement.className = document.documentElement.className
     .replace(/\b(light-theme|theme-roma|theme-romantic|theme-minimal)\b/g, '').trim();
@@ -1423,9 +1373,7 @@ function toggleTheme() {
 
 
 
-// ════════════════════════════════════════════
-//  NAVIGATION ANIMATIONS
-// ════════════════════════════════════════════
+// NAVIGATION ANIMATIONS
 const TAB_ORDER = ['home', 'stay', 'places', 'food', 'transport', 'departure'];
 let _currentTabId = 'home';
 
@@ -1467,9 +1415,7 @@ function showTab(tabId) {
   _currentTabId = tabId;
 }
 
-// ════════════════════════════════════════════
-//  OFFLINE INDICATOR
-// ════════════════════════════════════════════
+// OFFLINE INDICATOR
 function initOfflineIndicator() {
   const banner = document.getElementById('offline-banner');
   if (!banner) return;
@@ -1485,9 +1431,7 @@ function initOfflineIndicator() {
   updateStatus();
 }
 
-// ════════════════════════════════════════════
-//  SWIPE GESTURES
-// ════════════════════════════════════════════
+// SWIPE GESTURES
 function initSwipeGestures() {
   const content = document.getElementById('guide-content');
   if (!content) return;
@@ -1515,9 +1459,7 @@ function initSwipeGestures() {
   }, { passive: true });
 }
 
-// ════════════════════════════════════════════
-//  SCROLL TO TOP
-// ════════════════════════════════════════════
+// SCROLL TO TOP
 function scrollToTop() {
   const content = document.getElementById('guide-content');
   if (content) content.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1536,9 +1478,7 @@ function initScrollTopBtn() {
   }, { passive: true });
 }
 
-// ════════════════════════════════════════════
-//  DYNAMIC MANIFEST (C8)
-// ════════════════════════════════════════════
+// DYNAMIC MANIFEST (C8)
 function updateDynamicManifest() {
   const d = currentData;
   if (!d) return;
@@ -1568,9 +1508,7 @@ function updateDynamicManifest() {
   if (link) link.setAttribute('href', url);
 }
 
-// ════════════════════════════════════════════
-//  FONT SIZE & HIGH CONTRAST ACCESSIBILITY
-// ════════════════════════════════════════════
+// FONT SIZE & HIGH CONTRAST ACCESSIBILITY
 const FONT_SIZE_KEY = 'bnb_font_size';
 const HIGH_CONTRAST_KEY = 'bnb_high_contrast';
 
@@ -1605,9 +1543,7 @@ function initAccessibility() {
   applyHighContrast(hc);
 }
 
-// ════════════════════════════════════════════
-//  INIT
-// ════════════════════════════════════════════
+// INIT
 function init() {
   currentData = loadData();
   updateDynamicManifest();
@@ -1667,10 +1603,7 @@ function init() {
   initEventListeners();
 }
 
-// ════════════════════════════════════════════
-//  CSP-SAFE EVENT BINDING (C5)
-//  Replaces all inline onclick handlers removed from index.html.
-// ════════════════════════════════════════════
+// CSP-safe event binding — replaces inline onclick handlers
 function initEventListeners() {
   // ── Header / nav ─────────────────────────
   var gearBtn = document.getElementById('gear-btn');
@@ -1833,15 +1766,6 @@ function initEventListeners() {
 
   var closeRecoveryBtn = document.querySelector('#recovery-view .pin-cancel');
   if (closeRecoveryBtn) closeRecoveryBtn.addEventListener('click', closeRecoveryView);
-
-  // ── Font preload → stylesheet ─────────────
-  var fontLink = document.querySelector('link[rel="preload"][as="style"]');
-  if (fontLink) {
-    fontLink.onload = function() { this.onload = null; this.rel = 'stylesheet'; };
-    fontLink.onerror = function() { this.onerror = null; }; // prevent silent failures
-    // Handle already-cached stylesheets where onload may not fire
-    if (fontLink.sheet) { fontLink.onload = null; fontLink.rel = 'stylesheet'; }
-  }
 
   // ── Event delegation for dynamically-rendered settings buttons ────────────
   // Handles data-action buttons generated by renderSettingsApts(), renderAptHouseRules(), etc.

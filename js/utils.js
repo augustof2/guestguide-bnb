@@ -1,6 +1,4 @@
-// ════════════════════════════════════════════
-//  UTILS — Shared helper functions
-// ════════════════════════════════════════════
+// UTILS — Shared helper functions
 
 // ── HTML escaping ────────────────────────────
 
@@ -105,7 +103,6 @@ async function verifyPin(pin, storedHash, storageKey) {
       try {
         const newHash = await hashPin(pin);
         localStorage.setItem(storageKey, newHash);
-        console.log('[pin] Legacy SHA-256 hash auto-upgraded to PBKDF2');
       } catch (err) {
         console.warn('[pin] Failed to auto-upgrade legacy hash to PBKDF2:', err);
       }

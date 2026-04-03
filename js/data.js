@@ -1,6 +1,5 @@
-// ════════════════════════════════════════════
-//  DEFAULT DATA
-// ════════════════════════════════════════════
+// DEFAULT DATA
+const DEMO_PHONE = '+39 000 000 0000';
 const DEFAULT_DATA = {
   bbName: "Il Tuo B&B",
   subtitle: "Guest Guide",
@@ -9,7 +8,7 @@ const DEFAULT_DATA = {
   pwaName: '',
   pwaShortName: '',
   hostName: "Nome Host",
-  hostPhone: "+39 000 000 0000",
+  hostPhone: DEMO_PHONE,
   googleReviewUrl: "",
   qrBaseUrl: '',
   supportPhone: '',

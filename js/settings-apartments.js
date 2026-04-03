@@ -1,6 +1,4 @@
-// ════════════════════════════════════════════
-//  SETTINGS: APARTMENTS MANAGEMENT
-// ════════════════════════════════════════════
+// SETTINGS: APARTMENTS MANAGEMENT
 function renderSettingsApts(apts) {
   const container = document.getElementById('s-apts-container');
   container.dataset.count = apts.length;
@@ -150,7 +148,7 @@ async function collectSettingsApts() {
   const apts = [];
   for (let i = 0; i < count; i++) {
     const apt = {};
-    // Collect all text/url fields; wifiPass is XOR-obfuscated (portable across devices)
+    // Collect all text/url fields; wifiPass is AES-GCM encrypted
     const plainKeys = ['name','address','addressShort','mapsLink','maxGuests','maxGuestsEn','wifi','checkin','checkout','lat','lon',
      'howToReachIt','howToReachEn','howToAccessIt','howToAccessEn','parkingIt','parkingEn',
      'bedroomTagsIt','bedroomTagsEn','kitchenTagsIt','kitchenTagsEn','bathroomTagsIt','bathroomTagsEn'];
@@ -159,7 +157,7 @@ async function collectSettingsApts() {
       if (el) apt[k] = el.value;
     });
     const wifiEl = document.getElementById(`s-a${i}-wifiPass`);
-    apt.wifiPass = wifiEl ? obfuscate(wifiEl.value) : '';
+    apt.wifiPass = wifiEl ? await encryptWifi(wifiEl.value) : '';
     apt.houseRules = collectAptHouseRules(i);
     apt.extraServices = collectAptExtraServices(i);
     apt.places = collectAptPlaces(i);
@@ -213,9 +211,7 @@ function removeSettingsApt(idx) {
   });
 }
 
-// ════════════════════════════════════════════
-//  TRANSLATION DICTIONARY (IT→EN fallback)
-// ════════════════════════════════════════════
+// TRANSLATION DICTIONARY (IT→EN fallback)
 const TRANSLATION_DICT = {
   "Check-in": "Check-in",
   "Check-out": "Check-out",
@@ -302,9 +298,7 @@ function translateWithDict(text) {
   return null;
 }
 
-// ════════════════════════════════════════════
-//  AUTO-TRANSLATE (Italian → English via MyMemory + dictionary fallback)
-// ════════════════════════════════════════════
+// AUTO-TRANSLATE (Italian → English via MyMemory + dictionary fallback)
 async function autoTranslateField(itElId, enElId) {
   const itEl = document.getElementById(itElId);
   const enEl = document.getElementById(enElId);
@@ -334,9 +328,7 @@ async function autoTranslateField(itElId, enElId) {
   enEl.disabled = false;
   enEl.placeholder = prev;
 }
-// ════════════════════════════════════════════
-//  SETTINGS: APT HOUSE RULES (dynamic)
-// ════════════════════════════════════════════
+// SETTINGS: APT HOUSE RULES (dynamic)
 function renderAptHouseRules(aptIndex, rules) {
   const container = document.getElementById(`s-a${aptIndex}-rules`);
   if (!container) return;
@@ -386,9 +378,7 @@ function removeAptHouseRule(aptIndex, ruleIdx) {
   renderAptHouseRules(aptIndex, current);
 }
 
-// ════════════════════════════════════════════
-//  SETTINGS: APT EXTRA SERVICES (dynamic)
-// ════════════════════════════════════════════
+// SETTINGS: APT EXTRA SERVICES (dynamic)
 function renderAptExtraServices(aptIndex, services) {
   const container = document.getElementById(`s-a${aptIndex}-services`);
   if (!container) return;
@@ -439,9 +429,7 @@ function removeAptExtraService(aptIndex, svcIdx) {
   renderAptExtraServices(aptIndex, current);
 }
 
-// ════════════════════════════════════════════
-//  SETTINGS: APT PLACES (dynamic, per-apt)
-// ════════════════════════════════════════════
+// SETTINGS: APT PLACES (dynamic, per-apt)
 function renderAptPlaces(aptIndex, places) {
   const container = document.getElementById(`s-a${aptIndex}-places`);
   if (!container) return;
@@ -494,9 +482,7 @@ function removeAptPlace(aptIndex, placeIdx) {
   renderAptPlaces(aptIndex, current);
 }
 
-// ════════════════════════════════════════════
-//  SETTINGS: APT RESTAURANTS (dynamic, per-apt)
-// ════════════════════════════════════════════
+// SETTINGS: APT RESTAURANTS (dynamic, per-apt)
 function renderAptRests(aptIndex, rests) {
   const container = document.getElementById(`s-a${aptIndex}-restaurants`);
   if (!container) return;
@@ -549,9 +535,7 @@ function removeAptRest(aptIndex, restIdx) {
   renderAptRests(aptIndex, current);
 }
 
-// ════════════════════════════════════════════
-//  SETTINGS: APT SUPERMARKETS (per-apt)
-// ════════════════════════════════════════════
+// SETTINGS: APT SUPERMARKETS (per-apt)
 function renderAptSupermarkets(aptIndex, supermarkets) {
   const container = document.getElementById(`s-a${aptIndex}-supermarkets`);
   if (!container) return;
@@ -604,9 +588,7 @@ function removeAptSupermarket(aptIndex, smIdx) {
   renderAptSupermarkets(aptIndex, current);
 }
 
-// ════════════════════════════════════════════
-//  SETTINGS: APT TRANSPORT (per-apt)
-// ════════════════════════════════════════════
+// SETTINGS: APT TRANSPORT (per-apt)
 function collectAptTransport(aptIndex) {
   const g = id => document.getElementById(`s-a${aptIndex}-tr-${id}`);
   return {

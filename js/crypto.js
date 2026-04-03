@@ -1,7 +1,4 @@
-// ════════════════════════════════════════════
-//  CRYPTO MODULE
-//  AES-GCM token encryption + XOR obfuscation
-// ════════════════════════════════════════════
+// Crypto module: AES-GCM token/wifi encryption + XOR hash obfuscation
 
 const CRYPTO_KEY_STORE    = 'bnb_enc_key';
 const CRYPTO_IDB_DB       = 'bnb_crypto';
@@ -33,7 +30,6 @@ async function _loadKeyFromIdb() {
       req.onerror   = e => reject(e.target.error);
     });
   } catch (_) {
-    console.warn('[crypto] Failed to load key from IndexedDB:', _);
     return null;
   }
 }
@@ -54,7 +50,6 @@ async function _getOrCreateKey() {
     const idbKey = await _loadKeyFromIdb();
     if (idbKey) return idbKey;
   } catch (_) {
-    console.warn('[crypto] IndexedDB key load failed, trying localStorage:', _);
     /* fall through */
   }
 
@@ -71,13 +66,11 @@ async function _getOrCreateKey() {
         await _saveKeyToIdb(migratedKey);
         localStorage.removeItem(CRYPTO_KEY_STORE); // clean up extractable copy
       } catch (_) {
-        console.warn('[crypto] IndexedDB save failed, falling back to localStorage:', _);
         /* IDB not available — keep localStorage copy for now */
       }
       return migratedKey;
     }
   } catch (_) {
-    console.warn('[crypto] localStorage key migration failed:', _);
     /* generate fresh key */
   }
 
@@ -90,7 +83,6 @@ async function _getOrCreateKey() {
   try {
     await _saveKeyToIdb(key);
   } catch (_) {
-    console.warn('[crypto] IndexedDB save failed, falling back to localStorage:', _);
     // IndexedDB unavailable (e.g. private mode) — fall back to exportable localStorage
     const fallbackKey = await crypto.subtle.generateKey(
       { name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt']
@@ -104,28 +96,36 @@ async function _getOrCreateKey() {
 
 // ── AES-GCM encrypt / decrypt ────────────────
 
-async function encryptToken(plaintext) {
-  if (!plaintext) return '';
+async function _aesEncrypt(plaintext) {
   const key = await _getOrCreateKey();
   const iv = crypto.getRandomValues(new Uint8Array(12));
-  const enc = new TextEncoder();
-  const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
-  // Prepend IV to ciphertext, then Base64-encode the whole thing
+  const cipherBuf = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext)
+  );
   const combined = new Uint8Array(iv.byteLength + cipherBuf.byteLength);
   combined.set(iv, 0);
   combined.set(new Uint8Array(cipherBuf), iv.byteLength);
   return btoa(String.fromCharCode(...combined));
 }
 
+async function _aesDecrypt(b64) {
+  const key = await _getOrCreateKey();
+  const combined = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  const iv = combined.slice(0, 12);
+  const data = combined.slice(12);
+  const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+  return new TextDecoder().decode(plainBuf);
+}
+
+async function encryptToken(plaintext) {
+  if (!plaintext) return '';
+  return _aesEncrypt(plaintext);
+}
+
 async function decryptToken(ciphertext) {
   if (!ciphertext) return '';
   try {
-    const key = await _getOrCreateKey();
-    const combined = Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0));
-    const iv = combined.slice(0, 12);
-    const data = combined.slice(12);
-    const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
-    return new TextDecoder().decode(plainBuf);
+    return await _aesDecrypt(ciphertext);
   } catch (err) {
     console.warn('[crypto] Token decryption failed:', err);
     return '';
@@ -141,58 +141,26 @@ const _WIFI_AES_PREFIX = '_AESGCM_';
 
 async function encryptWifi(plaintext) {
   if (!plaintext) return '';
-  const key = await _getOrCreateKey();
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const enc = new TextEncoder();
-  const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, enc.encode(plaintext));
-  const combined = new Uint8Array(iv.byteLength + cipherBuf.byteLength);
-  combined.set(iv, 0);
-  combined.set(new Uint8Array(cipherBuf), iv.byteLength);
-  return _WIFI_AES_PREFIX + btoa(String.fromCharCode(...combined));
+  return _WIFI_AES_PREFIX + await _aesEncrypt(plaintext);
 }
 
 async function decryptWifi(ciphertext) {
   if (!ciphertext) return '';
-  // Handle legacy XOR-obfuscated values transparently
-  if (ciphertext.startsWith(_OBF_PREFIX)) {
-    console.warn('[crypto] Legacy XOR-obfuscated WiFi password detected. Please re-encrypt with AES-GCM via the settings panel.');
-    return deobfuscate(ciphertext);
-  }
+  // Handle legacy XOR-obfuscated values (migrated to AES-GCM on first boot)
+  if (ciphertext.startsWith(_OBF_PREFIX)) return deobfuscate(ciphertext);
   if (!ciphertext.startsWith(_WIFI_AES_PREFIX)) return ciphertext; // plain-text fallback
   try {
-    const key = await _getOrCreateKey();
-    const combined = Uint8Array.from(atob(ciphertext.slice(_WIFI_AES_PREFIX.length)), c => c.charCodeAt(0));
-    const iv = combined.slice(0, 12);
-    const data = combined.slice(12);
-    const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
-    return new TextDecoder().decode(plainBuf);
+    return await _aesDecrypt(ciphertext.slice(_WIFI_AES_PREFIX.length));
   } catch (err) {
     console.warn('[wifi] AES-GCM decryption failed:', err);
     return '';
   }
 }
 
-// ── WiFi password XOR obfuscation (DEPRECATED — removal planned 2027-01) ───
-// ⚠️  DEPRECATED: XOR obfuscation is kept ONLY for backward-compatible migration
-//    of existing data. New values are encrypted with AES-GCM via encryptWifi().
-//    Do NOT use obfuscate()/deobfuscate() for new WiFi password storage.
-//    Do NOT remove deobfuscate()/_xorBase64Decode() — required for legacy migration.
-//    Do NOT remove obfuscateHash()/deobfuscateHash() — used by settings-publish.js.
-//    Planned removal date: 2027-01-01
-// Values prefixed with _OBF_ are obfuscated; plain-text values are returned
-// as-is to maintain backward compatibility with existing localStorage data.
+// XOR obfuscation (legacy — kept for backward-compatible migration of existing data)
 
 const _XOR_KEY = 0x5A;
 const _OBF_PREFIX = '_OBF_';
-
-// Shared XOR helper: encodes/decodes a string to/from a Base64 XOR'd representation.
-function _xorBase64(str) {
-  const bytes = [];
-  for (let i = 0; i < str.length; i++) {
-    bytes.push(str.charCodeAt(i) ^ _XOR_KEY);
-  }
-  return btoa(String.fromCharCode(...bytes));
-}
 
 function _xorBase64Decode(b64) {
   const raw = atob(b64);
@@ -201,12 +169,6 @@ function _xorBase64Decode(b64) {
     s += String.fromCharCode(raw.charCodeAt(i) ^ _XOR_KEY);
   }
   return s;
-}
-
-function obfuscate(str) {
-  if (!str) return '';
-  console.warn('[crypto] obfuscate() is deprecated and should not be used for new data. Use encryptWifi() instead.');
-  return _OBF_PREFIX + _xorBase64(str);
 }
 
 function deobfuscate(str) {
@@ -226,7 +188,11 @@ function deobfuscate(str) {
 
 function obfuscateHash(hexHash) {
   if (!hexHash) return '';
-  return _xorBase64(hexHash);
+  const bytes = [];
+  for (let i = 0; i < hexHash.length; i++) {
+    bytes.push(hexHash.charCodeAt(i) ^ _XOR_KEY);
+  }
+  return btoa(String.fromCharCode(...bytes));
 }
 
 function deobfuscateHash(b64) {
