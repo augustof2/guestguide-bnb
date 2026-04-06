@@ -2,29 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // ── Collezione "guides" ──────────────────────────────────────────────
-    // Lettura pubblica: chiunque può leggere una guida (necessario per gli ospiti)
-    // Scrittura: solo il proprietario autenticato può aggiornare la propria guida
-    match /guides/{slug} {
-      allow read: if true;
-
-      allow write: if request.auth != null
-        && request.auth.uid == resource.data.ownerId;
-
-      // Permette la creazione di un nuovo documento se l'uid corrisponde
-      allow create: if request.auth != null
-        && request.resource.data.ownerId == request.auth.uid;
-    }
-
-    // ── Collezione "users" ───────────────────────────────────────────────
-    // Lettura: solo il proprietario del documento (l'utente stesso)
-    // Scrittura: bloccata dal client — solo Cloud Functions possono scrivere
-    match /users/{userId} {
-      allow read: if request.auth != null
-        && request.auth.uid == userId;
-
-      allow write: if false;
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
