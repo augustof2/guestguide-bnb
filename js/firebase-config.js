@@ -10,13 +10,13 @@
 
   var PLACEHOLDER_API_KEY = 'YOUR_API_KEY';
 
-  var firebaseConfig = {
-    apiKey:            'YOUR_API_KEY',
-    authDomain:        'YOUR_PROJECT_ID.firebaseapp.com',
-    projectId:         'YOUR_PROJECT_ID',
-    storageBucket:     'YOUR_PROJECT_ID.appspot.com',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-    appId:             'YOUR_APP_ID'
+  const firebaseConfig = {
+    apiKey: "AIzaSyCxIkr92R5YNdTqFiyzLB_lQmNw0JQOd0w",
+    authDomain: "guestguide-saas.firebaseapp.com",
+    projectId: "guestguide-saas",
+    storageBucket: "guestguide-saas.firebasestorage.app",
+    messagingSenderId: "164526468307",
+    appId: "1:164526468307:web:4ca6d35eda5dd6de553826"
   };
 
   // Se le credenziali sono ancora i placeholder, non inizializzare Firebase
